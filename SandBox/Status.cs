@@ -1,6 +1,4 @@
-﻿namespace USBDriver;
-
-public class QPIGSCommand : Command
+﻿public class Status
 {
     private int loadWatt;
     private decimal loadWattHour;
@@ -9,31 +7,15 @@ public class QPIGSCommand : Command
     private decimal pvInputWattHour;
     private DateTime lastpvInputWattHourComputed;
 
-    public QPIGSCommand()
+    public void Parse(string rawData)
     {
-        CommandName = "QPIGS";
-        ResponseSize = 126;
-    }
-
-    public override void Parse(string rawData)
-    {
-        string[] dataElem = rawData.Substring(1).Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-        Console.WriteLine(rawData);
-        /*int i = 0;
-
-    foreach (var item in dataElem)
-        {
-            byte[] ba = Encoding.Default.GetBytes(item);
-            var hexString = BitConverter.ToString(ba);
-            Console.WriteLine($" {i++} => {item} {hexString}");
-        }*/
+        string[] dataElem = rawData[1..].Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
         GridVoltage = Convert.ToDecimal(dataElem[0]);
         GridFrequency = Convert.ToDecimal(dataElem[1]);
         OutputVoltage = Convert.ToDecimal(dataElem[2]);
         OutputFrequency = Convert.ToDecimal(dataElem[3]);
         LoadVA = int.Parse(dataElem[4]);
         LoadWatt = int.Parse(dataElem[5]);
-
         LoadPercentage = Convert.ToDecimal(dataElem[6]);
         BusVoltage = Convert.ToDecimal(dataElem[7]);
         BatteryVoltage = Convert.ToDecimal(dataElem[8]);
@@ -88,7 +70,10 @@ public class QPIGSCommand : Command
         set
         {
             if (value != loadWattHour && lastloadWattHourComputed != new DateTime())
+            {
                 loadWattHour = value;
+            }
+
             lastloadWattHourComputed = DateTime.Now;
         }
     }
