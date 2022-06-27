@@ -1,0 +1,3 @@
+﻿using USBDriver;
+
+Inverter.Connect();
