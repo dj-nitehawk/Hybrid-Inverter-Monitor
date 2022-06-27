@@ -11,11 +11,19 @@ if (!port.CanWrite)
 }
 
 var status = new Status();
-var statusResult = SendCommand("QPIGS");
+
+var count = 0;
+while (count < 10)
+{
+    var statusResult = SendCommand("QPIGS");
+    status.Parse(statusResult);
+    var statusStr = JsonSerializer.Serialize(status);
+    Console.WriteLine(statusStr);
+    count++;
+    await Task.Delay(1000);
+}
+
 port.Close();
-status.Parse(statusResult);
-var statusStr = JsonSerializer.Serialize(status);
-Console.WriteLine(statusStr);
 
 string SendCommand(string cmd)
 {
