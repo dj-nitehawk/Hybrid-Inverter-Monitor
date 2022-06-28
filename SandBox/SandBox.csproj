@@ -7,8 +7,4 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="System.IO.Ports" Version="6.0.0" />
-    </ItemGroup>
-
 </Project>

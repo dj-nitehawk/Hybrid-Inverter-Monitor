@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using System.Text.Json;
 
 ushort[] crc_ta = { 0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7, 0x8108, 0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef };
 var port = File.Open("/dev/hidraw0", FileMode.Open, FileAccess.ReadWrite);
@@ -13,12 +12,20 @@ if (!port.CanWrite)
 var status = new Status();
 
 var count = 0;
-while (count < 10)
+while (count < 30)
 {
     var statusResult = SendCommand("QPIGS");
     status.Parse(statusResult);
-    var statusStr = JsonSerializer.Serialize(status);
-    Console.WriteLine(statusStr);
+
+    Console.Write(@$"
+Load Watts: {status.LoadWatt}
+Load Percentage: {status.LoadPercentage}%
+PV Voltage: {status.PVInputVoltage}V
+PV Current: {status.PVInputCurrent}A
+PV Watts: {status.PVInputWatt}
+Battery Voltage: {status.BatteryVoltage}V");
+    Console.SetCursorPosition(0, 1);
+
     count++;
     await Task.Delay(1000);
 }
