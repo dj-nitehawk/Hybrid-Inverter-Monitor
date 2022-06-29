@@ -68,10 +68,10 @@ internal abstract class CommandBase<TResponseDto> : BaseCommand where TResponseD
         {
             int da = (byte)(crc >> 8) >> 4;
             crc <<= 4;
-            crc ^= crc_ta[da ^ b >> 4];
+            crc ^= crc_ta[da ^ (b >> 4)];
             da = (byte)(crc >> 8) >> 4;
             crc <<= 4;
-            crc ^= crc_ta[da ^ b & 0x0F];
+            crc ^= crc_ta[da ^ (b & 0x0F)];
         }
 
         byte crcLow = (byte)crc;

@@ -21,8 +21,4 @@
         <None Remove="InverterService\protocol.pdf" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Endpoints\" />
-    </ItemGroup>
-
 </Project>

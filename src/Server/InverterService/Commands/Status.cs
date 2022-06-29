@@ -6,8 +6,10 @@ internal class Status : CommandBase<InverterStatus>
 {
     protected override string Command => "QPIGS";
 
-    public bool Update()
+    public async Task<bool> Update()
     {
+        await Task.Delay(1000);
+
         if (ReadFailed)
             return false;
 
