@@ -21,14 +21,7 @@ public class Endpoint : EndpointWithoutRequest<object>
     {
         while (!cancellation.IsCancellationRequested)
         {
-            try
-            {
-                _ = await Inverter.Status.Update();
-            }
-            catch
-            {
-                Console.WriteLine("Read error occurred!");
-            }
+            _ = await Inverter.Status.Update();
             yield return Inverter.Status.Data;
         }
     }

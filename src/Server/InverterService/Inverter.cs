@@ -16,7 +16,7 @@ internal static class Inverter
         {
             OpenPort();
         }
-        catch
+        catch (Exception)
         {
             IsConnected = false;
             lock (BaseCommand.Port ??= new FileStream("/dev/null", FileMode.Open))
@@ -31,7 +31,7 @@ internal static class Inverter
                         if (IsConnected)
                             break;
                     }
-                    catch
+                    catch (Exception)
                     {
                         Console.WriteLine("Inverter is not connected :-(");
                     }

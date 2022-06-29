@@ -42,9 +42,9 @@ internal abstract class CommandBase<TResponseDto> : BaseCommand where TResponseD
                 if (buffer.Any(b => b == 0x0d))
                     break;
             }
-            catch
+            catch (Exception)
             {
-                Console.WriteLine("Connection lost!");
+                Console.WriteLine("Read error occured!");
                 _ = Inverter.Connect();
                 return false;
             }
