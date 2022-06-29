@@ -7,9 +7,9 @@ internal class BaseCommand
     public static FileStream Port { get; set; } = null!;
 }
 
-internal abstract class CommandBase<TDto> : BaseCommand where TDto : new()
+internal abstract class CommandBase<TResponseDto> : BaseCommand where TResponseDto : new()
 {
-    public TDto Data { get; } = new();
+    public TResponseDto Data { get; } = new();
     protected abstract string Command { get; }
     protected string RawResponse { private set; get; } = string.Empty;
     protected bool ReadFailed => !SendCommand();
