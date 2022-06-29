@@ -1,0 +1,64 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.0.0
+MinimumVisualStudioVersion = 16.0.0.0
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InverterMon.Server", "Server\InverterMon.Server.csproj", "{B608F59F-4C72-43FD-820C-A0BADF4591AF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InverterMon.Client", "Client\InverterMon.Client.csproj", "{A973C7CD-FE6E-4CA5-A065-1BBE250C50D6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InverterMon.Shared", "Shared\InverterMon.Shared.csproj", "{5B01AF46-3275-4F57-B3EA-5F616DB4214B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A973C7CD-FE6E-4CA5-A065-1BBE250C50D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A973C7CD-FE6E-4CA5-A065-1BBE250C50D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A973C7CD-FE6E-4CA5-A065-1BBE250C50D6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A973C7CD-FE6E-4CA5-A065-1BBE250C50D6}.Debug|x64.Build.0 = Debug|Any CPU
+		{A973C7CD-FE6E-4CA5-A065-1BBE250C50D6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A973C7CD-FE6E-4CA5-A065-1BBE250C50D6}.Debug|x86.Build.0 = Debug|Any CPU
+		{A973C7CD-FE6E-4CA5-A065-1BBE250C50D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A973C7CD-FE6E-4CA5-A065-1BBE250C50D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A973C7CD-FE6E-4CA5-A065-1BBE250C50D6}.Release|x64.ActiveCfg = Release|Any CPU
+		{A973C7CD-FE6E-4CA5-A065-1BBE250C50D6}.Release|x64.Build.0 = Release|Any CPU
+		{A973C7CD-FE6E-4CA5-A065-1BBE250C50D6}.Release|x86.ActiveCfg = Release|Any CPU
+		{A973C7CD-FE6E-4CA5-A065-1BBE250C50D6}.Release|x86.Build.0 = Release|Any CPU
+		{B608F59F-4C72-43FD-820C-A0BADF4591AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B608F59F-4C72-43FD-820C-A0BADF4591AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B608F59F-4C72-43FD-820C-A0BADF4591AF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B608F59F-4C72-43FD-820C-A0BADF4591AF}.Debug|x64.Build.0 = Debug|Any CPU
+		{B608F59F-4C72-43FD-820C-A0BADF4591AF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B608F59F-4C72-43FD-820C-A0BADF4591AF}.Debug|x86.Build.0 = Debug|Any CPU
+		{B608F59F-4C72-43FD-820C-A0BADF4591AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B608F59F-4C72-43FD-820C-A0BADF4591AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B608F59F-4C72-43FD-820C-A0BADF4591AF}.Release|x64.ActiveCfg = Release|Any CPU
+		{B608F59F-4C72-43FD-820C-A0BADF4591AF}.Release|x64.Build.0 = Release|Any CPU
+		{B608F59F-4C72-43FD-820C-A0BADF4591AF}.Release|x86.ActiveCfg = Release|Any CPU
+		{B608F59F-4C72-43FD-820C-A0BADF4591AF}.Release|x86.Build.0 = Release|Any CPU
+		{5B01AF46-3275-4F57-B3EA-5F616DB4214B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B01AF46-3275-4F57-B3EA-5F616DB4214B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B01AF46-3275-4F57-B3EA-5F616DB4214B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5B01AF46-3275-4F57-B3EA-5F616DB4214B}.Debug|x64.Build.0 = Debug|Any CPU
+		{5B01AF46-3275-4F57-B3EA-5F616DB4214B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5B01AF46-3275-4F57-B3EA-5F616DB4214B}.Debug|x86.Build.0 = Debug|Any CPU
+		{5B01AF46-3275-4F57-B3EA-5F616DB4214B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B01AF46-3275-4F57-B3EA-5F616DB4214B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B01AF46-3275-4F57-B3EA-5F616DB4214B}.Release|x64.ActiveCfg = Release|Any CPU
+		{5B01AF46-3275-4F57-B3EA-5F616DB4214B}.Release|x64.Build.0 = Release|Any CPU
+		{5B01AF46-3275-4F57-B3EA-5F616DB4214B}.Release|x86.ActiveCfg = Release|Any CPU
+		{5B01AF46-3275-4F57-B3EA-5F616DB4214B}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BABEF52C-E442-4628-A6E7-8FC7C84CFF67}
+	EndGlobalSection
+EndGlobal

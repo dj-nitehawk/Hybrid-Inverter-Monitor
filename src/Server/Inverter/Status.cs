@@ -1,4 +1,4 @@
-﻿namespace InverterMon.Inverter;
+﻿namespace InverterMon.Server;
 
 internal class Status : CommandBase
 {
