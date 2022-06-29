@@ -19,9 +19,9 @@ internal static class Inverter
         catch
         {
             IsConnected = false;
-            lock (CommandBase.Port ??= new FileStream("/dev/null", FileMode.Open))
+            lock (BaseCommand.Port ??= new FileStream("/dev/null", FileMode.Open))
             {
-                CommandBase.Port.Dispose();
+                BaseCommand.Port.Dispose();
                 while (true)
                 {
                     Thread.Sleep(10000);
@@ -44,7 +44,7 @@ internal static class Inverter
     private static void OpenPort()
     {
         Console.WriteLine("Connecting to inverter...");
-        CommandBase.Port = File.Open("/dev/hidraw0", FileMode.Open, FileAccess.ReadWrite);
+        BaseCommand.Port = File.Open("/dev/hidraw0", FileMode.Open, FileAccess.ReadWrite);
         IsConnected = true;
     }
 }

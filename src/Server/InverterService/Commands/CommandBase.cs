@@ -2,11 +2,15 @@
 
 namespace InverterMon.Server.InverterService.Commands;
 
-internal abstract class CommandBase
+internal class BaseCommand
 {
-    protected abstract string Command { get; }
-
     public static FileStream Port { get; set; } = null!;
+}
+
+internal abstract class CommandBase<TDto> : BaseCommand where TDto : new()
+{
+    public TDto Data { get; } = new();
+    protected abstract string Command { get; }
     protected string RawResponse { private set; get; } = string.Empty;
     protected bool ReadFailed => !SendCommand();
 
