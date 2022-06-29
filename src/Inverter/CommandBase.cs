@@ -6,14 +6,11 @@ internal abstract class CommandBase
 {
     protected abstract string Command { get; }
 
-    public static FileStream Port { private get; set; } = null!;
-    protected string? RawResponse { private set; get; }
+    public static FileStream Port { get; set; } = null!;
+    protected string RawResponse { private set; get; } = string.Empty;
+    protected bool ReadFailed => !SendCommand();
 
-    private static readonly ushort[] crc_ta = {
-        0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7, 0x8108, 0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef
-    };
-
-    public virtual void Update()
+    private bool SendCommand()
     {
         byte[]? cmdBytes = Encoding.ASCII.GetBytes(Command);
         ushort crc = CalculateCRC(cmdBytes);
@@ -32,27 +29,32 @@ internal abstract class CommandBase
             try
             {
                 int read = Port.Read(buffer, pos, buffer.Length - pos);
+
                 if (read > 0)
-                {
                     pos += read;
-                }
                 else
-                {
                     Thread.Sleep(5);
-                }
-                if (buffer.Any(b => b == 0x0d)) { break; }
+
+                if (buffer.Any(b => b == 0x0d))
+                    break;
             }
-            catch (TimeoutException)
+            catch (IOException)
             {
-                break;
+                Console.WriteLine("Connection lost!");
+                _ = Inverter.Connect();
+                return false;
             }
         }
 
         RawResponse =
             buffer.Any(b => b == 0x0d)
             ? Encoding.ASCII.GetString(buffer, 0, pos - 3)
-            : null;
+            : string.Empty;
+
+        return true;
     }
+
+    private static readonly ushort[] crc_ta = { 0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7, 0x8108, 0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef };
 
     private static ushort CalculateCRC(byte[] buffer)
     {

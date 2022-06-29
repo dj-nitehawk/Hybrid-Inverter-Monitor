@@ -81,13 +81,10 @@ internal class Status : CommandBase
     private decimal pvInputWattHour;
     private DateTime lastpvInputWattHourComputed;
 
-    public override void Update()
+    public bool Update()
     {
-        base.Update();
-        if (RawResponse is null)
-        {
-            return;
-        }
+        if (ReadFailed)
+            return false;
 
         string[]? parts = RawResponse[1..].Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
@@ -112,5 +109,7 @@ internal class Status : CommandBase
         SCCOn = parts[16][1];
         ACChargeOn = parts[16][2];
         PVInputWatt = int.Parse(parts[19]);
+
+        return true;
     }
 }

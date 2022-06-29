@@ -1,16 +1,11 @@
-﻿if (!port.CanWrite)
-{
-    Console.WriteLine("couldn't open port!!!");
-    return;
-}
+﻿using InverterMon.Inverter;
 
-var status = new Status();
-
+var status = Inverter.Status;
 var count = 0;
+
 while (count < 30)
 {
-    var statusResult = SendCommand("QPIGS");
-    status.Parse(statusResult);
+    status.Update();
 
     Console.Write(@$"
 Load Watts: {status.LoadWatt}
@@ -24,6 +19,3 @@ Battery Voltage: {status.BatteryVoltage}V");
     count++;
     await Task.Delay(1000);
 }
-
-port.Close();
-
