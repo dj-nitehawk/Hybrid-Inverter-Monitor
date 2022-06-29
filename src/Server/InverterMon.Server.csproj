@@ -16,7 +16,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="Inverter\protocol.pdf" />
+        <None Remove="InverterService\protocol.pdf" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Endpoints\" />
     </ItemGroup>
 
 </Project>

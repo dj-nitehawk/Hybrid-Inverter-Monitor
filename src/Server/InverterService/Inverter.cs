@@ -1,4 +1,6 @@
-﻿namespace InverterMon.Server;
+﻿using InverterMon.Server.InverterService.Commands;
+
+namespace InverterMon.Server.InverterService;
 
 internal static class Inverter
 {

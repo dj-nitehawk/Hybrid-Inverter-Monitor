@@ -1,4 +1,4 @@
-﻿namespace InverterMon.Server;
+﻿namespace InverterMon.Server.InverterService.Commands;
 
 internal class Status : CommandBase
 {
@@ -9,27 +9,27 @@ internal class Status : CommandBase
     public decimal OutputVoltage { get; private set; }
     public decimal OutputFrequency { get; private set; }
     public int LoadVA { get; private set; }
-    public int LoadWatt
+    public int LoadWatts
     {
-        get => loadWatt;
+        get => loadWatts;
         set
         {
-            if (value != loadWatt)
+            if (value != loadWatts)
             {
-                loadWatt = value;
+                loadWatts = value;
                 double interval = (DateTime.Now - lastloadWattHourComputed).TotalSeconds;
-                LoadWattHour = value / (3600 / Convert.ToDecimal(interval));
+                LoadWattHours = value / (3600 / Convert.ToDecimal(interval));
             }
         }
     }
-    public decimal LoadWattHour
+    public decimal LoadWattHours
     {
-        get => loadWattHour;
+        get => loadWattHours;
         set
         {
-            if (value != loadWattHour && lastloadWattHourComputed != new DateTime())
+            if (value != loadWattHours && lastloadWattHourComputed != new DateTime())
             {
-                loadWattHour = value;
+                loadWattHours = value;
             }
 
             lastloadWattHourComputed = DateTime.Now;
@@ -74,8 +74,8 @@ internal class Status : CommandBase
     public char SCCOn { get; private set; }
     public char ACChargeOn { get; private set; }
 
-    private int loadWatt;
-    private decimal loadWattHour;
+    private int loadWatts;
+    private decimal loadWattHours;
     private int pvInputWatt;
     private DateTime lastloadWattHourComputed;
     private decimal pvInputWattHour;
@@ -93,7 +93,7 @@ internal class Status : CommandBase
         OutputVoltage = decimal.Parse(parts[2]);
         OutputFrequency = decimal.Parse(parts[3]);
         LoadVA = int.Parse(parts[4]);
-        LoadWatt = int.Parse(parts[5]);
+        LoadWatts = int.Parse(parts[5]);
         LoadPercentage = decimal.Parse(parts[6]);
         BusVoltage = decimal.Parse(parts[7]);
         BatteryVoltage = decimal.Parse(parts[8]);

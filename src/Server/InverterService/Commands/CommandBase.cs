@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace InverterMon.Server;
+namespace InverterMon.Server.InverterService.Commands;
 
 internal abstract class CommandBase
 {
