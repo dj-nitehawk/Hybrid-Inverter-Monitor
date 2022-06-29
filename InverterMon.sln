@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SandBox", "SandBox\SandBox.csproj", "{15CF86D6-E5AD-42B9-88D1-6F6C8C40B65A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InverterMon", "SandBox\InverterMon.csproj", "{15CF86D6-E5AD-42B9-88D1-6F6C8C40B65A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
