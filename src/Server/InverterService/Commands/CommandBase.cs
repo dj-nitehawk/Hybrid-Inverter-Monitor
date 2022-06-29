@@ -42,7 +42,7 @@ internal abstract class CommandBase<TResponseDto> : BaseCommand where TResponseD
                 if (buffer.Any(b => b == 0x0d))
                     break;
             }
-            catch (IOException)
+            catch
             {
                 Console.WriteLine("Connection lost!");
                 _ = Inverter.Connect();

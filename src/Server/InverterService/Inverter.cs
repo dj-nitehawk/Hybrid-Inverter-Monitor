@@ -24,7 +24,7 @@ internal static class Inverter
                 BaseCommand.Port.Dispose();
                 while (true)
                 {
-                    Thread.Sleep(10000);
+                    Thread.Sleep(5000);
                     try
                     {
                         OpenPort();
@@ -46,5 +46,6 @@ internal static class Inverter
         Console.WriteLine("Connecting to inverter...");
         BaseCommand.Port = File.Open("/dev/hidraw0", FileMode.Open, FileAccess.ReadWrite);
         IsConnected = true;
+        Console.WriteLine("Inverter connected!");
     }
 }
