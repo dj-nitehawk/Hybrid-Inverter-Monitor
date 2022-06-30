@@ -7,8 +7,8 @@
 
 <h1>Inverter Status</h1>
 <div>
-    load watts: @status?.LoadWatts (w)
-    pv watts : @status?.PVInputWatt (w)
+    <p>load watts: @status?.LoadWatts (w)</p>
+    <p>pv watts : @status?.PVInputWatt (w)</p>
 </div>
 
 @code{
@@ -33,8 +33,6 @@
                     DefaultBufferSize = 128
                 }))
         {
-            Console.WriteLine("val: " + data?.PVInputWatt);
-
             if (data is not null)
             {
                 status = data; 
