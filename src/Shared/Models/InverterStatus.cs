@@ -20,6 +20,7 @@ public class InverterStatus
             }
         }
     }
+    public double LoadCurrent => Math.Round(LoadWatts / Convert.ToDouble(OutputVoltage), 1);
     //public decimal LoadWattHours
     //{
     //    get => loadWattHours;
@@ -37,6 +38,7 @@ public class InverterStatus
     //public decimal BusVoltage { get; set; }
     public decimal BatteryVoltage { get; set; }
     public int BatteryChargeCurrent { get; set; }
+    public int BatteryChargeWatts => BatteryChargeCurrent * Convert.ToInt32(BatteryVoltage);
     //public int BatteryCapacity { get; set; }
     public int HeatSinkTemperature { get; set; }
     public decimal PVInputCurrent { get; set; }
@@ -68,6 +70,7 @@ public class InverterStatus
     //}    
     //public decimal SCCVoltage { get; set; }
     public int BatteryDischargeCurrent { get; set; }
+    public int BatteryDischargeWatts => BatteryDischargeCurrent * Convert.ToInt32(BatteryVoltage);
     //public char PVOrACFeed { get; set; }
     //public char LoadOn { get; set; }
     //public char SCCOn { get; set; }

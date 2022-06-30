@@ -5,10 +5,66 @@
 
 <PageTitle>Dashboard</PageTitle>
 
-<h1>Inverter Status</h1>
-<div>
-    <p>load watts: @status?.LoadWatts (w)</p>
-    <p>pv watts : @status?.PVInputWatt (w)</p>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card">
+                <h5 class="card-header">
+                    <span class="oi oi-power-standby" aria-hidden="true"/>
+                    Output Load
+                </h5>
+                <div class="card-body">
+                    <div class="container text-center fw-bold">
+                        <div class="row bg-light rounded p-2">
+                            <div class="col">
+                                <div class="fs-1 text-danger">@status?.LoadWatts</div>
+                                Watts
+                            </div>
+                        </div>                         
+                        <div class="row p-1">
+                            <div class="col">
+                                <div class="fs-6 text-muted">@status?.OutputVoltage</div>
+                                <span class="text-body">Voltage (V)</span>
+                            </div>
+                            <div class="col">
+                                <div class="fs-6 text-muted">@status?.LoadCurrent</div>
+                                Current (A)
+                            </div>
+                        </div>   
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="col-sm-6">
+            <div class="card">
+                <h5 class="card-header">
+                    <span class="oi oi-sun" aria-hidden="true"/>
+                    PV Input
+                </h5>
+                <div class="card-body">
+                    <div class="container text-center fw-bold">
+                        <div class="row bg-light rounded p-2">
+                            <div class="col">
+                                <div class="fs-1 text-success">@status?.PVInputWatt</div>
+                                Watts
+                            </div>
+                        </div>                         
+                        <div class="row p-1">
+                            <div class="col">
+                                <div class="fs-6 text-muted">@status?.OutputVoltage</div>
+                                <span class="text-body">Voltage (V)</span>
+                            </div>
+                            <div class="col">
+                                <div class="fs-6 text-muted">@status?.PVInputCurrent</div>
+                                Current (A)
+                            </div>
+                        </div>   
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @code{
@@ -39,5 +95,5 @@
                 StateHasChanged();
             }            
         }
-     }
+    }
 }
