@@ -1,9 +1,45 @@
 ﻿@page "/"
+@using InverterMon.Shared.Models
+@using System.Text.Json
+@inject HttpClient Http
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Dashboard</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Inverter Status</h1>
+<div>
+    load watts: @status?.LoadWatts (w)
+    pv watts : @status?.PVInputWatt (w)
+</div>
 
-Welcome to your new app.
+@code{
+    private InverterStatus? status;
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    protected override async Task OnInitializedAsync()
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, "api/status");
+        request.SetBrowserResponseStreamingEnabled(true);
+
+        using var response = await Http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+        response.EnsureSuccessStatusCode();
+
+        using var stream = await response.Content.ReadAsStreamAsync();
+
+        await foreach (var data in 
+            JsonSerializer.DeserializeAsyncEnumerable<InverterStatus>(
+                stream,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    DefaultBufferSize = 128
+                }))
+        {
+            Console.WriteLine("val: " + data?.PVInputWatt);
+
+            if (data is not null)
+            {
+                status = data; 
+                StateHasChanged();
+            }            
+        }
+     }
+}

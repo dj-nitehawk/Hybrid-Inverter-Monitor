@@ -35,8 +35,9 @@ public class Endpoint : EndpointWithoutRequest<object>
         {
             if (Env.IsDevelopment())
             {
-                await Task.Delay(3000, c);
+                await Task.Delay(1000, c);
                 cmd.Data.PVInputVoltage = Random.Shared.Next(300);
+                cmd.Data.PVInputWatt = Random.Shared.Next(1800);
                 cmd.Data.BatteryVoltage = Random.Shared.Next(26);
                 cmd.Data.LoadWatts = Random.Shared.Next(3500);
                 yield return cmd.Data;
