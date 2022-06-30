@@ -2,18 +2,13 @@
 
 namespace InverterMon.Server.InverterService.Commands;
 
-internal class Status : CommandBase<InverterStatus>
+internal class Status : Command<InverterStatus>
 {
-    protected override string Command => "QPIGS";
+    public override string CommandString => "QPIGS";
 
-    public async Task<bool> Update()
+    public override void Parse(string responseFromInverter)
     {
-        await Task.Delay(1000);
-
-        if (ReadFailed)
-            return false;
-
-        string[]? parts = RawResponse[1..].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        string[]? parts = responseFromInverter[1..].Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
         Data.GridVoltage = decimal.Parse(parts[0]);
         Data.GridFrequency = decimal.Parse(parts[1]);
@@ -36,7 +31,5 @@ internal class Status : CommandBase<InverterStatus>
         Data.SCCOn = parts[16][1];
         Data.ACChargeOn = parts[16][2];
         Data.PVInputWatt = int.Parse(parts[19]);
-
-        return true;
     }
 }
