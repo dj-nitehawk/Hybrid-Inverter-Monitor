@@ -4,7 +4,8 @@ using InverterMon.Server.InverterService;
 
 var builder = WebApplication.CreateBuilder();
 builder.Services.AddSingleton(new CommandQueue());
-builder.Services.AddHostedService<InverterWorker>();
+if (!builder.Environment.IsDevelopment())
+    builder.Services.AddHostedService<InverterWorker>();
 builder.Services.AddFastEndpoints();
 builder.Services.AddSwaggerDoc();
 
