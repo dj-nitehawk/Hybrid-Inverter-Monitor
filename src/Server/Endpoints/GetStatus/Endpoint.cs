@@ -55,7 +55,7 @@ public class Endpoint : EndpointWithoutRequest<object>
                 Queue.Commands.Enqueue(cmd);
 
                 while (!cmd.IsComplete && !cmd.TimedOut)
-                    await Task.Delay(500, c);
+                    await Task.Delay(100, c);
 
                 if (cmd.IsComplete)
                     yield return cmd.Data;

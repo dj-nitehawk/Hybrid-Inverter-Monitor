@@ -6,11 +6,35 @@
 <PageTitle>Dashboard</PageTitle>
 
 <div class="container">
+
+@if(status?.GridUsageWatts > 0)
+{
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-12">
             <div class="card">
                 <h5 class="card-header">
                     <span class="oi oi-power-standby" aria-hidden="true"/>
+                    Grid Usage
+                </h5>
+                <div class="card-body">
+                    <div class="container text-center fw-bold">
+                        <div class="row bg-light rounded p-2">
+                            <div class="col">
+                                <div class="fs-1 text-danger">@status?.GridUsageWatts</div>
+                                Watts
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>   
+}
+    <div class="row mt-3">
+        <div class="col-sm-6">
+            <div class="card">
+                <h5 class="card-header">
+                    <span class="oi oi-lightbulb" aria-hidden="true"/>
                     Output Load
                 </h5>
                 <div class="card-body">
@@ -23,11 +47,11 @@
                         </div>                         
                         <div class="row p-1">
                             <div class="col">
-                                <div class="fs-6 text-muted">@status?.OutputVoltage</div>
+                                <div class="fs-6 text-muted">@RoundToWholeNumer(status?.OutputVoltage)</div>
                                 <span class="text-body">Voltage (V)</span>
                             </div>
                             <div class="col">
-                                <div class="fs-6 text-muted">@status?.LoadCurrent</div>
+                                <div class="fs-6 text-muted">@RoundToOneDecimal(status?.LoadCurrent)</div>
                                 Current (A)
                             </div>
                         </div>   
@@ -52,11 +76,11 @@
                         </div>                         
                         <div class="row p-1">
                             <div class="col">
-                                <div class="fs-6 text-muted">@status?.OutputVoltage</div>
+                                <div class="fs-6 text-muted">@RoundToWholeNumer(status?.PVInputVoltage)</div>
                                 <span class="text-body">Voltage (V)</span>
                             </div>
                             <div class="col">
-                                <div class="fs-6 text-muted">@status?.PVInputCurrent</div>
+                                <div class="fs-6 text-muted">@RoundToOneDecimal(status?.PVInputCurrent)</div>
                                 Current (A)
                             </div>
                         </div>   
@@ -67,7 +91,7 @@
     </div>    
 </div>
 
-<div class="container pt-4">
+<div class="container pt-3">
         <div class="row">
         <div class="col-sm-12">
             <div class="card">
@@ -78,30 +102,30 @@
                 <div class="container text-center p-2">
                     <div class="row">
                         <div class="col-4">
-                            <span class="fs-6 fw-bold text-muted">Discharging</span>
+                            <span class="fs-6 fw-bold text-muted charge-discharge">Charging</span>
                             <div class="fw-bold">
-                                <div class="fs-1 text-danger">@status?.BatteryDischargeWatts</div>
+                                <div class="fs-1 text-danger">@status?.BatteryChargeWatts</div>
                                 Watts
                                 <div class="fw-bold">
-                                    <div class="fs-6 text-muted">@status?.BatteryDischargeCurrent</div>
+                                    <div class="fs-6 text-muted">@RoundToOneDecimal(status?.BatteryChargeCurrent)</div>
                                     (A)
                                 </div>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="container bg-light rounded-1 p-3 m-2 fw-bold text-muted fs-1">
-                                <div class="fs-4">Voltage</div>
-                                <div class="text-black">@status?.BatteryVoltage</div>
+                                <div class="fs-4 voltage">Voltage</div>
+                                <div class="text-black charge-discharge">@RoundToOneDecimal(status?.BatteryVoltage)</div>
                                 <div class="fs-6 text-black-50">(V)</div>
                             </div>
                         </div>
                         <div class="col-4">
-                            <span class="fs-6 fw-bold text-muted">Charging</span>
+                            <span class="fs-6 fw-bold text-muted charge-discharge">Discharging</span>
                             <div class="fw-bold">
-                                <div class="fs-1 text-success">@status?.BatteryChargeWatts</div>
+                                <div class="fs-1 text-success">@status?.BatteryDischargeWatts</div>
                                 Watts
                                 <div class="fw-bold">
-                                    <div class="fs-6 text-muted">@status?.PVInputCurrent</div>
+                                    <div class="fs-6 text-muted">@RoundToOneDecimal(status?.BatteryDischargeCurrent)</div>
                                     (A)
                                 </div>
                             </div>
@@ -142,4 +166,10 @@
             }            
         }
     }
+
+    private decimal RoundToWholeNumer(decimal? val)
+        => Math.Round(val ?? 0, 0);
+
+    private decimal RoundToOneDecimal(decimal? val)
+        => Math.Round(val ?? 0, 1);
 }

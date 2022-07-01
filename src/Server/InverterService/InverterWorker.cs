@@ -55,7 +55,7 @@ internal class InverterWorker : BackgroundService
                     await Connect(c);
                 }
             }
-            await Task.Delay(500, c);
+            await Task.Delay(1000, c);
         }
     }
 
@@ -76,10 +76,7 @@ internal class InverterWorker : BackgroundService
         do
         {
             int read = await port!.ReadAsync(buffer.AsMemory(pos, buffer.Length - pos), c);
-            if (read > 0)
-                pos += read;
-            else
-                Thread.Sleep(5);
+            if (read > 0) pos += read;
         }
         while (!buffer.Any(b => b == 0x0d));
 

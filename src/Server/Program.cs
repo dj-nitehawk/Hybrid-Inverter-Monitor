@@ -14,10 +14,10 @@ if (app.Environment.IsDevelopment())
     app.UseWebAssemblyDebugging();
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
-app.MapFallbackToFile("index.html");
 app.UseRouting();
 app.UseAuthorization();
 app.UseFastEndpoints(c => c.RoutingOptions = o => o.Prefix = "api");
 app.UseOpenApi();
 app.UseSwaggerUi3(s => s.ConfigureDefaults());
+app.MapFallbackToFile("index.html");
 app.Run("http://::80");

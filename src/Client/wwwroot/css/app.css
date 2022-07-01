@@ -62,3 +62,13 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+@media only screen and (max-width: 350px) {
+    .voltage {
+        font-size: 0.7em !important;
+    }
+
+    .charge-discharge {
+        font-size: 0.7em !important;
+    }
+}

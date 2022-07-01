@@ -2,6 +2,14 @@
 
 public class InverterStatus
 {
+    public int GridUsageWatts
+    {
+        get
+        {
+            var freePower = pvInputWatt + BatteryDischargeWatts;
+            return freePower < loadWatts ? loadWatts - freePower : 0;
+        }
+    }
     //public decimal GridVoltage { get; set; }
     //public decimal GridFrequency { get; set; }
     public decimal OutputVoltage { get; set; }
@@ -20,7 +28,15 @@ public class InverterStatus
             }
         }
     }
-    public double LoadCurrent => Math.Round(LoadWatts / Convert.ToDouble(OutputVoltage), 1);
+    public decimal LoadCurrent
+    {
+        get
+        {
+            if (loadWatts == 0) return 0;
+            return LoadWatts / OutputVoltage;
+        }
+    }
+
     //public decimal LoadWattHours
     //{
     //    get => loadWattHours;
@@ -38,7 +54,15 @@ public class InverterStatus
     //public decimal BusVoltage { get; set; }
     public decimal BatteryVoltage { get; set; }
     public int BatteryChargeCurrent { get; set; }
-    public int BatteryChargeWatts => BatteryChargeCurrent * Convert.ToInt32(BatteryVoltage);
+    public int BatteryChargeWatts
+    {
+        get
+        {
+            if (BatteryChargeCurrent == 0) return 0;
+            return Convert.ToInt32(BatteryChargeCurrent * BatteryVoltage);
+        }
+    }
+
     //public int BatteryCapacity { get; set; }
     public int HeatSinkTemperature { get; set; }
     public decimal PVInputCurrent { get; set; }
@@ -70,7 +94,15 @@ public class InverterStatus
     //}    
     //public decimal SCCVoltage { get; set; }
     public int BatteryDischargeCurrent { get; set; }
-    public int BatteryDischargeWatts => BatteryDischargeCurrent * Convert.ToInt32(BatteryVoltage);
+    public int BatteryDischargeWatts
+    {
+        get
+        {
+            if (BatteryDischargeCurrent == 0) return 0;
+            return Convert.ToInt32(BatteryDischargeCurrent * BatteryVoltage);
+        }
+    }
+
     //public char PVOrACFeed { get; set; }
     //public char LoadOn { get; set; }
     //public char SCCOn { get; set; }
