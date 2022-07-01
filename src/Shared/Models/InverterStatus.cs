@@ -6,8 +6,14 @@ public class InverterStatus
     {
         get
         {
-            var freePower = pvInputWatt + BatteryDischargeWatts;
-            return freePower < loadWatts ? loadWatts - freePower : 0;
+            int freePower = pvInputWatt + BatteryDischargeWatts;
+            if (freePower < loadWatts)
+            {
+                int diff = loadWatts - freePower;
+                if (diff > 25)
+                    return diff;
+            }
+            return 0;
         }
     }
     //public decimal GridVoltage { get; set; }
@@ -32,8 +38,7 @@ public class InverterStatus
     {
         get
         {
-            if (loadWatts == 0) return 0;
-            return LoadWatts / OutputVoltage;
+            return loadWatts == 0 ? 0 : LoadWatts / OutputVoltage;
         }
     }
 
@@ -58,8 +63,7 @@ public class InverterStatus
     {
         get
         {
-            if (BatteryChargeCurrent == 0) return 0;
-            return Convert.ToInt32(BatteryChargeCurrent * BatteryVoltage);
+            return BatteryChargeCurrent == 0 ? 0 : Convert.ToInt32(BatteryChargeCurrent * BatteryVoltage);
         }
     }
 
@@ -98,8 +102,7 @@ public class InverterStatus
     {
         get
         {
-            if (BatteryDischargeCurrent == 0) return 0;
-            return Convert.ToInt32(BatteryDischargeCurrent * BatteryVoltage);
+            return BatteryDischargeCurrent == 0 ? 0 : Convert.ToInt32(BatteryDischargeCurrent * BatteryVoltage);
         }
     }
 

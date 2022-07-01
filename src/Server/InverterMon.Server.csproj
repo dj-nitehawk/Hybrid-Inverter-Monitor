@@ -8,6 +8,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Content Remove="appsettings.Development.json" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="FastEndpoints" Version="4.3.0" />
         <PackageReference Include="FastEndpoints.Swagger" Version="4.3.0" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.6" />
@@ -20,6 +24,10 @@
 
     <ItemGroup>
         <None Remove="InverterService\protocol.pdf" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="appsettings.Development.json" />
     </ItemGroup>
 
 </Project>
