@@ -47,12 +47,14 @@
                         </div>                         
                         <div class="row p-1">
                             <div class="col">
-                                <div class="fs-6 text-muted">@RoundToWholeNumer(status?.OutputVoltage)</div>
-                                <span class="text-body">Voltage (V)</span>
+                                <div class="fs-5 text-muted">@RoundToWholeNumer(status?.OutputVoltage)</div>
+                                <span class="text-body">Voltage</span>
+                                <div class="unit">(V)</div>
                             </div>
                             <div class="col">
-                                <div class="fs-6 text-muted">@RoundToOneDecimal(status?.LoadCurrent)</div>
-                                Current (A)
+                                <div class="fs-5 text-muted">@RoundToOneDecimal(status?.LoadCurrent)</div>
+                                Current
+                                <div class="unit">(A)</div>
                             </div>
                         </div>   
                     </div>
@@ -76,12 +78,14 @@
                         </div>                         
                         <div class="row p-1">
                             <div class="col">
-                                <div class="fs-6 text-muted">@RoundToWholeNumer(status?.PVInputVoltage)</div>
-                                <span class="text-body">Voltage (V)</span>
+                                <div class="fs-5 text-muted">@RoundToWholeNumer(status?.PVInputVoltage)</div>
+                                <span class="text-body">Voltage</span>
+                                <div class="unit">(V)</div>
                             </div>
                             <div class="col">
-                                <div class="fs-6 text-muted">@RoundToOneDecimal(status?.PVInputCurrent)</div>
-                                Current (A)
+                                <div class="fs-5 text-muted">@RoundToOneDecimal(status?.PVInputCurrent)</div>
+                                Current 
+                                <div class="unit">(A)</div>
                             </div>
                         </div>   
                     </div>
@@ -106,8 +110,8 @@
                             <div class="fw-bold">
                                 <div class="fs-1 text-danger">@status?.BatteryChargeWatts</div>
                                 Watts
-                                <div class="fw-bold">
-                                    <div class="fs-6 text-muted">@RoundToOneDecimal(status?.BatteryChargeCurrent)</div>
+                                <div class="fw-bold unit">
+                                    <div class="fs-5 text-muted">@RoundToOneDecimal(status?.BatteryChargeCurrent)</div>
                                     (A)
                                 </div>
                             </div>
@@ -124,8 +128,8 @@
                             <div class="fw-bold">
                                 <div class="fs-1 text-success">@status?.BatteryDischargeWatts</div>
                                 Watts
-                                <div class="fw-bold">
-                                    <div class="fs-6 text-muted">@RoundToOneDecimal(status?.BatteryDischargeCurrent)</div>
+                                <div class="fw-bold unit">
+                                    <div class="fs-5 text-muted">@RoundToOneDecimal(status?.BatteryDischargeCurrent)</div>
                                     (A)
                                 </div>
                             </div>
