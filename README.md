@@ -1,5 +1,9 @@
 # Hybrid Inverter Monitor (BETA)
 
+<img width="400" src="screenshot.png"/>
+
+---
+
 This application allows you to monitor most chinese hybrid inverters such as `sako, epever, easun, mpp, voltronic, axpert, etc.` in realtime via USB port as an alternative to the wifi kit/module and cloud based apps such as smartess, watchpower, smartclient, etc. which can be at times unreliable.
 
 For this to work, you need to connect a linux computer such as a raspberry/orange pi or any other linux computer to the inverter via USB cable. Windows will not work due to the non-existence of a working device driver.
