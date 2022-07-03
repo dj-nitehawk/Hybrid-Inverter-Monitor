@@ -43,7 +43,7 @@ internal class InverterWorker : BackgroundService
     {
         while (!c.IsCancellationRequested)
         {
-            if (queue.Commands.TryDequeue(out ICommand? cmd))
+            if (queue.Commands.TryDequeue(out var cmd))
             {
                 try
                 {
@@ -55,7 +55,10 @@ internal class InverterWorker : BackgroundService
                     await Connect(c);
                 }
             }
-            await Task.Delay(1000, c);
+            else
+            {
+                await Task.Delay(1000, c);
+            }
         }
     }
 

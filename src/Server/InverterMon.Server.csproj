@@ -5,11 +5,12 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <NoWarn>CS8618</NoWarn>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
 
-    <ItemGroup>
-        <Content Remove="appsettings.Development.json" />
-    </ItemGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <DebugType>none</DebugType>
+    </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="FastEndpoints" Version="4.3.0" />
@@ -23,11 +24,8 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Content Remove="appsettings.Development.json" />
         <None Remove="InverterService\protocol.pdf" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Include="appsettings.Development.json" />
     </ItemGroup>
 
 </Project>
