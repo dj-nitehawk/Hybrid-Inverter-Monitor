@@ -52,7 +52,7 @@ internal class InverterWorker : BackgroundService
                 catch (Exception x)
                 {
                     log.LogError("execution error: {msg}", x.Message);
-                    await Connect(c);
+                    await Task.Delay(1000);
                 }
             }
             else

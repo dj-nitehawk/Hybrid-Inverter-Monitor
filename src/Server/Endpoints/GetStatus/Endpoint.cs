@@ -7,6 +7,8 @@ namespace InverterMon.Server.Endpoints.GetStatus;
 
 public class Endpoint : EndpointWithoutRequest<object>
 {
+    private static InverterStatus blank = new InverterStatus();
+
     public CommandQueue Queue { get; set; }
 
     public override void Configure()
@@ -35,7 +37,6 @@ public class Endpoint : EndpointWithoutRequest<object>
         {
             if (Env.IsDevelopment())
             {
-                await Task.Delay(1000, c);
                 cmd.Data.OutputVoltage = Random.Shared.Next(250);
                 cmd.Data.LoadWatts = Random.Shared.Next(3500);
                 cmd.Data.BatteryVoltage = Random.Shared.Next(28);
@@ -47,6 +48,7 @@ public class Endpoint : EndpointWithoutRequest<object>
                 cmd.Data.PVInputWatt = Random.Shared.Next(1800);
                 cmd.Data.BatteryVoltage = Random.Shared.Next(26);
                 yield return cmd.Data;
+                await Task.Delay(1000, c);
             }
             else
             {
@@ -55,12 +57,14 @@ public class Endpoint : EndpointWithoutRequest<object>
                 Queue.Commands.Enqueue(cmd);
 
                 while (!cmd.IsComplete && !cmd.TimedOut)
-                    await Task.Delay(100, c);
+                    await Task.Delay(300, c);
 
                 if (cmd.IsComplete)
                     yield return cmd.Data;
+                else
+                    yield return blank;
 
-                await Task.Delay(5000, c);
+                await Task.Delay(2000, c);
             }
         }
     }

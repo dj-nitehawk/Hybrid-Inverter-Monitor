@@ -43,7 +43,8 @@ User=root
 Group=root
 UMask=000
 
-WorkingDirectory=/inverter #put the downloaded files in here
+#put the downloaded files in here
+WorkingDirectory=/inverter
 ExecStart=/inverter/InverterMon.Server
 
 Restart=always
