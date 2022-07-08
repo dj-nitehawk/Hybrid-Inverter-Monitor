@@ -19,7 +19,7 @@ a, .btn-link {
 }
 
 .content {
-    padding-top: 1.1rem;
+    padding-top: 0.5rem;
 }
 
 .valid.modified:not([type=checkbox]) {
@@ -63,9 +63,9 @@ a, .btn-link {
         content: "An error has occurred."
     }
 
-@media only screen and (max-width: 350px) {
+@media only screen and (max-width: 360px) {
     .voltage {
-        font-size: 0.7em !important;
+        font-size: 0.5em !important;
     }
 
     .charge-discharge {
@@ -75,4 +75,26 @@ a, .btn-link {
 
 .unit {
     font-size: 0.9em !important;
+}
+
+.navbar {
+    padding-top: .1rem;
+    padding-bottom: .1rem;
+}
+
+.navbar-toggler-icon {
+    width: 0.75rem;
+    height: 0.75rem;
+}
+
+.card-header {
+    padding: 0.2rem;
+}
+
+.card-body {
+    padding: 0.2rem
+}
+
+.row {
+    --bs-gutter-x: 0.4rem;
 }

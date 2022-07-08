@@ -7,7 +7,7 @@ namespace InverterMon.Server.Endpoints.GetStatus;
 
 public class Endpoint : EndpointWithoutRequest<object>
 {
-    private static InverterStatus blank = new InverterStatus();
+    private static readonly InverterStatus blank = new();
 
     public CommandQueue Queue { get; set; }
 
@@ -41,7 +41,7 @@ public class Endpoint : EndpointWithoutRequest<object>
                 cmd.Data.LoadWatts = Random.Shared.Next(3500);
                 cmd.Data.BatteryVoltage = Random.Shared.Next(28);
                 cmd.Data.BatteryChargeCurrent = Random.Shared.Next(20);
-                cmd.Data.BatteryDischargeCurrent = 10; Random.Shared.Next(10);
+                cmd.Data.BatteryDischargeCurrent = 10; _ = Random.Shared.Next(10);
                 cmd.Data.HeatSinkTemperature = Random.Shared.Next(300);
                 cmd.Data.PVInputCurrent = Random.Shared.Next(300);
                 cmd.Data.PVInputVoltage = Random.Shared.Next(300);
@@ -58,10 +58,7 @@ public class Endpoint : EndpointWithoutRequest<object>
                 while (!cmd.IsComplete && !cmd.TimedOut)
                     await Task.Delay(300, c);
 
-                if (cmd.IsComplete)
-                    yield return cmd.Data;
-                else
-                    yield return blank;
+                yield return cmd.IsComplete ? cmd.Data : blank;
 
                 await Task.Delay(2000, c);
             }
