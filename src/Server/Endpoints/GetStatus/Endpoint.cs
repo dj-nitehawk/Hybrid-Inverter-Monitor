@@ -39,6 +39,7 @@ public class Endpoint : EndpointWithoutRequest<object>
             {
                 cmd.Data.OutputVoltage = Random.Shared.Next(250);
                 cmd.Data.LoadWatts = Random.Shared.Next(3500);
+                cmd.Data.LoadPercentage = Random.Shared.Next(100);
                 cmd.Data.BatteryVoltage = Random.Shared.Next(28);
                 cmd.Data.BatteryChargeCurrent = Random.Shared.Next(20);
                 cmd.Data.BatteryDischargeCurrent = 10; _ = Random.Shared.Next(10);

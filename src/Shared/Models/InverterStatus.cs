@@ -42,7 +42,7 @@ public class InverterStatus
     //        lastloadWattHourComputed = DateTime.Now;
     //    }
     //}
-    //public decimal LoadPercentage { get; set; }
+    public decimal LoadPercentage { get; set; }
     //public decimal BusVoltage { get; set; }
     public decimal BatteryVoltage { get; set; }
     public int BatteryChargeCurrent { get; set; }

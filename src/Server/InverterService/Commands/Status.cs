@@ -19,7 +19,7 @@ internal class Status : Command<InverterStatus>
         //Data.OutputFrequency = decimal.Parse(parts[3]);
         //Data.LoadVA = int.Parse(parts[4]);
         Data.LoadWatts = int.Parse(parts[5]);
-        //Data.LoadPercentage = decimal.Parse(parts[6]);
+        Data.LoadPercentage = decimal.Parse(parts[6]);
         //Data.BusVoltage = decimal.Parse(parts[7]);
         Data.BatteryVoltage = decimal.Parse(parts[8]);
         Data.BatteryChargeCurrent = int.Parse(parts[9]);
