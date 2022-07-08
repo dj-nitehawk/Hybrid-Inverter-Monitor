@@ -41,12 +41,11 @@ public class Endpoint : EndpointWithoutRequest<object>
                 cmd.Data.LoadWatts = Random.Shared.Next(3500);
                 cmd.Data.BatteryVoltage = Random.Shared.Next(28);
                 cmd.Data.BatteryChargeCurrent = Random.Shared.Next(20);
-                cmd.Data.BatteryDischargeCurrent = Random.Shared.Next(10);
+                cmd.Data.BatteryDischargeCurrent = 10; Random.Shared.Next(10);
                 cmd.Data.HeatSinkTemperature = Random.Shared.Next(300);
                 cmd.Data.PVInputCurrent = Random.Shared.Next(300);
                 cmd.Data.PVInputVoltage = Random.Shared.Next(300);
                 cmd.Data.PVInputWatt = Random.Shared.Next(1800);
-                cmd.Data.BatteryVoltage = Random.Shared.Next(26);
                 yield return cmd.Data;
                 await Task.Delay(1000, c);
             }

@@ -2,20 +2,7 @@
 
 public class InverterStatus
 {
-    public int GridUsageWatts
-    {
-        get
-        {
-            int freePower = pvInputWatt + BatteryDischargeWatts;
-            if (freePower < loadWatts)
-            {
-                int diff = loadWatts - freePower;
-                if (diff > 25)
-                    return diff;
-            }
-            return 0;
-        }
-    }
+    public int GridUsageWatts => LoadWatts + BatteryChargeWatts - (PVInputWatt + BatteryDischargeWatts);
     //public decimal GridVoltage { get; set; }
     //public decimal GridFrequency { get; set; }
     public decimal OutputVoltage { get; set; }
