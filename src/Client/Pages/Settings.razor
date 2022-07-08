@@ -1,0 +1,72 @@
+﻿@page "/settings"
+@using InverterMon.Shared.Models
+@inject HttpClient Http
+
+<PageTitle>Settings</PageTitle>
+
+<h1>Inverter Settings</h1>
+
+<div class="container">
+    <div class="row border-primary bg-light">
+        <div class="col-6 my-auto">
+            Battery charging priority:
+        </div>
+        <div class="col-6 bg-secondary p-2">
+            <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetChargePriority(ChargePriorityRequest.SolarFirst)">
+                <span class="@Spinner("SolarFirst")"></span>
+                <span class="@Hidden("SolarFirst")">Solar First</span>
+                <span class="@Success("SolarFirst")"></span>
+            </button>
+            <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetChargePriority(ChargePriorityRequest.SolarAndUtility)">
+                <span class="@Spinner("SolarAndUtility")"></span>
+                <span class="@Hidden("SolarAndUtility")">Solar & Utility</span>
+                <span class="@Success("SolarAndUtility")"></span>
+            </button>
+            <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetChargePriority(ChargePriorityRequest.OnlySolar)">
+                <span class="@Spinner("OnlySolar")"></span>
+                <span class="@Hidden("OnlySolar")">Solar Only</span>
+                <span class="@Success("OnlySolar")"></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+@code{
+    private string CurrentButton = "";
+    private bool IsSuccess;
+
+    private async Task SetChargePriority(string priority)
+    {
+        IsSuccess = false;
+
+        if (priority == ChargePriorityRequest.OnlySolar)
+            CurrentButton = "OnlySolar";
+
+        if (priority == ChargePriorityRequest.SolarAndUtility)
+            CurrentButton = "SolarAndUtility";
+
+        if (priority == ChargePriorityRequest.SolarFirst)
+            CurrentButton = "SolarFirst";
+
+        var res = await Http.GetStringAsync($"api/settings/charge-priority/{priority}");
+        if (res == "true")
+        {
+            IsSuccess = true;
+        }
+    }
+
+    public string Spinner (string button)
+    {
+        return CurrentButton == button && !IsSuccess ? "spinner-border" : "";
+    }
+
+    private string Hidden(string button)
+    {
+        return CurrentButton == button && !IsSuccess ? "visually-hidden" : "";
+    }
+
+    private string Success(string button)
+    {
+        return CurrentButton == button && IsSuccess ? "oi oi-circle-check text-success" : "";
+    }
+}

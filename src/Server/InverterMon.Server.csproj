@@ -4,7 +4,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <NoWarn>CS8618</NoWarn>
+        <NoWarn>CS8618;CA2016</NoWarn>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
 
@@ -29,8 +29,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <_WebToolingArtifacts Remove="Properties\PublishProfiles\linux-arm-x64.pubxml" />
-      <_WebToolingArtifacts Remove="Properties\PublishProfiles\linux-arm-x86.pubxml" />
+        <_WebToolingArtifacts Remove="Properties\PublishProfiles\linux-arm-x64.pubxml" />
+        <_WebToolingArtifacts Remove="Properties\PublishProfiles\linux-arm-x86.pubxml" />
     </ItemGroup>
 
 </Project>

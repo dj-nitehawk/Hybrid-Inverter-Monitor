@@ -2,7 +2,7 @@
 
 public interface ICommand
 {
-    string CommandString { get; }
+    string CommandString { get; set; }
     bool IsComplete { get; set; }
     void Parse(string rawResponse);
 }
@@ -11,10 +11,22 @@ internal abstract class Command<TResponseDto> : ICommand where TResponseDto : ne
 {
 
     public DateTime StartTime { private get; set; }
-    public bool TimedOut => DateTime.Now.Subtract(StartTime).TotalSeconds > 3;
-    public TResponseDto Data { get; } = new();
+    public bool TimedOut => DateTime.Now.Subtract(StartTime).TotalSeconds > 5;
+    public TResponseDto Result { get; protected set; } = new();
     public bool IsComplete { get; set; }
-    public abstract string CommandString { get; }
+    public abstract string CommandString { get; set; }
 
-    public abstract void Parse(string rawResponse);
+    public abstract void Parse(string responseFromInverter);
+
+    protected bool IsCommandSuccessful(string responseFromInverter)
+    {
+        //Console.WriteLine("inverter response: " + responseFromInverter);
+        return responseFromInverter[1..4] == "ACK";
+    }
+
+    public async Task WhileProcessing(CancellationToken c)
+    {
+        while (!IsComplete && !TimedOut)
+            await Task.Delay(300, c);
+    }
 }

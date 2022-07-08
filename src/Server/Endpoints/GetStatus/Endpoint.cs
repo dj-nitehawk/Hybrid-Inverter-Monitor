@@ -37,17 +37,17 @@ public class Endpoint : EndpointWithoutRequest<object>
         {
             if (Env.IsDevelopment())
             {
-                cmd.Data.OutputVoltage = Random.Shared.Next(250);
-                cmd.Data.LoadWatts = Random.Shared.Next(3500);
-                cmd.Data.LoadPercentage = Random.Shared.Next(100);
-                cmd.Data.BatteryVoltage = Random.Shared.Next(28);
-                cmd.Data.BatteryChargeCurrent = Random.Shared.Next(20);
-                cmd.Data.BatteryDischargeCurrent = 10; _ = Random.Shared.Next(10);
-                cmd.Data.HeatSinkTemperature = Random.Shared.Next(300);
-                cmd.Data.PVInputCurrent = Random.Shared.Next(300);
-                cmd.Data.PVInputVoltage = Random.Shared.Next(300);
-                cmd.Data.PVInputWatt = Random.Shared.Next(1800);
-                yield return cmd.Data;
+                cmd.Result.OutputVoltage = Random.Shared.Next(250);
+                cmd.Result.LoadWatts = Random.Shared.Next(3500);
+                cmd.Result.LoadPercentage = Random.Shared.Next(100);
+                cmd.Result.BatteryVoltage = Random.Shared.Next(28);
+                cmd.Result.BatteryChargeCurrent = Random.Shared.Next(20);
+                cmd.Result.BatteryDischargeCurrent = 10; _ = Random.Shared.Next(10);
+                cmd.Result.HeatSinkTemperature = Random.Shared.Next(300);
+                cmd.Result.PVInputCurrent = Random.Shared.Next(300);
+                cmd.Result.PVInputVoltage = Random.Shared.Next(300);
+                cmd.Result.PVInputWatt = Random.Shared.Next(1800);
+                yield return cmd.Result;
                 await Task.Delay(1000, c);
             }
             else
@@ -56,10 +56,9 @@ public class Endpoint : EndpointWithoutRequest<object>
                 cmd.StartTime = DateTime.Now;
                 Queue.Commands.Enqueue(cmd);
 
-                while (!cmd.IsComplete && !cmd.TimedOut)
-                    await Task.Delay(300, c);
+                await cmd.WhileProcessing(c);
 
-                yield return cmd.IsComplete ? cmd.Data : blank;
+                yield return cmd.IsComplete ? cmd.Result : blank;
 
                 await Task.Delay(2000, c);
             }
