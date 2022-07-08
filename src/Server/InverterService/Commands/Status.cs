@@ -13,7 +13,7 @@ internal class Status : Command<InverterStatus>
         string[]? parts = responseFromInverter[1..]
             .Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-        //Data.GridVoltage = decimal.Parse(parts[0]);
+        Data.GridVoltage = decimal.Parse(parts[0]);
         //Data.GridFrequency = decimal.Parse(parts[1]);
         Data.OutputVoltage = decimal.Parse(parts[2]);
         //Data.OutputFrequency = decimal.Parse(parts[3]);
