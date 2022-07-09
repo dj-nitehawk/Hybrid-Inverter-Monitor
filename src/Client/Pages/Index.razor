@@ -5,141 +5,146 @@
 
 <PageTitle>Dashboard</PageTitle>
 
-<div class="container">
+<Loader Enabled=@(status is null) />
 
-@if(status?.GridUsageWatts > 50)
+@if(status is not null)
 {
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="card">
-                <h5 class="card-header">
-                    <span class="oi oi-power-standby" aria-hidden="true"/>
-                    Grid Usage
-                </h5>
-                <div class="card-body">
-                    <div class="container text-center fw-bold">
-                        <div class="row bg-light rounded">
-                            <div class="col">
-                                <div class="fs-1 text-danger">@status?.GridUsageWatts</div>
-                                W
-                            </div>
-                        </div> 
+    <div class="container">
+
+    @if(status?.GridUsageWatts > 50)
+    {
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <h5 class="card-header">
+                        <span class="oi oi-power-standby" aria-hidden="true"/>
+                        Grid Usage
+                    </h5>
+                    <div class="card-body">
+                        <div class="container text-center fw-bold">
+                            <div class="row bg-light rounded">
+                                <div class="col">
+                                    <div class="fs-1 text-danger">@status?.GridUsageWatts</div>
+                                    W
+                                </div>
+                            </div> 
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>   
-}
-    <div class="row mt-2">
-        <div class="col-sm-6">
-            <div class="card">
-                <h5 class="card-header">
-                    <span class="oi oi-lightbulb" aria-hidden="true"/>
-                    Output Load - @RoundToWholeNumer(status?.LoadPercentage)%
-                </h5>
-                <div class="card-body">
-                    <div class="container text-center fw-bold">
-                        <div class="row bg-light rounded">
-                            <div class="col">
-                                <div class="fs-1 text-danger">@status?.LoadWatts</div>
-                                W
-                            </div>
-                        </div>                         
-                        <div class="row">
-                            <div class="col">
-                                <div class="fs-5 text-muted">@RoundToWholeNumer(status?.OutputVoltage)</div>
-                                <span class="text-body">
-                                    V
-                                </span>
-                               </div>
-                            <div class="col">
-                                <div class="fs-5 text-muted">@RoundToOneDecimal(status?.LoadCurrent)</div>
-                                A
-                            </div>
-                        </div>   
-                    </div>
-                </div>
-            </div>
-        </div>
-    
-        <div class="col-sm-6">
-            <div class="card">
-                <h5 class="card-header">
-                    <span class="oi oi-sun" aria-hidden="true"/>
-                    PV Input
-                </h5>
-                <div class="card-body">
-                    <div class="container text-center fw-bold">
-                        <div class="row bg-light rounded">
-                            <div class="col">
-                                <div class="fs-1 text-success">@status?.PVInputWatt</div>
-                                W
-                            </div>
-                        </div>                         
-                        <div class="row">
-                            <div class="col">
-                                <div class="fs-5 text-muted">@RoundToWholeNumer(status?.PVInputVoltage)</div>
+        </div>   
+    }
+        <div class="row mt-2">
+            <div class="col-sm-6">
+                <div class="card">
+                    <h5 class="card-header">
+                        <span class="oi oi-lightbulb" aria-hidden="true"/>
+                        Output Load - @RoundToWholeNumer(status?.LoadPercentage)%
+                    </h5>
+                    <div class="card-body">
+                        <div class="container text-center fw-bold">
+                            <div class="row bg-light rounded">
+                                <div class="col">
+                                    <div class="fs-1 text-danger">@status?.LoadWatts</div>
+                                    W
+                                </div>
+                            </div>                         
+                            <div class="row">
+                                <div class="col">
+                                    <div class="fs-5 text-muted">@RoundToWholeNumer(status?.OutputVoltage)</div>
                                     <span class="text-body">
                                         V
                                     </span>
-                                </div>
-                            <div class="col">
-                                <div class="fs-5 text-muted">@RoundToOneDecimal(status?.PVInputCurrent)</div>
-                                A 
-                            </div>
-                        </div>   
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>    
-</div>
-
-<div class="container pt-2">
-        <div class="row">
-        <div class="col-sm-12">
-            <div class="card">
-                <h5 class="card-header align-self-center w-100">
-                    <span class="oi oi-battery-empty" aria-hidden="true"/>
-                    Battery
-                </h5>
-                <div class="container text-center">
-                    <div class="row">
-                        <div class="col-4">
-                            <span class="fs-6 fw-bold text-muted charge-discharge">Charging</span>
-                            <div class="fw-bold">
-                                <div class="fs-1 text-danger">@status?.BatteryChargeWatts</div>
-                                W
-                                <div class="fw-bold">
-                                    <div class="fs-5 text-muted">@RoundToOneDecimal(status?.BatteryChargeCurrent)</div>
+                                   </div>
+                                <div class="col">
+                                    <div class="fs-5 text-muted">@RoundToOneDecimal(status?.LoadCurrent)</div>
                                     A
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="container bg-light rounded-1 p-3 m-2 fw-bold text-muted fs-1">
-                                <div class="fs-4 voltage">Voltage</div>
-                                <div class="text-black charge-discharge">@RoundToOneDecimal(status?.BatteryVoltage)</div>
-                                <div class="fs-6 text-black-50">V</div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <span class="fs-6 fw-bold text-muted charge-discharge">Discharging</span>
-                            <div class="fw-bold">
-                                <div class="fs-1 text-success">@status?.BatteryDischargeWatts</div>
-                                W
-                                <div class="fw-bold">
-                                    <div class="fs-5 text-muted">@RoundToOneDecimal(status?.BatteryDischargeCurrent)</div>
-                                    A
-                                </div>
-                            </div>
+                            </div>   
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        </div>
+    
+            <div class="col-sm-6">
+                <div class="card">
+                    <h5 class="card-header">
+                        <span class="oi oi-sun" aria-hidden="true"/>
+                        PV Input
+                    </h5>
+                    <div class="card-body">
+                        <div class="container text-center fw-bold">
+                            <div class="row bg-light rounded">
+                                <div class="col">
+                                    <div class="fs-1 text-success">@status?.PVInputWatt</div>
+                                    W
+                                </div>
+                            </div>                         
+                            <div class="row">
+                                <div class="col">
+                                    <div class="fs-5 text-muted">@RoundToWholeNumer(status?.PVInputVoltage)</div>
+                                        <span class="text-body">
+                                            V
+                                        </span>
+                                    </div>
+                                <div class="col">
+                                    <div class="fs-5 text-muted">@RoundToOneDecimal(status?.PVInputCurrent)</div>
+                                    A 
+                                </div>
+                            </div>   
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
     </div>
+
+    <div class="container pt-2">
+            <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <h5 class="card-header align-self-center w-100">
+                        <span class="oi oi-battery-empty" aria-hidden="true"/>
+                        Battery
+                    </h5>
+                    <div class="container text-center">
+                        <div class="row">
+                            <div class="col-4">
+                                <span class="fs-6 fw-bold text-muted charge-discharge">Charging</span>
+                                <div class="fw-bold">
+                                    <div class="fs-1 text-danger">@status?.BatteryChargeWatts</div>
+                                    W
+                                    <div class="fw-bold">
+                                        <div class="fs-5 text-muted">@RoundToOneDecimal(status?.BatteryChargeCurrent)</div>
+                                        A
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="container bg-light rounded-1 p-3 m-2 fw-bold text-muted fs-1">
+                                    <div class="fs-4 voltage">Voltage</div>
+                                    <div class="text-black charge-discharge">@RoundToOneDecimal(status?.BatteryVoltage)</div>
+                                    <div class="fs-6 text-black-50">V</div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <span class="fs-6 fw-bold text-muted charge-discharge">Discharging</span>
+                                <div class="fw-bold">
+                                    <div class="fs-1 text-success">@status?.BatteryDischargeWatts</div>
+                                    W
+                                    <div class="fw-bold">
+                                        <div class="fs-5 text-muted">@RoundToOneDecimal(status?.BatteryDischargeCurrent)</div>
+                                        A
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>    
+}
 
 @code{
     private InverterStatus? status;

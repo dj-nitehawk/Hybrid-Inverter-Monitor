@@ -4,17 +4,7 @@
 
 <PageTitle>Settings</PageTitle>
 
-@if(settings is null)
-{
-    <div id="app">
-        <div class="container vh-100 w-100 text-center">
-            <div class="my-auto p-5">
-                <span class="spinner-border"></span>
-                <div class="fw-bold">... Loading ...</div>
-            </div>
-        </div>
-    </div>
-}
+<Loader Enabled=@(settings is null)/>
 
 @if(settings is not null)
 {
