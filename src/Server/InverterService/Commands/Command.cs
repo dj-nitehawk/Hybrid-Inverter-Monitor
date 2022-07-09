@@ -11,7 +11,7 @@ internal abstract class Command<TResponseDto> : ICommand where TResponseDto : ne
 {
 
     public DateTime StartTime { private get; set; } = DateTime.Now;
-    public bool TimedOut => DateTime.Now.Subtract(StartTime).TotalSeconds > 5;
+    public bool TimedOut => DateTime.Now.Subtract(StartTime).TotalSeconds > 3;
     public TResponseDto Result { get; protected set; } = new();
     public bool IsComplete { get; set; }
     public abstract string CommandString { get; set; }

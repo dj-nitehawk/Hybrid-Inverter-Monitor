@@ -14,31 +14,54 @@
 @if(settings is not null)
 {
     <div class="container">
-        <div class="row border-primary bg-light">
-            <div class="col-6 my-auto">
-                Battery charging priority:
+        <div class="row border-primary bg-light px-3">
+            <div class="col-6 my-auto fw-bold">
+                Battery Charging Priority:
             </div>
             <div class="col-6 bg-secondary p-2">
                 <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetChargePriority(ChargePriorityRequest.OnlySolar)">
-                    <span class="@Spinner(Button.OnlySolar)"></span>
-                    <span class="@Hidden(Button.OnlySolar)">Solar Only</span>
-                    <span class="@Success(Button.OnlySolar, ChargePriorityRequest.OnlySolar, settings.ChargePriority)"></span>
+                    <span class="@Spinner(Button.ChOnlySolar)"></span>
+                    <span class="@Hidden(Button.ChOnlySolar)">Solar Only</span>
+                    <span class="@Success(Button.ChOnlySolar, ChargePriorityRequest.OnlySolar, settings.ChargePriority)"></span>
                 </button>
                 <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetChargePriority(ChargePriorityRequest.SolarFirst)">
-                    <span class="@Spinner(Button.SolarFirst)"></span>
-                    <span class="@Hidden(Button.SolarFirst)">Solar First</span>
-                    <span class="@Success(Button.SolarFirst, ChargePriorityRequest.SolarFirst, settings.ChargePriority)"></span>
+                    <span class="@Spinner(Button.ChSolarFirst)"></span>
+                    <span class="@Hidden(Button.ChSolarFirst)">Solar First</span>
+                    <span class="@Success(Button.ChSolarFirst, ChargePriorityRequest.SolarFirst, settings.ChargePriority)"></span>
                 </button>
                 <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetChargePriority(ChargePriorityRequest.SolarAndUtility)">
-                    <span class="@Spinner(Button.SolarAndUtility)"></span>
-                    <span class="@Hidden(Button.SolarAndUtility)">Solar & Utility</span>
-                    <span class="@Success(Button.SolarAndUtility, ChargePriorityRequest.SolarAndUtility, settings.ChargePriority)"></span>
+                    <span class="@Spinner(Button.ChSolarAndUtility)"></span>
+                    <span class="@Hidden(Button.ChSolarAndUtility)">Solar & Utility</span>
+                    <span class="@Success(Button.ChSolarAndUtility, ChargePriorityRequest.SolarAndUtility, settings.ChargePriority)"></span>
                 </button>
                 <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetChargePriority(ChargePriorityRequest.UtilityFirst)">
-                    <span class="@Spinner(Button.UtilityFirst)"></span>
-                    <span class="@Hidden(Button.UtilityFirst)">Utility First</span>
-                    <span class="@Success(Button.UtilityFirst, ChargePriorityRequest.UtilityFirst, settings.ChargePriority)"></span>
+                    <span class="@Spinner(Button.ChUtilityFirst)"></span>
+                    <span class="@Hidden(Button.ChUtilityFirst)">Utility First</span>
+                    <span class="@Success(Button.ChUtilityFirst, ChargePriorityRequest.UtilityFirst, settings.ChargePriority)"></span>
                 </button>
+            </div>
+        </div>
+
+        <div class="row border-primary bg-light px-3 mt-1">
+            <div class="col-6 my-auto fw-bold">
+                Output Source Priority:
+            </div>
+            <div class="col-6 bg-secondary p-2">
+                <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetOutputPriority(OutputPriorityRequest.SolarFirst)">
+                    <span class="@Spinner(Button.OpSolarFirst)"></span>
+                    <span class="@Hidden(Button.OpSolarFirst)">Solar First</span>
+                    <span class="@Success(Button.OpSolarFirst, OutputPriorityRequest.SolarFirst, settings.OutputPriority)"></span>
+                </button>
+                 <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetOutputPriority(OutputPriorityRequest.SolarBatteryUtility)">
+                    <span class="@Spinner(Button.OpSolarBatteryUtility)"></span>
+                    <span class="@Hidden(Button.OpSolarBatteryUtility)">Solar > Battery > Utility</span>
+                    <span class="@Success(Button.OpSolarBatteryUtility, OutputPriorityRequest.SolarBatteryUtility, settings.OutputPriority)"></span>
+                </button>  
+                 <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetOutputPriority(OutputPriorityRequest.UtilityFirst)">
+                    <span class="@Spinner(Button.OpUtilityFirst)"></span>
+                    <span class="@Hidden(Button.OpUtilityFirst)">Utility First</span>
+                    <span class="@Success(Button.OpUtilityFirst, OutputPriorityRequest.UtilityFirst, settings.OutputPriority)"></span>
+                </button>                   
             </div>
         </div>
     </div>    
@@ -68,16 +91,16 @@
         switch (priority)
         {
             case ChargePriorityRequest.OnlySolar:
-                currentButton = Button.OnlySolar;
+                currentButton = Button.ChOnlySolar;
                 break;
             case ChargePriorityRequest.SolarFirst:
-                currentButton = Button.SolarFirst;
+                currentButton = Button.ChSolarFirst;
                 break;
             case ChargePriorityRequest.SolarAndUtility:
-                currentButton = Button.SolarAndUtility;
+                currentButton = Button.ChSolarAndUtility;
                 break;
             case ChargePriorityRequest.UtilityFirst:
-                currentButton = Button.UtilityFirst;
+                currentButton = Button.ChUtilityFirst;
                 break;
             default:
                 currentButton = Button.None;
@@ -88,6 +111,33 @@
         { 
             isSuccess = true;
             settings!.ChargePriority = priority;
+        }
+    }
+
+    private async Task SetOutputPriority(string priority)
+    {
+        isSuccess = false;
+
+        switch (priority)
+        {
+            case OutputPriorityRequest.SolarFirst:
+                currentButton = Button.OpSolarFirst;
+                break;
+            case OutputPriorityRequest.SolarBatteryUtility:
+                currentButton = Button.OpSolarBatteryUtility;
+                break;
+            case OutputPriorityRequest.UtilityFirst:
+                currentButton = Button.OpUtilityFirst;
+                break;
+            default:
+                currentButton = Button.None;
+                break;
+        };
+
+        if (await Http.GetStringAsync($"api/settings/output-priority/{priority}") == "true")
+        { 
+            isSuccess = true;
+            settings!.OutputPriority = priority;
         }
     }
 
@@ -109,9 +159,12 @@
     private enum Button
     {
         None,
-        OnlySolar,
-        SolarFirst,
-        SolarAndUtility,
-        UtilityFirst
+        ChOnlySolar,
+        ChSolarFirst,
+        ChSolarAndUtility,
+        ChUtilityFirst,
+        OpUtilityFirst,
+        OpSolarFirst,
+        OpSolarBatteryUtility
     }
 }

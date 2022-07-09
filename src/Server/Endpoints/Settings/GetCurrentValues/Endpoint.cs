@@ -20,8 +20,23 @@ public class Endpoint : EndpointWithoutRequest<SettingsStatus>
         Queue.Commands.Enqueue(cmd);
         await cmd.WhileProcessing(c);
         if (cmd.IsComplete)
+        {
             await SendAsync(cmd.Result);
+        }
         else
-            ThrowError("Unable to read current settings in a timely manner!");
+        {
+            if (Env.IsDevelopment())
+            {
+                cmd.Result.ChargePriority = "03";
+                cmd.Result.MaxACChargeCurrent = "10";
+                cmd.Result.MaxCombinedChargeCurrent = "020";
+                cmd.Result.OutputPriority = "02";
+                await SendAsync(cmd.Result);
+            }
+            else
+            {
+                ThrowError("Unable to read current settings in a timely manner!");
+            }
+        }
     }
 }
