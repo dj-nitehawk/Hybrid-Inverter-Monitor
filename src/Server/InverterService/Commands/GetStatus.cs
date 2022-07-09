@@ -33,6 +33,6 @@ internal class GetStatus : Command<InverterStatus>
         //Data.LoadOn = parts[16][3];
         //Data.SCCOn = parts[16][1];
         //Data.ACChargeOn = parts[16][2];
-        Result.PVInputWatt = int.Parse(parts[19]);
+        Result.PVInputWatt = Convert.ToInt32(int.Parse(parts[19]) / 1.09);
     }
 }
