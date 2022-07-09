@@ -1,5 +1,4 @@
 ﻿using InverterMon.Server.InverterService;
-using InverterMon.Server.InverterService.Commands;
 using InverterMon.Shared.Models;
 using System.Runtime.CompilerServices;
 
@@ -31,7 +30,7 @@ public class Endpoint : EndpointWithoutRequest<object>
 
     private async IAsyncEnumerable<InverterStatus> GetDataStream([EnumeratorCancellation] CancellationToken c)
     {
-        Status? cmd = new();
+        InverterService.Commands.GetStatus? cmd = new();
 
         while (!c.IsCancellationRequested)
         {

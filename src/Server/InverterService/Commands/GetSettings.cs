@@ -2,7 +2,7 @@ using InverterMon.Shared.Models;
 
 namespace InverterMon.Server.InverterService.Commands;
 
-internal class CurrentSettings : Command<SettingsStatus>
+internal class GetSettings : Command<CurrentSettings>
 {
     public override string CommandString { get; set; } = "QPIRI";
 

@@ -1,6 +1,6 @@
 ﻿namespace InverterMon.Shared.Models;
 
-public class SettingsStatus
+public class CurrentSettings
 {
     public string ChargePriority { get; set; }
     public string OutputPriority { get; set; }
