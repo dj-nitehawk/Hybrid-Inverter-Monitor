@@ -1,4 +1,4 @@
-# Hybrid Inverter Monitor (BETA)
+# Hybrid Inverter Monitor
 
 <img width="400" src="screenshot.png"/>
 
