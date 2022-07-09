@@ -4,15 +4,22 @@
 
 <PageTitle>Settings</PageTitle>
 
-<h1>Inverter Settings 
-    @if(settings is null)
-    {
-        <span class="spinner-border"></span>
-    }
-</h1>
+@if(settings is null)
+{
+    <div id="app">
+        <div class="container vh-100 w-100 text-center">
+            <div class="my-auto p-5">
+                <span class="spinner-border"></span>
+                <div class="fw-bold">... Loading ...</div>
+            </div>
+        </div>
+    </div>
+}
 
 @if(settings is not null)
 {
+    <h1>Inverter Settings</h1>
+
     <div class="container">
         <div class="row border-primary bg-light px-3">
             <div class="col-6 my-auto fw-bold">

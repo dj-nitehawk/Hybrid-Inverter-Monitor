@@ -16,13 +16,21 @@
 </head>
 
 <body>
-    <div id="app">Loading...</div>
+    <div id="app">
+        <div class="container vh-100 w-100 text-center">
+            <div class="my-auto p-5">
+                <span class="spinner-border"></span>
+                <div class="fw-bold">... Loading ...</div>
+            </div>
+        </div>
+    </div>
 
     <div id="blazor-error-ui">
-        An unhandled error has occurred.
+        An error has occurred...
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
+
     <script src="_framework/blazor.webassembly.js"></script>
     <script>
         if ('serviceWorker' in navigator)
