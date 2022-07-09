@@ -4,69 +4,114 @@
 
 <PageTitle>Settings</PageTitle>
 
-<h1>Inverter Settings</h1>
+<h1>Inverter Settings 
+    @if(settings is null)
+    {
+        <span class="spinner-border"></span>
+    }
+</h1>
 
-<div class="container">
-    <div class="row border-primary bg-light">
-        <div class="col-6 my-auto">
-            Battery charging priority:
+@if(settings is not null)
+{
+    <div class="container">
+        <div class="row border-primary bg-light">
+            <div class="col-6 my-auto">
+                Battery charging priority:
+            </div>
+            <div class="col-6 bg-secondary p-2">
+                <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetChargePriority(ChargePriorityRequest.OnlySolar)">
+                    <span class="@Spinner(Button.OnlySolar)"></span>
+                    <span class="@Hidden(Button.OnlySolar)">Solar Only</span>
+                    <span class="@Success(Button.OnlySolar, ChargePriorityRequest.OnlySolar, settings.ChargePriority)"></span>
+                </button>
+                <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetChargePriority(ChargePriorityRequest.SolarFirst)">
+                    <span class="@Spinner(Button.SolarFirst)"></span>
+                    <span class="@Hidden(Button.SolarFirst)">Solar First</span>
+                    <span class="@Success(Button.SolarFirst, ChargePriorityRequest.SolarFirst, settings.ChargePriority)"></span>
+                </button>
+                <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetChargePriority(ChargePriorityRequest.SolarAndUtility)">
+                    <span class="@Spinner(Button.SolarAndUtility)"></span>
+                    <span class="@Hidden(Button.SolarAndUtility)">Solar & Utility</span>
+                    <span class="@Success(Button.SolarAndUtility, ChargePriorityRequest.SolarAndUtility, settings.ChargePriority)"></span>
+                </button>
+                <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetChargePriority(ChargePriorityRequest.UtilityFirst)">
+                    <span class="@Spinner(Button.UtilityFirst)"></span>
+                    <span class="@Hidden(Button.UtilityFirst)">Utility First</span>
+                    <span class="@Success(Button.UtilityFirst, ChargePriorityRequest.UtilityFirst, settings.ChargePriority)"></span>
+                </button>
+            </div>
         </div>
-        <div class="col-6 bg-secondary p-2">
-            <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetChargePriority(ChargePriorityRequest.SolarFirst)">
-                <span class="@Spinner("SolarFirst")"></span>
-                <span class="@Hidden("SolarFirst")">Solar First</span>
-                <span class="@Success("SolarFirst")"></span>
-            </button>
-            <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetChargePriority(ChargePriorityRequest.SolarAndUtility)">
-                <span class="@Spinner("SolarAndUtility")"></span>
-                <span class="@Hidden("SolarAndUtility")">Solar & Utility</span>
-                <span class="@Success("SolarAndUtility")"></span>
-            </button>
-            <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetChargePriority(ChargePriorityRequest.OnlySolar)">
-                <span class="@Spinner("OnlySolar")"></span>
-                <span class="@Hidden("OnlySolar")">Solar Only</span>
-                <span class="@Success("OnlySolar")"></span>
-            </button>
-        </div>
-    </div>
-</div>
+    </div>    
+}
 
 @code{
-    private string CurrentButton = "";
-    private bool IsSuccess;
+    private SettingsStatus? settings;
+    private Button currentButton = Button.None;
+    private bool isSuccess;
 
-    private async Task SetChargePriority(string priority)
+    protected override async Task OnInitializedAsync()
     {
-        IsSuccess = false;
-
-        if (priority == ChargePriorityRequest.OnlySolar)
-            CurrentButton = "OnlySolar";
-
-        if (priority == ChargePriorityRequest.SolarAndUtility)
-            CurrentButton = "SolarAndUtility";
-
-        if (priority == ChargePriorityRequest.SolarFirst)
-            CurrentButton = "SolarFirst";
-
-        var res = await Http.GetStringAsync($"api/settings/charge-priority/{priority}");
-        if (res == "true")
+        try
         {
-            IsSuccess = true;
+            settings = await Http.GetFromJsonAsync<SettingsStatus>("api/settings/get-current-values");
+        }
+        catch (Exception)
+        {
+            // do nothing
         }
     }
 
-    public string Spinner (string button)
+    private async Task SetChargePriority(string priority)
     {
-        return CurrentButton == button && !IsSuccess ? "spinner-border" : "";
+        isSuccess = false;
+
+        switch (priority)
+        {
+            case ChargePriorityRequest.OnlySolar:
+                currentButton = Button.OnlySolar;
+                break;
+            case ChargePriorityRequest.SolarFirst:
+                currentButton = Button.SolarFirst;
+                break;
+            case ChargePriorityRequest.SolarAndUtility:
+                currentButton = Button.SolarAndUtility;
+                break;
+            case ChargePriorityRequest.UtilityFirst:
+                currentButton = Button.UtilityFirst;
+                break;
+            default:
+                currentButton = Button.None;
+                break;
+        };
+
+        if (await Http.GetStringAsync($"api/settings/charge-priority/{priority}") == "true")
+        { 
+            isSuccess = true;
+            settings!.ChargePriority = priority;
+        }
     }
 
-    private string Hidden(string button)
-    {
-        return CurrentButton == button && !IsSuccess ? "visually-hidden" : "";
-    }
+    private string Spinner(Button button)
+        => currentButton == button && !isSuccess 
+           ? "spinner-border" 
+           : "";
 
-    private string Success(string button)
+    private string Hidden(Button button) 
+        => currentButton == button && !isSuccess 
+           ? "visually-hidden" 
+           : "";
+
+    private string Success(Button button, string currentValue, string settingValue) 
+        => (currentButton == button && isSuccess) || currentValue == settingValue 
+           ? "oi oi-circle-check text-success" 
+           : "";
+
+    private enum Button
     {
-        return CurrentButton == button && IsSuccess ? "oi oi-circle-check text-success" : "";
+        None,
+        OnlySolar,
+        SolarFirst,
+        SolarAndUtility,
+        UtilityFirst
     }
 }

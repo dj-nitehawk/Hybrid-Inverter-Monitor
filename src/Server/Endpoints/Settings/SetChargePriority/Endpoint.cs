@@ -16,11 +16,8 @@ public class Endpoint : Endpoint<ChargePriorityRequest, bool>
 
     public override async Task HandleAsync(ChargePriorityRequest r, CancellationToken c)
     {
-        var cmd = new ChargePriority(r.Priority)
-        {
-            IsComplete = false,
-            StartTime = DateTime.Now
-        };
+        var cmd = new ChargePriority(r.Priority);
+
         Queue.Commands.Enqueue(cmd);
 
         await cmd.WhileProcessing(c);
