@@ -47,7 +47,7 @@ internal class InverterWorker : BackgroundService
             {
                 try
                 {
-                    await ExecuteCommand(cmd, c);
+                    await ExecuteCommand(cmd, port!, c);
                 }
                 catch (Exception x)
                 {
@@ -57,12 +57,12 @@ internal class InverterWorker : BackgroundService
             }
             else
             {
-                await Task.Delay(1000, c);
+                await Task.Delay(500, c);
             }
         }
     }
 
-    private async Task ExecuteCommand(ICommand command, CancellationToken c)
+    private static async Task ExecuteCommand(ICommand command, FileStream port, CancellationToken c)
     {
         byte[]? cmdBytes = Encoding.ASCII.GetBytes(command.CommandString);
         ushort crc = CalculateCRC(cmdBytes);
@@ -73,13 +73,14 @@ internal class InverterWorker : BackgroundService
         buf[cmdBytes.Length + 1] = (byte)(crc & 0xff);
         buf[cmdBytes.Length + 2] = 0x0d;
 
-        await port!.WriteAsync(buf, c);
+        await port.WriteAsync(buf, c);
         byte[]? buffer = new byte[1024];
         int pos = 0;
         do
         {
-            int read = await port!.ReadAsync(buffer.AsMemory(pos, buffer.Length - pos), c);
-            if (read > 0) pos += read;
+            int readCount = await port.ReadAsync(buffer.AsMemory(pos, buffer.Length - pos), c);
+            if (readCount > 0)
+                pos += readCount;
         }
         while (!buffer.Any(b => b == 0x0d));
 

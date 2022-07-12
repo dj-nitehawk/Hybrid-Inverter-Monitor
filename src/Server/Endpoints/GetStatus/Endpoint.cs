@@ -36,12 +36,12 @@ public class Endpoint : EndpointWithoutRequest<object>
         {
             if (Env.IsDevelopment())
             {
-                cmd.Result.OutputVoltage = Random.Shared.Next(250);
+                cmd.Result.OutputVoltage = Random.Shared.Next(240);
                 cmd.Result.LoadWatts = Random.Shared.Next(3500);
                 cmd.Result.LoadPercentage = Random.Shared.Next(100);
-                cmd.Result.BatteryVoltage = Random.Shared.Next(28);
+                cmd.Result.BatteryVoltage = Random.Shared.Next(24);
                 cmd.Result.BatteryChargeCurrent = Random.Shared.Next(20);
-                cmd.Result.BatteryDischargeCurrent = 10; _ = Random.Shared.Next(10);
+                cmd.Result.BatteryDischargeCurrent = Random.Shared.Next(10);
                 cmd.Result.HeatSinkTemperature = Random.Shared.Next(300);
                 cmd.Result.PVInputCurrent = Random.Shared.Next(300);
                 cmd.Result.PVInputVoltage = Random.Shared.Next(300);
@@ -59,7 +59,7 @@ public class Endpoint : EndpointWithoutRequest<object>
 
                 yield return cmd.IsComplete ? cmd.Result : blank;
 
-                await Task.Delay(2000, c);
+                await Task.Delay(3000, c);
             }
         }
     }
