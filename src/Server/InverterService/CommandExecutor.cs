@@ -49,11 +49,9 @@ internal class CommandExecutor : BackgroundService
                 try
                 {
                     await ExecuteCommand(cmd, port!, c);
-                    queue.IsAcceptingCommands = true;
                 }
                 catch (Exception x)
                 {
-                    queue.IsAcceptingCommands = false;
                     log.LogError("execution error: {msg}", x.Message);
                     await Task.Delay(1000);
                 }

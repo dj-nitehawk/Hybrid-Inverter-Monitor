@@ -28,6 +28,8 @@ public class Endpoint : EndpointWithoutRequest<object>
 
     private async IAsyncEnumerable<InverterStatus> GetDataStream([EnumeratorCancellation] CancellationToken c)
     {
+        var blank = new InverterStatus();
+
         while (!c.IsCancellationRequested)
         {
             if (Env.IsDevelopment())
@@ -46,10 +48,7 @@ public class Endpoint : EndpointWithoutRequest<object>
             }
             else
             {
-                if (!Queue.StatusCommand.ResultIsStale)
-                    yield return Queue.StatusCommand.Result;
-                else
-                    yield return new InverterStatus();
+                yield return !Queue.StatusCommand.ResultIsStale ? Queue.StatusCommand.Result : blank;
             }
             await Task.Delay(1000, c);
         }

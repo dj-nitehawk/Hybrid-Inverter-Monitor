@@ -13,10 +13,8 @@ internal class StatusRetriever : BackgroundService
 
         while (!c.IsCancellationRequested)
         {
-            if (queue.AddCommand(cmd))
-                await Task.Delay(3000);
-            else
-                await Task.Delay(1000);
+            queue.AddCommand(cmd);
+            await Task.Delay(3000);
         }
     }
 }
