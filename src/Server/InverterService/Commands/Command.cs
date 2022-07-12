@@ -16,7 +16,7 @@ public abstract class Command<TResponseDto> : ICommand where TResponseDto : new(
 
     public abstract void Parse(string responseFromInverter);
 
-    private DateTime startTime = DateTime.Now;
+    protected DateTime startTime = DateTime.Now;
 
     public void Start()
     {
@@ -30,12 +30,9 @@ public abstract class Command<TResponseDto> : ICommand where TResponseDto : new(
     protected static bool IsCommandSuccessful(string responseFromInverter)
         => responseFromInverter[1..4] == "ACK";
 
-    private bool IsProcessing()
-        => DateTime.Now.Subtract(startTime).TotalMilliseconds <= 3000 && !IsComplete;
-
     public async Task WhileProcessing(CancellationToken c)
     {
-        while (!c.IsCancellationRequested && IsProcessing())
+        while (!c.IsCancellationRequested && (!IsComplete && DateTime.Now.Subtract(startTime).TotalMilliseconds <= 3000))
             await Task.Delay(500, c);
     }
 }

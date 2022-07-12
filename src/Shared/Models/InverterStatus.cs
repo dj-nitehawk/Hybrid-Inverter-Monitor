@@ -106,21 +106,4 @@ public class InverterStatus
     //private DateTime lastloadWattHourComputed;
     //private decimal pvInputWattHour;
     //private DateTime lastpvInputWattHourComputed;
-
-    public void Reset()
-    {
-        GridVoltage = 0;
-        OutputVoltage = 0;
-        LoadWatts = 0;
-        LoadPercentage = 0;
-        BatteryVoltage = 0;
-        BatteryChargeCurrent = 0;
-        HeatSinkTemperature = 0;
-        PVInputCurrent = 0;
-        PVInputVoltage = 0;
-        PVInputWatt = 0;
-        BatteryDischargeCurrent = 0;
-        loadWatts = 0;
-        pvInputWatt = 0;
-    }
 }

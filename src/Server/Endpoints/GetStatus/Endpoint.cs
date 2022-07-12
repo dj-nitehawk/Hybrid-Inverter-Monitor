@@ -46,8 +46,10 @@ public class Endpoint : EndpointWithoutRequest<object>
             }
             else
             {
-                await Queue.StatusCommand.WhileProcessing(c);
-                yield return Queue.StatusCommand.Result;
+                if (!Queue.StatusCommand.ResultIsStale)
+                    yield return Queue.StatusCommand.Result;
+                else
+                    yield return new InverterStatus();
             }
             await Task.Delay(1000, c);
         }
