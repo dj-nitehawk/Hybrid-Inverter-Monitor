@@ -28,15 +28,13 @@ public class Endpoint : EndpointWithoutRequest<CurrentSettings>
             return;
         }
 
-        Queue.Commands.Enqueue(cmd);
+        Queue.AddCommand(cmd);
+
         await cmd.WhileProcessing(c);
+
         if (cmd.IsComplete)
-        {
             await SendAsync(cmd.Result);
-        }
         else
-        {
             ThrowError("Unable to read current settings in a timely manner!");
-        }
     }
 }

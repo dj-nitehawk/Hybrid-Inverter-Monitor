@@ -2,7 +2,7 @@
 
 namespace InverterMon.Server.InverterService.Commands;
 
-internal class GetStatus : Command<InverterStatus>
+public class GetStatus : Command<InverterStatus>
 {
     public override string CommandString { get; set; } = "QPIGS";
 

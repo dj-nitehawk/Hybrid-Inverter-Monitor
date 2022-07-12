@@ -79,7 +79,7 @@
                     @Sanitize(settings.MaxCombinedChargeCurrent) A
                   </button>
                   <ul class="dropdown-menu dropdown-menu">
-                    @foreach (var val in chargeCurrentValues!.CombinedCurrentValues)
+                    @foreach (var val in chargeCurrentValues!.CombinedAmpereValues)
                     {
                         <li>
                             <a 
@@ -113,7 +113,7 @@
                     @Sanitize(settings.MaxACChargeCurrent) A
                   </button>
                   <ul class="dropdown-menu dropdown-menu">
-                    @foreach (var val in chargeCurrentValues!.UtilityCurrentValues)
+                    @foreach (var val in chargeCurrentValues!.UtilityAmpereValues)
                     {
                         <li>
                             <a 

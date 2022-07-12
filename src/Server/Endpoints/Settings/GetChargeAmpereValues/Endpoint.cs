@@ -18,16 +18,18 @@ public class Endpoint : EndpointWithoutRequest<Shared.Models.ChargeAmpereValues>
         {
             await SendAsync(new()
             {
-                CombinedCurrentValues = new[] { "010", "020", "040" },
-                UtilityCurrentValues = new[] { "04", "10", "20" }
+                CombinedAmpereValues = new[] { "010", "020", "040" },
+                UtilityAmpereValues = new[] { "04", "10", "20" }
             });
             return;
         }
 
         var cmd1 = new InverterService.Commands.GetChargeAmpereValues(true);
         var cmd2 = new InverterService.Commands.GetChargeAmpereValues(false);
-        Queue.Commands.Enqueue(cmd1);
-        Queue.Commands.Enqueue(cmd2);
+
+        Queue.AddCommand(cmd1);
+        Queue.AddCommand(cmd2);
+
         await Task.WhenAll(
             cmd1.WhileProcessing(c),
             cmd2.WhileProcessing(c));
@@ -36,13 +38,13 @@ public class Endpoint : EndpointWithoutRequest<Shared.Models.ChargeAmpereValues>
         {
             await SendAsync(new()
             {
-                CombinedCurrentValues = cmd2.Result,
-                UtilityCurrentValues = cmd1.Result
+                UtilityAmpereValues = cmd1.Result,
+                CombinedAmpereValues = cmd2.Result
             });
         }
         else
         {
-            ThrowError("Unable to read charge current values in a timely manner!");
+            ThrowError("Unable to read charge ampere values in a timely manner!");
         }
     }
 }

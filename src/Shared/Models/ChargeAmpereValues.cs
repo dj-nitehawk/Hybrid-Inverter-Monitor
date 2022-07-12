@@ -2,6 +2,6 @@
 
 public class ChargeAmpereValues
 {
-    public IEnumerable<string> CombinedCurrentValues { get; set; }
-    public IEnumerable<string> UtilityCurrentValues { get; set; }
+    public IEnumerable<string> CombinedAmpereValues { get; set; }
+    public IEnumerable<string> UtilityAmpereValues { get; set; }
 }

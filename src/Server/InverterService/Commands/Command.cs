@@ -3,27 +3,39 @@
 public interface ICommand
 {
     string CommandString { get; set; }
-    bool IsComplete { get; set; }
     void Parse(string rawResponse);
+    void Start();
+    void End();
 }
 
-internal abstract class Command<TResponseDto> : ICommand where TResponseDto : new()
+public abstract class Command<TResponseDto> : ICommand where TResponseDto : new()
 {
-
-    public DateTime StartTime { private get; set; } = DateTime.Now;
-    public bool TimedOut => DateTime.Now.Subtract(StartTime).TotalSeconds > 3;
-    public TResponseDto Result { get; protected set; } = new();
-    public bool IsComplete { get; set; }
     public abstract string CommandString { get; set; }
+    public TResponseDto Result { get; protected set; } = new();
+    public bool IsComplete { get; private set; }
 
     public abstract void Parse(string responseFromInverter);
+
+    private DateTime startTime = DateTime.Now;
+
+    public void Start()
+    {
+        startTime = DateTime.Now;
+        IsComplete = false;
+    }
+
+    public void End()
+        => IsComplete = true;
 
     protected static bool IsCommandSuccessful(string responseFromInverter)
         => responseFromInverter[1..4] == "ACK";
 
+    private bool IsProcessing()
+        => DateTime.Now.Subtract(startTime).TotalMilliseconds <= 3000 && !IsComplete;
+
     public async Task WhileProcessing(CancellationToken c)
     {
-        while (!IsComplete && !TimedOut)
-            await Task.Delay(300, c);
+        while (!c.IsCancellationRequested && IsProcessing())
+            await Task.Delay(500, c);
     }
 }

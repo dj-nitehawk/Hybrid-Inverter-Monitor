@@ -3,13 +3,13 @@ using System.Text;
 
 namespace InverterMon.Server.InverterService;
 
-internal class InverterWorker : BackgroundService
+internal class CommandExecutor : BackgroundService
 {
     private readonly CommandQueue queue;
     private FileStream? port;
-    private readonly ILogger<InverterWorker> log;
+    private readonly ILogger<CommandExecutor> log;
 
-    public InverterWorker(CommandQueue queue, ILogger<InverterWorker> log)
+    public CommandExecutor(CommandQueue queue, ILogger<CommandExecutor> log)
     {
         this.queue = queue;
         this.log = log;
@@ -43,14 +43,17 @@ internal class InverterWorker : BackgroundService
     {
         while (!c.IsCancellationRequested)
         {
-            if (queue.Commands.TryDequeue(out var cmd))
+            var cmd = queue.GetCommand();
+            if (cmd is not null)
             {
                 try
                 {
                     await ExecuteCommand(cmd, port!, c);
+                    queue.IsAcceptingCommands = true;
                 }
                 catch (Exception x)
                 {
+                    queue.IsAcceptingCommands = false;
                     log.LogError("execution error: {msg}", x.Message);
                     await Task.Delay(1000);
                 }
@@ -64,6 +67,7 @@ internal class InverterWorker : BackgroundService
 
     private static async Task ExecuteCommand(ICommand command, FileStream port, CancellationToken c)
     {
+        command.Start();
         byte[]? cmdBytes = Encoding.ASCII.GetBytes(command.CommandString);
         ushort crc = CalculateCRC(cmdBytes);
 
@@ -85,8 +89,7 @@ internal class InverterWorker : BackgroundService
         while (!buffer.Any(b => b == 0x0d));
 
         command.Parse(Encoding.ASCII.GetString(buffer, 0, pos - 3));
-        command.IsComplete = true;
-
+        command.End();
     }
 
     private static readonly ushort[] crc_ta = { 0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7, 0x8108, 0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef };
