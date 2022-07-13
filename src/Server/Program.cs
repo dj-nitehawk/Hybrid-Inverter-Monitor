@@ -1,11 +1,13 @@
 global using FastEndpoints;
 using FastEndpoints.Swagger;
+using InverterMon.Server.Database;
 using InverterMon.Server.InverterService;
 using System.Net;
 
 var builder = WebApplication.CreateBuilder();
 builder.WebHost.ConfigureKestrel(o => o.Listen(IPAddress.Any, 80));
-builder.Services.AddSingleton(new CommandQueue());
+builder.Services.AddSingleton<CommandQueue>();
+builder.Services.AddSingleton<Database>();
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddSwaggerDoc();
