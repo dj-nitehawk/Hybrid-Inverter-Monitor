@@ -2,7 +2,7 @@
 
 public static class PVGenExtensions
 {
-    private static readonly TimeSpan d = TimeSpan.FromMinutes(5);
+    private static readonly TimeSpan d = TimeSpan.FromMinutes(1);
 
     public static string ToKey(this DateTime dt)
     {

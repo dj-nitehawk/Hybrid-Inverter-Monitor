@@ -10,7 +10,7 @@ public class PVGeneration
     {
         var currentHour = DateTime.Now.Hour;
 
-        if (currentHour is >= 8 and <= 16)
+        if (currentHour is >= 7 and <= 17)
         {
             var key = DateTime.Now.ToKey();
 
