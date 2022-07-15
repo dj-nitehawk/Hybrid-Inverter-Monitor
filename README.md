@@ -8,7 +8,7 @@ This application allows you to monitor most chinese hybrid inverters such as `sa
 
 For this to work, you need to connect a linux computer such as a raspberry/orange pi or any other linux computer to the inverter via USB cable. Windows will not work due to the non-existence of a working device driver.
 
-Once your inverter is connected via USB, a new device path should appear in `/dev/hidraw0`. Once that's available and if your inverter supports the **Voltronic** communication protocol, all you have to do is execute the `InverterMon.Server` executable. The the binaries can be downloaded from the releases section on github. Make sure to choose the correct architecture (x64/arm) for your machine.
+Once your inverter is connected via USB, a new device path should appear in `/dev/hidraw0`. Once that's available and if your inverter supports the **Voltronic** communication protocol, all you have to do is execute the `InverterMon.Server` executable. The the binaries can be downloaded from the [releases section](https://github.com/dj-nitehawk/Hybrid-Inverter-Monitor/releases). Make sure to choose the correct architecture (x64/arm) for your machine.
 
 After the application has started successfully, you can simply open up a web browser and navigate to `http://ip.address.of.machine` to see the dashboard. It may take up to 5 seconds for the data to show up initially.
 
