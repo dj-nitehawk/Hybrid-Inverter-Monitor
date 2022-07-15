@@ -19,34 +19,32 @@ public class InverterStatus
         get => pvInputWatt;
         set
         {
-            pvInputWatt = value;
-            if (value > 0)
+            if (value > 0 && value != pvInputWatt)
             {
-                double interval = (DateTime.Now - lastpvInputWattHourComputed).TotalSeconds;
+                pvInputWatt = value;
+                double interval = (DateTime.Now - pvInputWattHourLastComputed).TotalSeconds;
                 PVInputWattHour += value / (3600 / Convert.ToDecimal(interval));
+                pvInputWattHourLastComputed = DateTime.Now;
             }
         }
     }
-    public decimal PVInputWattHour
-    {
-        get => pvInputWattHour;
-        set
-        {
-            pvInputWattHour = value;
-            lastpvInputWattHourComputed = DateTime.Now;
-        }
-    }
+    public decimal PVInputWattHour { get; private set; }
     public decimal SCCVoltage { get; set; }
     public int BatteryDischargeCurrent { get; set; }
     public int BatteryDischargeWatts => BatteryDischargeCurrent == 0 ? 0 : Convert.ToInt32(BatteryDischargeCurrent * BatteryVoltage);
 
     private int pvInputWatt;
-    private decimal pvInputWattHour;
-    private DateTime lastpvInputWattHourComputed;
+    private DateTime pvInputWattHourLastComputed;
 
     public void RestorePVWattHours(decimal accruedWattHours)
     {
-        Console.WriteLine("restored: " + accruedWattHours);
         PVInputWattHour = accruedWattHours;
+        pvInputWattHourLastComputed = DateTime.Now;
+    }
+
+    public void ResetPVWattHourAccumulation()
+    {
+        PVInputWattHour = 0;
+        pvInputWattHourLastComputed = DateTime.Now;
     }
 }

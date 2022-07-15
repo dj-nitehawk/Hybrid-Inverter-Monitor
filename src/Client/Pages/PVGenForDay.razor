@@ -1,0 +1,85 @@
+﻿@page "/pvgen"
+@using InverterMon.Shared.Models
+@inject HttpClient Http
+
+<PageTitle>PV Generation For Day</PageTitle>
+
+<div>
+    @if(day == null)
+    {
+        <Loader Enabled=true />
+    }
+    else
+    {
+        <h3 class="bg-dark bg-opacity-10 text-center p-3">
+            <button class="btn bg-white" @onclick="GetPrevDay">
+                <span class="oi oi-arrow-thick-left"></span>
+            </button>
+            <span class="mx-3">
+                @day.DayName
+            </span>
+            <button class="btn  bg-white" @onclick="GetNextDay">
+                <span class="oi oi-arrow-thick-right"></span>
+            </button>
+        </h3>
+        <Line Data="day.WattPeaks" Config="config" />
+        <h4 class="bg-light text-center p-3">
+            Total Generation: <b>@day.TotalWattHours</b> Wh
+        </h4>
+    }
+</div>
+
+@code{
+    private PVDay? day;
+
+    private LineConfig config = new ()
+    {
+        Title = new(),
+        Padding = "auto",
+        ForceFit = true,
+        XField = "Time",
+        YField = "Watts",
+        Smooth = false
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await FetchForDay();
+    }
+
+    private async Task FetchForDay(int? dayNumber = null)
+    {
+        try
+        {
+            day = await Http.GetFromJsonAsync<PVDay>($"api/pv-log/get-pv-for-day/{dayNumber ?? DateOnly.FromDateTime(DateTime.Now).DayNumber}");
+        }
+        catch (Exception)
+        {
+            //ignore
+        }
+    }
+
+    private async Task GetNextDay()
+    {
+        var dayNum = this.day.DayNumber+1;
+        day = null;
+        await FetchForDay(dayNum);
+
+        if (day is null)
+            await FetchForDay(dayNum - 1);
+
+        StateHasChanged();
+    }
+
+    private async Task GetPrevDay()
+    { 
+        var dayNum = this.day.DayNumber-1;
+        day = null;
+        await FetchForDay(dayNum);
+
+        if (day is null)
+            await FetchForDay(dayNum + 1);
+
+        StateHasChanged();
+    }
+}

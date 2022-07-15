@@ -1,11 +1,13 @@
+using InverterMon.Server.Persistance;
+
 namespace InverterMon.Server.InverterService;
 
 internal class StatusRetriever : BackgroundService
 {
     private readonly CommandQueue queue;
-    private readonly Database.Database db;
+    private readonly Database db;
 
-    public StatusRetriever(CommandQueue queue, Database.Database db)
+    public StatusRetriever(CommandQueue queue, Database db)
     {
         this.queue = queue;
         this.db = db;
@@ -17,8 +19,12 @@ internal class StatusRetriever : BackgroundService
 
         while (!c.IsCancellationRequested)
         {
-            queue.AddCommand(cmd);
-            _ = db.UpdateTodaysPVGeneration(cmd, c);
+            if (queue.IsAcceptingCommands)
+            {
+                queue.AddCommand(cmd);
+                _ = db.UpdateTodaysPVGeneration(cmd, c);
+            }
+
             await Task.Delay(3000);
         }
     }

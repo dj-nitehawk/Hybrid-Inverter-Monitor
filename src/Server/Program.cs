@@ -1,7 +1,7 @@
 global using FastEndpoints;
 using FastEndpoints.Swagger;
-using InverterMon.Server.Database;
 using InverterMon.Server.InverterService;
+using InverterMon.Server.Persistance;
 using System.Net;
 
 var builder = WebApplication.CreateBuilder();

@@ -49,7 +49,9 @@ public class Endpoint : EndpointWithoutRequest<object>
             }
             else
             {
-                yield return !Queue.StatusCommand.ResultIsStale ? Queue.StatusCommand.Result : blank;
+                yield return !Queue.StatusCommand.ResultIsStale
+                    ? Queue.StatusCommand.Result
+                    : blank;
             }
             await Task.Delay(1000, c);
         }
