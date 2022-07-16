@@ -6,8 +6,6 @@ public class GetStatus : Command<InverterStatus>
 {
     public override string CommandString { get; set; } = "QPIGS";
 
-    public bool ResultIsStale => DateTime.Now.Subtract(startTime).TotalMilliseconds >= 4000;
-
     public override void Parse(string responseFromInverter)
     {
         //(232.0 50.1 232.0 50.1 0000 0000 000 476 27.02 000 100 0553 0000 000.0 27.00 00000 10011101 03 04 00000 101a\xc8\r

@@ -46,27 +46,24 @@ public class Database
 
     public async Task UpdateTodaysPVGeneration(GetStatus cmd, CancellationToken c)
     {
-        if (!cmd.ResultIsStale)
+        await cmd.WhileProcessing(c);
+
+        var todayDayNumer = DateOnly.FromDateTime(DateTime.Now).DayNumber;
+
+        if (today?.Id == todayDayNumer)
         {
-            await cmd.WhileProcessing(c);
-
-            var todayDayNumer = DateOnly.FromDateTime(DateTime.Now).DayNumber;
-
-            if (today?.Id == todayDayNumer)
-            {
-                today.SetWattPeaks(cmd.Result.PVInputWatt);
-                today.SetTotalWattHours(cmd.Result.PVInputWattHour);
-                pvGenCollection.Update(today);
-            }
-            else
-            {
-                cmd.Result.ResetPVWattHourAccumulation(); //it's a new day. start accumulation from scratch.
-                today = new PVGeneration { Id = todayDayNumer };
-                today.SetTotalWattHours(0);
-                pvGenCollection.Insert(today);
-            }
-            db.Checkpoint();
+            today.SetWattPeaks(cmd.Result.PVInputWatt);
+            today.SetTotalWattHours(cmd.Result.PVInputWattHour);
+            pvGenCollection.Update(today);
         }
+        else
+        {
+            cmd.Result.ResetPVWattHourAccumulation(); //it's a new day. start accumulation from scratch.
+            today = new PVGeneration { Id = todayDayNumer };
+            today.SetTotalWattHours(0);
+            pvGenCollection.Insert(today);
+        }
+        db.Checkpoint();
     }
 
     public PVGeneration? GetPVGenForDay(int dayNumer)

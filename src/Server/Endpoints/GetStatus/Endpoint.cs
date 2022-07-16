@@ -49,7 +49,7 @@ public class Endpoint : EndpointWithoutRequest<object>
             }
             else
             {
-                yield return !Queue.StatusCommand.ResultIsStale
+                yield return Queue.IsAcceptingCommands
                     ? Queue.StatusCommand.Result
                     : blank;
             }
