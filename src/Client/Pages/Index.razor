@@ -20,8 +20,8 @@
                         <span class="oi oi-power-standby" aria-hidden="true"/>
                         Grid Usage
                     </h5>
-                    <div class="card-body">
-                        <div class="container text-center fw-bold">
+                    <div class="card-body pt-0">
+                        <div class="container text-center fw-bold p-0">
                             <div class="row bg-light rounded">
                                 <div class="col">
                                     <div class="fs-1 text-danger">@status?.GridUsageWatts</div>
@@ -38,12 +38,15 @@
             <div class="col-sm-6">
                 <div class="card">
                     <h5 class="card-header">
-                        <span class="oi oi-lightbulb" aria-hidden="true"/>
-                        Output Load - @RoundToWholeNumer(status?.LoadPercentage)%
+                        <span class="oi oi-lightbulb"/>
+                        <span>Output Load</span>
                     </h5>
-                    <div class="card-body">
-                        <div class="container text-center fw-bold">
+                    <div class="card-body pt-0">
+                        <div class="container text-center fw-bold p-0">
                             <div class="row bg-light rounded">
+                                <div class="progress p-0" style="height:0.1rem;">
+                                    <span class="progress-bar" role="progressbar" style="width: @RoundToWholeNumer(status?.LoadPercentage)%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></span>
+                                </div>
                                 <div class="col">
                                     <div class="fs-1 text-danger">@status?.LoadWatts</div>
                                     W
@@ -70,11 +73,14 @@
                 <div class="card">
                     <h5 class="card-header">
                         <span class="oi oi-sun" aria-hidden="true"/>
-                        PV Input
+                        <span>Solar Power</span>
                     </h5>
-                    <div class="card-body">
-                        <div class="container text-center fw-bold">
+                    <div class="card-body pt-0">
+                        <div class="container text-center fw-bold p-0">
                             <div class="row bg-light rounded">
+                                <div class="progress p-0" style="height:0.1rem;">
+                                    <span class="progress-bar" role="progressbar" style="width: @status?.PVPotential%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></span>
+                                </div>                                
                                 <div class="col">
                                     <div class="fs-1 text-success">@status?.PVInputWatt</div>
                                     W
