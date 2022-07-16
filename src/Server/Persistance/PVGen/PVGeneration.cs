@@ -8,21 +8,16 @@ public class PVGeneration
 
     public void SetWattPeaks(int newValue)
     {
-        var currentHour = DateTime.Now.Hour;
+        var key = DateTime.Now.ToTimeBucket();
 
-        if (currentHour is >= 7 and <= 17)
+        if (WattPeaks.ContainsKey(key))
         {
-            var key = DateTime.Now.ToKey();
-
-            if (WattPeaks.ContainsKey(key))
-            {
-                if (WattPeaks[key] < newValue)
-                    WattPeaks[key] = newValue;
-            }
-            else
-            {
+            if (WattPeaks[key] < newValue)
                 WattPeaks[key] = newValue;
-            }
+        }
+        else
+        {
+            WattPeaks[key] = newValue;
         }
     }
 

@@ -24,7 +24,6 @@ internal class StatusRetriever : BackgroundService
                 queue.AddCommand(cmd);
                 _ = db.UpdateTodaysPVGeneration(cmd, c);
             }
-
             await Task.Delay(3000);
         }
     }

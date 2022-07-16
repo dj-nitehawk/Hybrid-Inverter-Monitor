@@ -46,6 +46,9 @@ public class Database
 
     public async Task UpdateTodaysPVGeneration(GetStatus cmd, CancellationToken c)
     {
+        if (DateTime.Now.Hour is < 6 or > 17) //todo: make this a user customizable setting
+            return;
+
         await cmd.WhileProcessing(c);
 
         var todayDayNumer = DateOnly.FromDateTime(DateTime.Now).DayNumber;
