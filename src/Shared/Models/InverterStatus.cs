@@ -29,7 +29,7 @@ public class InverterStatus
         }
     }
     public decimal PVInputWattHour { get; private set; }
-    public int PVPotential => Convert.ToInt32(PVInputWatt / PVInputVoltage * 10);
+    public int PVPotential => PVInputVoltage > 0 ? Convert.ToInt32(PVInputCurrent / 9 * 100) : 0; //todo: allow user to set pmax
     public decimal SCCVoltage { get; set; }
     public int BatteryDischargeCurrent { get; set; }
     public int BatteryDischargeWatts => BatteryDischargeCurrent == 0 ? 0 : Convert.ToInt32(BatteryDischargeCurrent * BatteryVoltage);
