@@ -63,13 +63,14 @@ a, .btn-link {
         content: "An error has occurred."
     }
 
-@media only screen and (max-width: 360px) {
+@media only screen and (max-width: 415px) {
     .voltage {
-        font-size: 0.5em !important;
+        font-size: 0.6em !important;
+        margin: 1em 0;
     }
 
     .charge-discharge {
-        font-size: 0.7em !important;
+        font-size: 0.8em !important;
     }
 }
 
