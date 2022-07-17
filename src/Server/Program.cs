@@ -5,7 +5,8 @@ using InverterMon.Server.Persistance;
 using System.Net;
 
 var builder = WebApplication.CreateBuilder();
-builder.WebHost.ConfigureKestrel(o => o.Listen(IPAddress.Any, 80));
+_ = int.TryParse(builder.Configuration["LaunchSettings:WebPort"] ?? "80", out var port);
+builder.WebHost.ConfigureKestrel(o => o.Listen(IPAddress.Any, port));
 builder.Services.AddSingleton<CommandQueue>();
 builder.Services.AddSingleton<Database>();
 if (builder.Environment.IsDevelopment())

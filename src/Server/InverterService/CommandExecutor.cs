@@ -8,32 +8,31 @@ internal class CommandExecutor : BackgroundService
     private readonly CommandQueue queue;
     private FileStream? port;
     private readonly ILogger<CommandExecutor> log;
+    private readonly IConfiguration confing;
 
-    public CommandExecutor(CommandQueue queue, ILogger<CommandExecutor> log)
+    public CommandExecutor(CommandQueue queue, IConfiguration config, ILogger<CommandExecutor> log)
     {
         this.queue = queue;
+        this.confing = config;
         this.log = log;
         Connect(new CancellationTokenSource(TimeSpan.FromHours(1)).Token).GetAwaiter().GetResult();
     }
 
     private async Task Connect(CancellationToken c)
     {
+        var dev = confing["LaunchSettings:DeviceAddress"] ?? "/dev/hidraw0";
+
         while (!c.IsCancellationRequested)
         {
             try
             {
-                if (port is not null)
-                {
-                    await port.DisposeAsync();
-                    port = null;
-                }
-                port = File.Open("/dev/hidraw0", FileMode.Open, FileAccess.ReadWrite);
-                log.LogInformation("connected to inverter!");
+                port = File.Open(dev, FileMode.Open, FileAccess.ReadWrite);
+                log.LogInformation("inverter connected!");
                 break;
             }
             catch (Exception x)
             {
-                log.LogError("connect error: {msg}", x.Message);
+                log.LogError("inverter connection failed: {msg}", x.Message);
                 await Task.Delay(5000, c);
             }
         }
@@ -56,12 +55,12 @@ internal class CommandExecutor : BackgroundService
                 {
                     queue.IsAcceptingCommands = false;
                     log.LogError("execution error: {msg}", x.Message);
-                    await Task.Delay(1000);
+                    await Task.Delay(3000);
                 }
             }
             else
             {
-                await Task.Delay(1000, c);
+                await Task.Delay(500, c);
             }
         }
     }

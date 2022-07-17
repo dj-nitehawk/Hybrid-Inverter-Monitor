@@ -21,9 +21,7 @@ public class CommandQueue
     }
 
     public ICommand? GetCommand()
-    {
-        return toProcess.TryPeek(out var command) ? command : null;
-    }
+        => toProcess.TryPeek(out var command) ? command : null;
 
     public void RemoveCommand()
         => toProcess.TryDequeue(out _);
