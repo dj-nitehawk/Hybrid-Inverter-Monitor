@@ -24,7 +24,7 @@
         </h3>
         <Line Data="day.WattPeaks" Config="config" />
         <h4 class="bg-light text-center p-3">
-            Total Generation: <b>@day.TotalWattHours</b> Wh
+            Total Generation: <b>@day.TotalKiloWattHours</b> kWh
         </h4>
     }
 </div>
@@ -61,7 +61,7 @@
 
     private async Task GetNextDay()
     {
-        var dayNum = this.day.DayNumber+1;
+        var dayNum = this.day?.DayNumber+1;
         day = null;
         await FetchForDay(dayNum);
 
@@ -73,7 +73,7 @@
 
     private async Task GetPrevDay()
     { 
-        var dayNum = this.day.DayNumber-1;
+        var dayNum = this.day?.DayNumber-1;
         day = null;
         await FetchForDay(dayNum);
 

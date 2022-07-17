@@ -6,7 +6,7 @@ public class PVDay
 {
     public int DayNumber { get; set; }
     public string DayName { get; set; }
-    public int TotalWattHours { get; set; }
+    public decimal TotalKiloWattHours { get; set; }
     public IEnumerable<WattPeak> WattPeaks { get; set; }
 
     public class WattPeak

@@ -34,7 +34,7 @@ public class Endpoint : Endpoint<Request, PVDay>
                 pvDay.WattPeaks.Add(i.ToString(), Random.Shared.Next(2000));
         }
 
-        Response.TotalWattHours = Convert.ToInt32(pvDay.TotalWattHours);
+        Response.TotalKiloWattHours = Math.Round(pvDay.TotalWattHours / 1000, 2);
         Response.DayNumber = pvDay.Id;
         Response.DayName = DateOnly.FromDayNumber(pvDay.Id).ToString("dddd MMMM dd");
         Response.WattPeaks = pvDay.WattPeaks.Select(p => new PVDay.WattPeak
