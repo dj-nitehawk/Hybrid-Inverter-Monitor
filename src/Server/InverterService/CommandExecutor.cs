@@ -13,7 +13,7 @@ internal class CommandExecutor : BackgroundService
     public CommandExecutor(CommandQueue queue, IConfiguration config, ILogger<CommandExecutor> log)
     {
         this.queue = queue;
-        this.confing = config;
+        confing = config;
         this.log = log;
         Connect(new CancellationTokenSource(TimeSpan.FromHours(1)).Token).GetAwaiter().GetResult();
     }

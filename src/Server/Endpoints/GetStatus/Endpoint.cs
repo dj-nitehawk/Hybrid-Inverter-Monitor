@@ -45,6 +45,7 @@ public class Endpoint : EndpointWithoutRequest<object>
                 status.PVInputCurrent = Random.Shared.Next(300);
                 status.PVInputVoltage = Random.Shared.Next(300);
                 status.PVInputWatt = Random.Shared.Next(1800);
+                status.PVMaxCapacity = Random.Shared.Next(300);
                 yield return status;
             }
             else

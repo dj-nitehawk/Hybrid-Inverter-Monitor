@@ -1,6 +1,7 @@
 ﻿using InverterMon.Server.InverterService;
 using InverterMon.Server.InverterService.Commands;
 using InverterMon.Server.Persistance.PVGen;
+using InverterMon.Server.Persistance.Settings;
 using LiteDB;
 
 namespace InverterMon.Server.Persistance;
@@ -9,17 +10,24 @@ public class Database
 {
     private readonly LiteDatabase db;
     private readonly CommandQueue queue;
+    private readonly UserSettings settings;
     private readonly ILiteCollection<PVGeneration> pvGenCollection;
+    private readonly ILiteCollection<UserSettings> usrSettingsCollection;
     private PVGeneration? today;
 
-    public Database(IHostApplicationLifetime lifetime, CommandQueue queue)
+    public Database(IHostApplicationLifetime lifetime, CommandQueue queue, UserSettings settings)
     {
         this.queue = queue;
+        this.settings = settings;
         db = new("InverterMon.db") { CheckpointSize = 0 };
-        pvGenCollection = db.GetCollection<PVGeneration>();
         lifetime.ApplicationStopping.Register(() => db?.Dispose());
+        pvGenCollection = db.GetCollection<PVGeneration>();
+        usrSettingsCollection = db.GetCollection<UserSettings>();
         RestoreTodaysPVWattHours();
+        RestoreUserSettings();
     }
+
+    //todo: break apart this class and put seperated logic in each vertical slice
 
     public void RestoreTodaysPVWattHours()
     {
@@ -46,7 +54,9 @@ public class Database
 
     public async Task UpdateTodaysPVGeneration(GetStatus cmd, CancellationToken c)
     {
-        if (DateTime.Now.Hour is < 6 or > 17) //todo: make this a user customizable setting
+        var hourNow = DateTime.Now.Hour;
+
+        if (hourNow < settings.SunlightStartHour || hourNow >= settings.SunlightEndHour)
             return;
 
         await cmd.WhileProcessing(c);
@@ -71,4 +81,26 @@ public class Database
 
     public PVGeneration? GetPVGenForDay(int dayNumer)
         => pvGenCollection.FindOne(p => p.Id == dayNumer);
+
+    public void RestoreUserSettings()
+    {
+        var settings = usrSettingsCollection.FindById(1);
+        if (settings is not null)
+        {
+            this.settings.PVMaxCapacity = settings.PVMaxCapacity;
+            this.settings.SunlightStartHour = settings.SunlightStartHour;
+            this.settings.SunlightEndHour = settings.SunlightEndHour;
+        }
+        else
+        {
+            usrSettingsCollection.Insert(this.settings);
+            db.Checkpoint();
+        }
+    }
+
+    public void UpdateUserSettings(UserSettings settings)
+    {
+        usrSettingsCollection.Update(settings);
+        db.Checkpoint();
+    }
 }

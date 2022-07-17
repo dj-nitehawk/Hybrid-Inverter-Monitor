@@ -140,8 +140,8 @@
             </div>
             <div class="col-6 p-2 bg-secondary">
                 <div class="row">
-                    <div class="col-1">
-                    <input type="text" class="form-control"  value="10">
+                    <div style="width:4.2rem;">
+                        <input type="number" class="form-control bg-light" @bind-value=settings.SystemSpec.PVMaxCapacity>
                     </div>
                 <div class="col-1 fw-bolder fs-5 m-1 text-white">A</div>
                 </div>
@@ -153,8 +153,8 @@
             </div>
             <div class="col-6 p-2 bg-secondary">
                 <div class="row">
-                    <div class="col-1">
-                        <input type="text" class="form-control"  value="10">
+                    <div style="width:4.2rem;">
+                        <input type="number" class="form-control bg-light" @bind-value=settings.SystemSpec.SunlightStartHour>
                     </div>
                 <div class="col-1 fw-bolder fs-5 m-1 text-white">Hrs</div>
                 </div>
@@ -166,12 +166,20 @@
             </div>
             <div class="col-6 p-2 bg-secondary">
                 <div class="row">
-                    <div class="col-1">
-                        <input type="text" class="form-control" value="10">
+                    <div style="width:4.2rem;">
+                        <input type="number" class="form-control bg-light" @bind-value=settings.SystemSpec.SunlightEndHour>
                     </div>
                     <div class="col-1 fw-bolder fs-5 m-1 text-white">Hrs</div>
                 </div>
             </div>
+        </div>
+        <div class="row border-primary px-3 mt-1">
+            <div class="col-5"></div>
+            <button type="button" class="btn btn-primary my-3 col-2" @onclick="UpdateUserSettings">
+                <span class="@Spinner(Button.UpdateUserSettings)" style="width:1.2rem;height:1.2rem;"></span>
+                <span class="@Hidden(Button.UpdateUserSettings)">Update</span>            
+            </button>  
+            <div class="col-5"></div>
         </div>
     </div>
 }
@@ -287,6 +295,15 @@
         }
     }
 
+    private async Task UpdateUserSettings()
+    {
+        currentButton = Button.UpdateUserSettings;
+        isSuccess = false;
+        await Http.PostAsJsonAsync("api/settings/set-system-spec", settings!.SystemSpec);
+        isSuccess = true;
+        currentButton = Button.None;
+    }
+
     private string Spinner(Button button)
         => currentButton == button && !isSuccess 
            ? "spinner-border" 
@@ -314,7 +331,8 @@
         ChUtilityFirst,
         OpUtilityFirst,
         OpSolarFirst,
-        OpSolarBatteryUtility
+        OpSolarBatteryUtility,
+        UpdateUserSettings
     }
 
     private static class Setting

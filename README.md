@@ -1,6 +1,6 @@
 # Hybrid Inverter Monitor
 
-<img width="400" src="screenshot.png"/>
+<img src="screenshot.png"/>
 
 ---
 

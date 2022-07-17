@@ -2,11 +2,13 @@ global using FastEndpoints;
 using FastEndpoints.Swagger;
 using InverterMon.Server.InverterService;
 using InverterMon.Server.Persistance;
+using InverterMon.Server.Persistance.Settings;
 using System.Net;
 
 var builder = WebApplication.CreateBuilder();
 _ = int.TryParse(builder.Configuration["LaunchSettings:WebPort"] ?? "80", out var port);
 builder.WebHost.ConfigureKestrel(o => o.Listen(IPAddress.Any, port));
+builder.Services.AddSingleton<UserSettings>();
 builder.Services.AddSingleton<CommandQueue>();
 builder.Services.AddSingleton<Database>();
 if (builder.Environment.IsDevelopment())
