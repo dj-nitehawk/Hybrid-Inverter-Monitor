@@ -7,6 +7,7 @@
         <NoWarn>CS8618;CA2016</NoWarn>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PublishSingleFile>true</PublishSingleFile>
+        <RuntimeIdentifier>linux-arm64</RuntimeIdentifier>
         <SelfContained>true</SelfContained>
         <PublishTrimmed>true</PublishTrimmed>
     </PropertyGroup>
@@ -33,19 +34,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <_WebToolingArtifacts Remove="Properties\PublishProfiles\linux-arm-x64.pubxml" />
-        <_WebToolingArtifacts Remove="Properties\PublishProfiles\linux-arm-x86.pubxml" />
-        <_WebToolingArtifacts Remove="Properties\PublishProfiles\linux-musl-arm-x64.pubxml" />
-        <_WebToolingArtifacts Remove="Properties\PublishProfiles\linux-musl-arm-x86.pubxml" />
-        <_WebToolingArtifacts Remove="Properties\PublishProfiles\linux-musl-x64.pubxml" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Update="Properties\PublishProfiles\linux-x64 - Copy.pubxml">
-            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-        </None>
+        <Folder Include="Properties\PublishProfiles\" />
     </ItemGroup>
 
 </Project>
