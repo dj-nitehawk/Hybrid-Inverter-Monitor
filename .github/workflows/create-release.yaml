@@ -8,6 +8,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rid: [linux-x64]
+      fail-fast: false
     steps:
       - uses: actions/checkout@v2
 
