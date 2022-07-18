@@ -48,8 +48,8 @@ jobs:
         working-directory: src/Server
         run: |
           dotnet publish ./InverterMon.Server.csproj -c Release -r ${{ matrix.rid }} --self-contained -o ./bin/${{ matrix.rid }}
-          zip -r ${{ matrix.rid }} ./bin
-          echo "<<<<<<<<<<< FILE LIST >>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+          zip -r ./bin/${{ matrix.rid }}.zip ./bin/${{ matrix.rid }}
+          echo "<<<<<<<<<<<<< FILE LIST >>>>>>>>>>>>>>>>""
           ls -la ./bin
       - name: Get Release File Name & Upload URL
         id: get_release_info
@@ -67,6 +67,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.get_release_info.outputs.upload_url }}
-          asset_path: ./bin/${{ matrix.rid }}.zip
+          asset_path: src/Server/bin/${{ matrix.rid }}.zip
           asset_name: ${{ steps.get_release_info.outputs.file_name }}-${{ matrix.rid }}.zip
           asset_content_type: application/zip
