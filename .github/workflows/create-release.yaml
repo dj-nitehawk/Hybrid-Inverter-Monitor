@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        rid: [linux-x64]
+        rid: [linux-x64, linux-arm64]
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
@@ -25,7 +25,7 @@ jobs:
         run: |
           dotnet publish ./InverterMon.Server.csproj -c Release -r ${{ matrix.rid }} --self-contained -o ./bin/${{ matrix.rid }}
           rm -rf ./bin/${{ matrix.rid }}/BlazorDebugProxy
-          zip -r ./bin/${{ matrix.rid }}.zip ./bin/${{ matrix.rid }}
+          zip -r ./bin/${{ matrix.rid }}.zip ./bin/${{ matrix.rid }}/*
 
       - name: Release
         uses: softprops/action-gh-release@v1
