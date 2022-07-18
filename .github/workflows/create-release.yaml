@@ -1,4 +1,5 @@
 name: Create Release With Binary Assets
+
 on:
   push:
     tags:
@@ -7,13 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        rid: [linux-x64]
-      fail-fast: false
     steps:
       - name: Checkout Source Code
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v2
@@ -22,18 +19,19 @@ jobs:
 
       - name: Publish Binaries
         working-directory: src/Server
-        run: |
-          dotnet publish ./InverterMon.Server.csproj -c Release -r ${{ matrix.rid }} --self-contained -o ./bin/${{ matrix.rid }}
-          rm -rf ./bin/${{ matrix.rid }}/BlazorDebugProxy
-          zip -r ./bin/${{ matrix.rid }}.zip ./bin/${{ matrix.rid }}
-  # release:
-  #   runs-on: ubuntu-latest
-  #   needs: publish
-  #   steps:
-  #     - name: Release
-  #       uses: softprops/action-gh-release@v1
-  #       if: startsWith(github.ref, 'refs/tags/')
-  #       with:
-  #         draft: true
-  #         body_path: src/changelog.md
-  #         files: src/Server/bin/*.zip
+        run: dotnet publish ./InverterMon.Server.csproj -c Release -r linux-x64 --self-contained -o ./bin/linux-x64
+# release:
+#   runs-on: ubuntu-latest
+#   needs: publish
+#   steps:
+#     - name: Release
+#       uses: softprops/action-gh-release@v1
+#       if: startsWith(github.ref, 'refs/tags/')
+#       with:
+#         draft: true
+#         body_path: src/changelog.md
+#         files: src/Server/bin/*.zip
+
+# dotnet publish ./InverterMon.Server.csproj -c Release -r ${{ matrix.rid }} --self-contained -o ./bin/${{ matrix.rid }}
+# rm -rf ./bin/${{ matrix.rid }}/BlazorDebugProxy
+# zip -r ./bin/${{ matrix.rid }}.zip ./bin/${{ matrix.rid }}
