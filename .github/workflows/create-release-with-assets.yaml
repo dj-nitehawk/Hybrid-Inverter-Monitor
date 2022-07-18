@@ -33,6 +33,7 @@ jobs:
     strategy:
       matrix:
         rid: [linux-x64, linux-arm64]
+      fail-fast: false
     steps:
       - uses: actions/checkout@v2.4.2
       - name: Load Release URL File from release job
@@ -46,7 +47,7 @@ jobs:
       - name: Publish Binaries
         working-directory: src/Server
         run: |
-          dotnet publish ./InverterMon.Server.csproj -c Release -r ${{ matrix.rid }} -o ./bin/${{ matrix.rid }}
+          dotnet publish ./InverterMon.Server.csproj -c Release -r ${{ matrix.rid }} --self-contained -o ./bin/${{ matrix.rid }}
           zip -r ${{ matrix.rid }} ./bin/${{ matrix.rid }}
       - name: Get Release File Name & Upload URL
         id: get_release_info
