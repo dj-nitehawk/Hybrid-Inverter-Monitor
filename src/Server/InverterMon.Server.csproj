@@ -6,6 +6,9 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <NoWarn>CS8618;CA2016</NoWarn>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PublishSingleFile>true</PublishSingleFile>
+        <SelfContained>true</SelfContained>
+        <PublishTrimmed>true</PublishTrimmed>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -38,11 +41,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Properties\PublishProfiles\linux-x64 - Copy.pubxml">
-        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-      </None>
+        <None Update="Properties\PublishProfiles\linux-x64 - Copy.pubxml">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </None>
     </ItemGroup>
 
 </Project>
