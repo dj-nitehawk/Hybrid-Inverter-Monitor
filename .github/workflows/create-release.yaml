@@ -21,11 +21,11 @@ jobs:
           dotnet-version: 6.x
 
       - name: Publish Binaries
-        working-directory: src/Server/bin
+        working-directory: src/Server
         run: |
-          dotnet publish ./InverterMon.Server.csproj -c Release -r ${{ matrix.rid }} --self-contained -o ./${{ matrix.rid }}
-          rm -rf ./${{ matrix.rid }}/BlazorDebugProxy
-          cd ./${{ matrix.rid }}
+          dotnet publish ./InverterMon.Server.csproj -c Release -r ${{ matrix.rid }} --self-contained -o ./bin/${{ matrix.rid }}
+          rm -rf ./bin/${{ matrix.rid }}/BlazorDebugProxy
+          cd ./bin/${{ matrix.rid }}
           zip -r -9 ../${{ matrix.rid }}.zip ./*
 
       - name: Create Release
