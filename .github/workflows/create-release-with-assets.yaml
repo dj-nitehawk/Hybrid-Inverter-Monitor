@@ -48,7 +48,7 @@ jobs:
         working-directory: src/Server
         run: |
           dotnet publish ./InverterMon.Server.csproj -c Release -r ${{ matrix.rid }} --self-contained -o ./bin/${{ matrix.rid }}
-          zip -r ${{ matrix.rid }} ./bin/${{ matrix.rid }}.zip
+          zip -r ${{ matrix.rid }} ./bin/${{ matrix.rid }}
           ls -la ./bin
       - name: Get Release File Name & Upload URL
         id: get_release_info
