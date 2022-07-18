@@ -17,9 +17,7 @@ jobs:
             linux-musl-arm64,
             linux-musl-arm,
             linux-musl-x64,
-            linux-musl,
             linux-x64,
-            linux,
           ]
       fail-fast: true
     steps:
