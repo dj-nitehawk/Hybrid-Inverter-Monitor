@@ -9,17 +9,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Source Code
       - uses: actions/checkout@v2
+      - run: echo "test..."
+      # - name: Setup .NET
+      #   uses: actions/setup-dotnet@v2
+      #   with:
+      #     dotnet-version: 6.x
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: 6.x
-
-      - name: Publish Binaries
-        working-directory: src/Server
-        run: dotnet publish ./InverterMon.Server.csproj -c Release -r linux-x64 --self-contained -o ./bin/linux-x64
+      # - name: Publish Binaries
+      #   working-directory: src/Server
+      #   run: dotnet publish ./InverterMon.Server.csproj -c Release -r linux-x64 --self-contained -o ./bin/linux-x64
 # release:
 #   runs-on: ubuntu-latest
 #   needs: publish
