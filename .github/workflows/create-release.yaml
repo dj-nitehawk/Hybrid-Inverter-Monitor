@@ -6,10 +6,10 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        rid: [linux-x64]
-      fail-fast: false
+    #strategy:
+    #  matrix:
+    #    rid: [linux-x64]
+    #  fail-fast: false
     steps:
       - name: Checkout Source Code
       - uses: actions/checkout@v2
