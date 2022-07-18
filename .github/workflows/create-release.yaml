@@ -7,10 +7,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    #strategy:
-    #  matrix:
-    #    rid: [linux-x64]
-    #  fail-fast: false
+    strategy:
+      matrix:
+        rid: [linux-x64]
+      fail-fast: false
     steps:
       - name: Checkout Source Code
       - uses: actions/checkout@v3
@@ -26,7 +26,6 @@ jobs:
           dotnet publish ./InverterMon.Server.csproj -c Release -r ${{ matrix.rid }} --self-contained -o ./bin/${{ matrix.rid }}
           rm -rf ./bin/${{ matrix.rid }}/BlazorDebugProxy
           zip -r ./bin/${{ matrix.rid }}.zip ./bin/${{ matrix.rid }}
-
   # release:
   #   runs-on: ubuntu-latest
   #   needs: publish
