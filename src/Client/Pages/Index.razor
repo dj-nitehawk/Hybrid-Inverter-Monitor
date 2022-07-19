@@ -2,6 +2,7 @@
 @using InverterMon.Shared.Models
 @using System.Text.Json
 @inject HttpClient Http
+@implements IDisposable
 
 <PageTitle>Dashboard</PageTitle>
 
@@ -154,6 +155,7 @@
 
 @code{
     private InverterStatus? status;
+    private bool isDisposed;
 
     protected override async Task OnInitializedAsync()
     {
@@ -178,8 +180,15 @@
             {
                 status = data; 
                 StateHasChanged();
-            }            
+            }
+            if (isDisposed)
+                break;
         }
+    }
+
+    public void Dispose()
+    {
+        isDisposed = true;
     }
 
     private decimal RoundToWholeNumer(decimal? val)
