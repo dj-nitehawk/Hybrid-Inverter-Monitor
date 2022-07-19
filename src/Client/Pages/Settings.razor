@@ -79,7 +79,7 @@
                     @Sanitize(settings.MaxCombinedChargeCurrent) A
                   </button>
                   <ul class="dropdown-menu dropdown-menu">
-                    @foreach (var val in chargeCurrentValues!.CombinedAmpereValues)
+                    @foreach (var val in settings.CombinedAmpereValues)
                     {
                         <li>
                             <a 
@@ -113,7 +113,7 @@
                     @Sanitize(settings.MaxACChargeCurrent) A
                   </button>
                   <ul class="dropdown-menu dropdown-menu">
-                    @foreach (var val in chargeCurrentValues!.UtilityAmpereValues)
+                    @foreach (var val in settings.UtilityAmpereValues)
                     {
                         <li>
                             <a 
@@ -185,7 +185,6 @@
 }
 
 @code{
-    private ChargeAmpereValues? chargeCurrentValues;
     private CurrentSettings? settings;
     private Button currentButton = Button.None;
     private bool isSuccess;
@@ -193,18 +192,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        try
-        {
-            var cTask = Http.GetFromJsonAsync<ChargeAmpereValues>("api/settings/get-charge-ampere-values");
-            var sTask = Http.GetFromJsonAsync<CurrentSettings>("api/settings/get-setting-values");
-            await Task.WhenAll(cTask, sTask);
-            chargeCurrentValues = cTask.Result;
-            settings = sTask.Result;
-        }
-        catch (Exception)
-        {
-            // do nothing
-        }
+        settings = await Http.GetFromJsonAsync<CurrentSettings>("api/settings/get-setting-values");
     }
 
     private async Task SetChargePriority(string priority)

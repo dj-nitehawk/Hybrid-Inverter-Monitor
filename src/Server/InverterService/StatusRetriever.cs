@@ -25,7 +25,7 @@ internal class StatusRetriever : BackgroundService
             if (queue.IsAcceptingCommands)
             {
                 cmd.Result.PVMaxCapacity = userSettings.PVMaxCapacity; //feels hacky. find a better solution.
-                queue.AddCommand(cmd);
+                queue.AddCommands(cmd);
                 _ = db.UpdateTodaysPVGeneration(cmd, c);
             }
             await Task.Delay(3000);

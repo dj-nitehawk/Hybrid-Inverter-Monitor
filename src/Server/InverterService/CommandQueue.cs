@@ -10,11 +10,12 @@ public class CommandQueue
 
     private readonly ConcurrentQueue<ICommand> toProcess = new();
 
-    public bool AddCommand(ICommand command)
+    public bool AddCommands(params ICommand[] commands)
     {
         if (IsAcceptingCommands)
         {
-            toProcess.Enqueue(command);
+            foreach (var cmd in commands)
+                toProcess.Enqueue(cmd);
             return true;
         }
         return false;

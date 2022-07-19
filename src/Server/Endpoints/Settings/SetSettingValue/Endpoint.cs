@@ -15,7 +15,7 @@ public class Endpoint : Endpoint<Shared.Models.SetSetting, bool>
     public override async Task HandleAsync(Shared.Models.SetSetting r, CancellationToken c)
     {
         var cmd = new InverterService.Commands.SetSetting(r.Command, r.Value);
-        Queue.AddCommand(cmd);
+        Queue.AddCommands(cmd);
         await cmd.WhileProcessing(c);
         await SendAsync(cmd.Result);
     }
