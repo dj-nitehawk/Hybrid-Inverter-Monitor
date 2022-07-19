@@ -6,14 +6,14 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <NoWarn>CS8618;CA2016</NoWarn>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PublishSingleFile>true</PublishSingleFile>
-        <RuntimeIdentifier>linux-arm64</RuntimeIdentifier>
-        <SelfContained>true</SelfContained>
-        <PublishTrimmed>true</PublishTrimmed>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <DebugType>none</DebugType>
+        <PublishSingleFile>true</PublishSingleFile>
+        <RuntimeIdentifier>linux-arm64</RuntimeIdentifier>
+        <SelfContained>true</SelfContained>
+        <PublishTrimmed>true</PublishTrimmed>
     </PropertyGroup>
 
     <ItemGroup>
@@ -30,11 +30,10 @@
 
     <ItemGroup>
         <Content Remove="appsettings.Development.json" />
+        <None Remove="InverterMon-log.db" />
+        <None Remove="InverterMon.db" />
         <None Remove="InverterService\protocol.pdf" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="Properties\PublishProfiles\" />
+        <None Include="../changelog.md" Link="changelog.md" />
     </ItemGroup>
 
 </Project>
