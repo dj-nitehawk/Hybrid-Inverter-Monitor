@@ -41,6 +41,6 @@ jobs:
         if: ${{ !contains(github.ref, 'beta') }}
         with:
           draft: false
-          name: v${{ github.ref_name }} Release
+          name: ${{ github.ref_name }} Release
           body_path: src/changelog.md
           files: src/Server/bin/*.zip
