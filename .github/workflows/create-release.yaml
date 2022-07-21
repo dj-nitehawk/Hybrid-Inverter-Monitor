@@ -38,8 +38,9 @@ jobs:
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+        if: ${{ !contains(github.ref, 'beta') }}
         with:
           draft: false
+          name: v${{ env.GitVersion_SemVer }} Release
           body_path: src/changelog.md
           files: src/Server/bin/*.zip
