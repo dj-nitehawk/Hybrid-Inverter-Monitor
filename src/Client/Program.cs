@@ -10,4 +10,5 @@ builder.Services.AddScoped(_ => new HttpClient
     BaseAddress = new Uri(builder.HostEnvironment.BaseAddress),
     Timeout = TimeSpan.FromSeconds(3)
 });
+_ = InverterMon.Client.Pages.Index.StartStatusStreaming(builder.HostEnvironment.BaseAddress);
 await builder.Build().RunAsync();

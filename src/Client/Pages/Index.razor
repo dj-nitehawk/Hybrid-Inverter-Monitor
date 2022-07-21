@@ -1,7 +1,6 @@
 ﻿@page "/"
 @using InverterMon.Shared.Models
 @using System.Text.Json
-@inject HttpClient Http
 @implements IDisposable
 
 <PageTitle>Dashboard</PageTitle>
@@ -154,20 +153,53 @@
 }
 
 @code{
+    private static event Action<InverterStatus?>? onStatusUpdated;
     private InverterStatus? status;
-    private bool isDisposed;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, "api/status");
+        onStatusUpdated += UpdateState;
+    }
+
+    private void UpdateState(InverterStatus? status) 
+    {
+        this.status = status;
+        StateHasChanged();     
+    }
+
+    public void Dispose()
+    {
+        onStatusUpdated -= UpdateState;
+    }
+
+    private decimal RoundToWholeNumer(decimal? val)
+    => Math.Round(val ?? 0, 0);
+
+    private decimal RoundToOneDecimal(decimal? val)
+        => Math.Round(val ?? 0, 1);
+
+    public static async Task StartStatusStreaming(string basePath)
+    {
+        //note: only reason we have a full-time stream download is because there's a bug in
+        //      blazor-wasm that doesn't close the fetch http requests when streaming is involved.
+        //      and it leads to a new stream download being created everytime a page is initialized.
+        //      which leads to a memory leak/ connection exhaustion.
+
+        using var client = new HttpClient
+        {
+            BaseAddress = new Uri(basePath),
+            Timeout = TimeSpan.FromSeconds(5)
+        };
+
+        using var request = new HttpRequestMessage(HttpMethod.Get, "api/status");
         request.SetBrowserResponseStreamingEnabled(true);
 
-        using var response = await Http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+        using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
         response.EnsureSuccessStatusCode();
 
         using var stream = await response.Content.ReadAsStreamAsync();
 
-        await foreach (var data in 
+        await foreach (var s in
             JsonSerializer.DeserializeAsyncEnumerable<InverterStatus>(
                 stream,
                 new JsonSerializerOptions
@@ -176,24 +208,7 @@
                     DefaultBufferSize = 64
                 }))
         {
-            if (data is not null)
-            {
-                status = data; 
-                StateHasChanged();
-            }
-            if (isDisposed)
-                break;
+            onStatusUpdated?.Invoke(s);
         }
     }
-
-    public void Dispose()
-    {
-        isDisposed = true;
-    }
-
-    private decimal RoundToWholeNumer(decimal? val)
-        => Math.Round(val ?? 0, 0);
-
-    private decimal RoundToOneDecimal(decimal? val)
-        => Math.Round(val ?? 0, 1);
 }
