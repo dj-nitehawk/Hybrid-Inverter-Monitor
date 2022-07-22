@@ -154,16 +154,16 @@
 
 @code{
     private static event Action<InverterStatus?>? onStatusUpdated;
-    private InverterStatus? status;
+    private static InverterStatus? status;
 
     protected override void OnInitialized()
     {
         onStatusUpdated += UpdateState;
     }
 
-    private void UpdateState(InverterStatus? status) 
+    private void UpdateState(InverterStatus? s) 
     {
-        this.status = status;
+        status = s;
         StateHasChanged();     
     }
 
