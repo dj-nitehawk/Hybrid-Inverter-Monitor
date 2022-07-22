@@ -1,7 +1,6 @@
 ﻿@page "/"
 @using InverterMon.Shared.Models
 @using System.Text.Json
-@inject NavigationManager NavMan;
 @implements IDisposable
 
 <PageTitle>Dashboard</PageTitle>
@@ -161,11 +160,14 @@
     protected override void OnInitialized()
     {
         onStatusUpdated += UpdateState;
-        onStatusRetrievalError += ReloadApp;
+        onStatusRetrievalError += NullifyStatus;
     }
 
-    private void ReloadApp()
-        => NavMan.NavigateTo("/", true);
+    private void NullifyStatus()
+    { 
+        status = null;
+        StateHasChanged();
+    }
 
     private void UpdateState(InverterStatus? s) 
     {
@@ -176,7 +178,7 @@
     public void Dispose()
     {
         onStatusUpdated -= UpdateState;
-        onStatusRetrievalError -= ReloadApp;
+        onStatusRetrievalError -= NullifyStatus;
     }
 
     private decimal RoundToWholeNumer(decimal? val)
@@ -192,38 +194,41 @@
         //      and it leads to a new stream download being created everytime a page is initialized.
         //      which leads to a memory leak/ connection exhaustion.
 
-        using var client = new HttpClient
+        while (true)
         {
-            BaseAddress = new Uri(basePath),
-            Timeout = TimeSpan.FromSeconds(5)
-        };
-
-        using var request = new HttpRequestMessage(HttpMethod.Get, "api/status");
-        request.SetBrowserResponseStreamingEnabled(true);
-
-        using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-        response.EnsureSuccessStatusCode();
-
-        using var stream = await response.Content.ReadAsStreamAsync();
-
-        try
-        {
-            await foreach (var s in
-                JsonSerializer.DeserializeAsyncEnumerable<InverterStatus>(
-                    stream,
-                    new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true,
-                        DefaultBufferSize = 64
-                    }))
+            try
             {
-                onStatusUpdated?.Invoke(s);
+                using var client = new HttpClient
+                {
+                    BaseAddress = new Uri(basePath),
+                    Timeout = TimeSpan.FromSeconds(5)
+                };
+
+                using var request = new HttpRequestMessage(HttpMethod.Get, "api/status");
+                request.SetBrowserResponseStreamingEnabled(true);
+
+                using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+                response.EnsureSuccessStatusCode();
+
+                using var stream = await response.Content.ReadAsStreamAsync();
+
+                await foreach (var s in
+                    JsonSerializer.DeserializeAsyncEnumerable<InverterStatus>(
+                        stream,
+                        new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true,
+                            DefaultBufferSize = 64
+                        }))
+                {
+                    onStatusUpdated?.Invoke(s);
+                }
             }
-        }
-        catch (Exception)
-        {
-            await Task.Delay(5000);
-            onStatusRetrievalError?.Invoke();
+            catch (Exception)
+            {
+                onStatusRetrievalError?.Invoke();
+                await Task.Delay(5000);
+            }
         }
     }
 }

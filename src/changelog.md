@@ -1,3 +1,4 @@
 ## changelog
 - quicker status page rendering
-- auto reload if network failure occurs
+- auto reconnect/resume status retrieval if network failure occurs
+- minor optimizations
