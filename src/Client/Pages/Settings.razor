@@ -79,7 +79,7 @@
                     @Sanitize(settings.MaxCombinedChargeCurrent) A
                   </button>
                   <ul class="dropdown-menu dropdown-menu">
-                    @foreach (var val in settings.CombinedAmpereValues)
+                    @foreach (var val in chargeAmpereValues!.CombinedAmpereValues)
                     {
                         <li>
                             <a 
@@ -113,7 +113,7 @@
                     @Sanitize(settings.MaxACChargeCurrent) A
                   </button>
                   <ul class="dropdown-menu dropdown-menu">
-                    @foreach (var val in settings.UtilityAmpereValues)
+                    @foreach (var val in chargeAmpereValues!.UtilityAmpereValues)
                     {
                         <li>
                             <a 
@@ -185,10 +185,40 @@
 }
 
 @code{
+    private static ChargeAmpereValues? chargeAmpereValues;
     private CurrentSettings? settings;
     private Button currentButton = Button.None;
     private bool isSuccess;
     private string inProgressSetting = "";
+
+    public static async Task RetrieveChargeAmpereValues(string basePath)
+    {
+        using var client = new HttpClient
+        {
+            BaseAddress = new Uri(basePath),
+            Timeout = TimeSpan.FromSeconds(5)
+        };
+
+        var retryDelay = (int)TimeSpan.FromSeconds(1).TotalMilliseconds;
+        var maxDelay = (int)TimeSpan.FromMinutes(1).TotalMilliseconds;
+
+        while (true)
+        {
+            try
+            {
+                chargeAmpereValues = await client.GetFromJsonAsync<ChargeAmpereValues>("api/settings/get-charge-ampere-values");
+                break;
+            }
+            catch (Exception)
+            {
+                if (retryDelay > maxDelay)
+                    break;
+
+                await Task.Delay(retryDelay);
+                retryDelay += 250;
+            }
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {

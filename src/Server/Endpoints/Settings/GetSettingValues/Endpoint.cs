@@ -18,40 +18,26 @@ public class Endpoint : EndpointWithoutRequest<CurrentSettings>
 
     public override async Task HandleAsync(CancellationToken c)
     {
-        var cmd1 = new GetSettings();
-        cmd1.Result.SystemSpec = UserSettings.ToSystemSpec();
+        var cmd = new GetSettings();
+        cmd.Result.SystemSpec = UserSettings.ToSystemSpec();
 
         if (Env.IsDevelopment())
         {
-            cmd1.Result.ChargePriority = "03";
-            cmd1.Result.MaxACChargeCurrent = "10";
-            cmd1.Result.MaxCombinedChargeCurrent = "020";
-            cmd1.Result.OutputPriority = "02";
-            cmd1.Result.CombinedAmpereValues = new[] { "010", "020", "030" };
-            cmd1.Result.UtilityAmpereValues = new[] { "04", "10", "20" };
-            await SendAsync(cmd1.Result);
+            cmd.Result.ChargePriority = "03";
+            cmd.Result.MaxACChargeCurrent = "10";
+            cmd.Result.MaxCombinedChargeCurrent = "020";
+            cmd.Result.OutputPriority = "02";
+            await SendAsync(cmd.Result);
             return;
         }
 
-        var cmd2 = new GetChargeAmpereValues(true);
-        var cmd3 = new GetChargeAmpereValues(false);
+        Queue.AddCommands(cmd);
 
-        Queue.AddCommands(cmd1, cmd2, cmd3);
+        await cmd.WhileProcessing(c);
 
-        await Task.WhenAll(
-            cmd1.WhileProcessing(c),
-            cmd2.WhileProcessing(c),
-            cmd3.WhileProcessing(c));
-
-        if (cmd1.IsComplete && cmd2.IsComplete && cmd3.IsComplete)
-        {
-            cmd1.Result.UtilityAmpereValues = cmd2.Result;
-            cmd1.Result.CombinedAmpereValues = cmd3.Result;
-            await SendAsync(cmd1.Result);
-        }
+        if (cmd.IsComplete)
+            await SendAsync(cmd.Result);
         else
-        {
             ThrowError("Unable to read settings in a timely manner!");
-        }
     }
 }
