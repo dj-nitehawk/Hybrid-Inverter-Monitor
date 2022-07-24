@@ -3,7 +3,13 @@ using FastEndpoints.Swagger;
 using InverterMon.Server.InverterService;
 using InverterMon.Server.Persistance;
 using InverterMon.Server.Persistance.Settings;
+using System.Globalization;
 using System.Net;
+
+//avoid parsing issues with non-english cultures
+var cultureInfo = new CultureInfo("en-US");
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 var builder = WebApplication.CreateBuilder();
 _ = int.TryParse(builder.Configuration["LaunchSettings:WebPort"] ?? "80", out var port);
