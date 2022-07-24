@@ -34,12 +34,15 @@ internal class GetSettings : Command<CurrentSettings>
         // 24) 0 - pv ok for parallel
         // 25) 1 - pv power balance
 
-        string[]? parts = responseFromInverter[1..]
-            .Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (IsCommandSuccessful(responseFromInverter))
+        {
+            string[]? parts = responseFromInverter[1..]
+                .Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-        Result.MaxACChargeCurrent = parts[14 - 1];
-        Result.MaxCombinedChargeCurrent = parts[15 - 1];
-        Result.OutputPriority = $"0{parts[17 - 1]}";
-        Result.ChargePriority = $"0{parts[18 - 1]}";
+            Result.MaxACChargeCurrent = parts[14 - 1];
+            Result.MaxCombinedChargeCurrent = parts[15 - 1];
+            Result.OutputPriority = $"0{parts[17 - 1]}";
+            Result.ChargePriority = $"0{parts[18 - 1]}";
+        }
     }
 }
