@@ -12,13 +12,10 @@ internal class GetChargeAmpereValues : Command<List<string>>
 
     public override void Parse(string responseFromInverter)
     {
-        if (IsCommandSuccessful(responseFromInverter))
-        {
-            var parts = responseFromInverter[1..]
-                .Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                .Select(x => x[0..3]);
+        var parts = responseFromInverter[1..]
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .Select(x => x[0..3]);
 
-            Result.AddRange(parts);
-        }
+        Result.AddRange(parts);
     }
 }

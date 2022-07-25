@@ -27,9 +27,6 @@ public abstract class Command<TResponseDto> : ICommand where TResponseDto : new(
     public void End()
         => IsComplete = true;
 
-    protected static bool IsCommandSuccessful(string responseFromInverter)
-        => responseFromInverter[1..4] == "ACK";
-
     public async Task WhileProcessing(CancellationToken c)
     {
         while (!c.IsCancellationRequested && !IsComplete && DateTime.Now.Subtract(startTime).TotalMilliseconds <= 3000)

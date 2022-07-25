@@ -11,6 +11,6 @@ internal class SetSetting : Command<bool>
 
     public override void Parse(string responseFromInverter)
     {
-        Result = IsCommandSuccessful(responseFromInverter);
+        Result = responseFromInverter[1..4] == "ACK";
     }
 }
