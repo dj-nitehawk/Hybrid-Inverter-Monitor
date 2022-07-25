@@ -201,7 +201,7 @@
         using var client = new HttpClient
         {
             BaseAddress = new Uri(basePath),
-            Timeout = TimeSpan.FromSeconds(5)
+            Timeout = TimeSpan.FromSeconds(10)
         };
 
         var retryDelay = (int)TimeSpan.FromSeconds(1).TotalMilliseconds;
@@ -212,6 +212,19 @@
             try
             {
                 chargeAmpereValues = await client.GetFromJsonAsync<ChargeAmpereValues>("api/settings/get-charge-ampere-values");
+
+                // some inverters only seem to support one of the two commands over usb
+                if(chargeAmpereValues?.CombinedAmpereValues.Any() is true &&
+                   chargeAmpereValues?.UtilityAmpereValues.Any() is false)
+                {
+                    chargeAmpereValues.UtilityAmpereValues = chargeAmpereValues.CombinedAmpereValues;
+                }
+                if(chargeAmpereValues?.CombinedAmpereValues.Any() is false &&
+                   chargeAmpereValues?.UtilityAmpereValues.Any() is true)
+                {
+                    chargeAmpereValues.CombinedAmpereValues = chargeAmpereValues.UtilityAmpereValues;
+                }
+
                 break;
             }
             catch (Exception)
