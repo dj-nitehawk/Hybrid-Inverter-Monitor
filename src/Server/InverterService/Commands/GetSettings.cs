@@ -37,9 +37,14 @@ internal class GetSettings : Command<CurrentSettings>
         string[]? parts = responseFromInverter[1..]
             .Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
+        Result.BackToGridVoltage = decimal.Parse(parts[9 - 1]);
+        Result.DischargeCuttOffVoltage = decimal.Parse(parts[10 - 1]);
+        Result.BulkChargeVoltage = decimal.Parse(parts[11 - 1]);
+        Result.FloatChargeVoltage = decimal.Parse(parts[12 - 1]);
         Result.MaxACChargeCurrent = parts[14 - 1];
         Result.MaxCombinedChargeCurrent = parts[15 - 1];
         Result.OutputPriority = $"0{parts[17 - 1]}";
         Result.ChargePriority = $"0{parts[18 - 1]}";
+        Result.BackToBatteryVoltage = decimal.Parse(parts[23 - 1]);
     }
 }

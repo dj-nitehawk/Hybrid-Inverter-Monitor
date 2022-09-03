@@ -13,6 +13,9 @@
             <button class="nav-link active" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab">Inverter</button>
         </li>
         <li class="nav-item" role="presentation">
+            <button class="nav-link" id="voltages-tab" data-bs-toggle="tab" data-bs-target="#voltages" type="button" role="tab">Voltages</button>
+        </li>
+        <li class="nav-item" role="presentation">
             <button class="nav-link" id="spec-tab" data-bs-toggle="tab" data-bs-target="#spec" type="button" role="tab">System</button>
         </li>
     </ul>
@@ -137,6 +140,90 @@
                 </div>
             </div>
         </div>
+        
+        <div class="tab-pane fade" id="voltages" role="tabpanel">
+            <div class="row border-primary bg-light px-3 mt-0">
+                <div class="col-6 my-auto fw-bold">
+                    Bulk Charge Voltage:
+                </div>
+                <div class="col-6 bg-secondary p-2">
+                    <div class="row">
+                        <div>
+                            <input @bind-value=settings.BulkChargeVoltage class="form-control bg-light d-inline" style="width:4rem;" type="text" maxlength="4" >
+                            <button type="button" class="btn btn-light m-2" @onclick="()=>SetVoltage(Setting.BulkVoltage)">
+                                <span class="@Spinner(Button.BulkVoltage)"></span>
+                                <span class="@Hidden(Button.BulkVoltage)">Save</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row border-primary bg-light px-3 mt-0">
+                <div class="col-6 my-auto fw-bold">
+                    Float Charge Voltage:
+                </div>
+                <div class="col-6 bg-secondary p-2">
+                    <div class="row">
+                        <div>
+                            <input @bind-value=settings.FloatChargeVoltage class="form-control bg-light d-inline" style="width:4rem;" type="text" maxlength="4">
+                            <button type="button" class="btn btn-light m-2" @onclick="()=>SetVoltage(Setting.FloatVoltage)">
+                                <span class="@Spinner(Button.FloatVoltage)"></span>
+                                <span class="@Hidden(Button.FloatVoltage)">Save</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row border-primary bg-light px-3 mt-0">
+                <div class="col-6 my-auto fw-bold">
+                    Discharge Cutoff Voltage:
+                </div>
+                <div class="col-6 bg-secondary p-2">
+                    <div class="row">
+                        <div>
+                            <input @bind-value=settings.DischargeCuttOffVoltage class="form-control bg-light d-inline" style="width:4rem;" type="text" maxlength="4">
+                            <button type="button" class="btn btn-light m-2" @onclick="()=>SetVoltage(Setting.DischargeCutOff)">
+                                <span class="@Spinner(Button.DischargeCutOff)"></span>
+                                <span class="@Hidden(Button.DischargeCutOff)">Save</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row border-primary bg-light px-3 mt-0">
+                <div class="col-6 my-auto fw-bold">
+                    Back To Grid Voltage:
+                </div>
+                <div class="col-6 bg-secondary p-2">
+                    <div class="row">
+                        <div>
+                            <input @bind-value=settings.BackToGridVoltage class="form-control bg-light d-inline" style="width:4rem;" type="text" maxlength="4">
+                            <button type="button" class="btn btn-light m-2" @onclick="()=>SetVoltage(Setting.BackToGrid)">
+                                <span class="@Spinner(Button.BackToGridVoltage)"></span>
+                                <span class="@Hidden(Button.BackToGridVoltage)">Save</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row border-primary bg-light px-3 mt-0">
+                <div class="col-6 my-auto fw-bold">
+                    Back To Battery Voltage:
+                </div>
+                <div class="col-6 bg-secondary p-2">
+                    <div class="row">
+                        <div>
+                            <input @bind-value=settings.BackToBatteryVoltage class="form-control bg-light d-inline" style="width:4rem;" type="text" maxlength="4">
+                            <button type="button" class="btn btn-light m-2" @onclick="()=>SetVoltage(Setting.BackToBattery)">
+                                <span class="@Spinner(Button.BackToBattery)"></span>
+                                <span class="@Hidden(Button.BackToBattery)">Save</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+       
         <div class="tab-pane fade" id="spec" role="tabpanel">
             <div class="row border-primary bg-light px-3 mt-0">
                 <div class="col-6 my-auto fw-bold">
@@ -160,7 +247,7 @@
                         <div style="width:4.2rem;">
                             <input type="number" class="form-control bg-light" @bind-value=settings.SystemSpec.SunlightStartHour>
                         </div>
-                    <div class="col-1 fw-bolder fs-5 m-1 text-white">Hrs</div>
+                        <div class="col-1 fw-bolder fs-5 m-1 text-white">Hrs</div>
                     </div>
                 </div>
             </div>
@@ -300,6 +387,44 @@
         }
     }
 
+    private async Task SetVoltage(string setting)
+    {
+        isSuccess = false;
+        decimal value = 0;
+
+        switch (setting)
+        {
+            case Setting.BulkVoltage:
+                currentButton = Button.BulkVoltage;
+                value = settings!.BulkChargeVoltage;
+                break;
+            case Setting.FloatVoltage:
+                currentButton = Button.FloatVoltage;
+                value = settings!.FloatChargeVoltage;
+                break;
+            case Setting.DischargeCutOff:
+                currentButton = Button.DischargeCutOff;
+                value = settings!.DischargeCuttOffVoltage;
+                break;
+            case Setting.BackToGrid:
+                currentButton = Button.BackToGridVoltage;
+                value = settings!.BackToGridVoltage;
+                break;
+            case Setting.BackToBattery:
+                currentButton = Button.BackToBattery;
+                value = settings!.BackToBatteryVoltage;
+                break;
+            default:
+                currentButton = Button.None;
+                break;
+        };
+
+        if (await Http.GetStringAsync($"api/settings/set-setting/{setting}/{value:00.0}") == "true")
+        {
+            isSuccess = true;
+        }
+    }
+
     private async Task SetSetting(string settingName, string value)
     {
         inProgressSetting = settingName;
@@ -356,19 +481,24 @@
            : "";
 
     private string Sanitize(string value)
-        => value.StartsWith("0") ? value[1..] : value;
+        => value.StartsWith("0") ? value[1..] : value;    
 
     private enum Button
     {
-        None,
-        ChOnlySolar,
-        ChSolarFirst,
-        ChSolarAndUtility,
-        ChUtilityFirst,
-        OpUtilityFirst,
-        OpSolarFirst,
-        OpSolarBatteryUtility,
-        UpdateUserSettings
+        None = 0,
+        ChOnlySolar = 1,
+        ChSolarFirst = 2,
+        ChSolarAndUtility = 3,
+        ChUtilityFirst = 4,
+        OpUtilityFirst = 5,
+        OpSolarFirst = 6,
+        OpSolarBatteryUtility = 7,
+        UpdateUserSettings = 8,
+        BackToGridVoltage = 9,
+        BackToBattery= 10,
+        DischargeCutOff = 11,
+        BulkVoltage = 12,
+        FloatVoltage = 13
     }
 
     private static class Setting
@@ -377,5 +507,11 @@
         public const string OutputPriority = "POP";
         public const string CombinedChargeCurrent = "MNCHGC";
         public const string UtilityChargeCurrent = "MUCHGC";
+
+        public const string BulkVoltage = "PCVV";
+        public const string FloatVoltage = "PBFT";
+        public const string DischargeCutOff = "PSDV";
+        public const string BackToGrid = "PBCV";
+        public const string BackToBattery = "PBDV";
     }
 }

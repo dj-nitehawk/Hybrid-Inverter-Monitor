@@ -27,6 +27,7 @@ public class Endpoint : EndpointWithoutRequest<CurrentSettings>
             cmd.Result.MaxACChargeCurrent = "10";
             cmd.Result.MaxCombinedChargeCurrent = "020";
             cmd.Result.OutputPriority = "02";
+            cmd.Result.BulkChargeVoltage = 27.1m;
             await SendAsync(cmd.Result);
             return;
         }

@@ -10,10 +10,19 @@
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <DebugType>none</DebugType>
+        <!--<InvariantGlobalization>true</InvariantGlobalization> litedb needs en-us culture-->
         <PublishSingleFile>true</PublishSingleFile>
         <RuntimeIdentifier>linux-arm64</RuntimeIdentifier>
         <SelfContained>true</SelfContained>
         <PublishTrimmed>true</PublishTrimmed>
+        <DebuggerSupport>false</DebuggerSupport>
+        <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
+        <EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
+        <EventSourceSupport>false</EventSourceSupport>
+        <HttpActivityPropagationSupport>false</HttpActivityPropagationSupport>
+        <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
+        <UseNativeHttpHandler>true</UseNativeHttpHandler>
+        <UseSystemResourceKeys>true</UseSystemResourceKeys>
     </PropertyGroup>
 
     <ItemGroup>
