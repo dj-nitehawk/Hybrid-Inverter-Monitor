@@ -40,5 +40,5 @@ app.UseStaticFiles();
 app.MapFallbackToFile("index.html");
 app.UseRouting();
 app.UseAuthorization();
-app.UseFastEndpoints(c => c.RoutingOptions = o => o.Prefix = "api");
+app.UseFastEndpoints(c => c.Endpoints.RoutePrefix = "api");
 app.Run();
