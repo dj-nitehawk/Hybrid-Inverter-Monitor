@@ -1,3 +1,2 @@
 ## changelog
-- add voltage settings
-- upgrade packages
+- display heatsink temperature
