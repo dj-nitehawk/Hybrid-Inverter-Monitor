@@ -61,7 +61,7 @@
                                    </div>
                                 <div class="col">
                                     <div class="row h-100 align-content-center">
-                                        <span class="fs-5 @(status?.HeatSinkTemperature > 60 ? "text-danger fw-bolder" : "text-muted")">
+                                        <span class="fs-5 @(status?.HeatSinkTemperature > 50 ? "text-danger fw-bolder blinktext" : "text-muted")">
                                             @(status?.HeatSinkTemperature) C°
                                         </span>
                                     </div>

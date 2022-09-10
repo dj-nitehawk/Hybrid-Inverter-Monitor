@@ -99,3 +99,25 @@ a, .btn-link {
 .row {
     --bs-gutter-x: 0.4rem;
 }
+
+.blinktext {
+    animation: blink-text 900ms linear infinite !important;
+}
+
+@keyframes blink-text {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    50.01% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
