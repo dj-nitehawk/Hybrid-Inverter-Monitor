@@ -238,6 +238,19 @@
                     </div>
                 </div>
             </div>
+            <div class="row border-primary bg-light px-3 mt-0">
+                <div class="col-6 my-auto fw-bold">
+                    Battery Capacity:
+                </div>
+                <div class="col-6 p-2 bg-secondary">
+                    <div class="row">
+                        <div style="width:4.75rem;">
+                            <input type="number" class="form-control bg-light" @bind-value=settings.SystemSpec.BatteryCapacity>
+                        </div>
+                        <div class="col-1 fw-bolder fs-5 m-1 text-white">Ah</div>
+                    </div>
+                </div>
+            </div>
             <div class="row border-primary bg-light px-3 mt-1">
                 <div class="col-6 my-auto fw-bold">
                     Daylight Start (24hr format):

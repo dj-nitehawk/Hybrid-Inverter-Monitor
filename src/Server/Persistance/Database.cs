@@ -88,6 +88,7 @@ public class Database
         if (settings is not null)
         {
             this.settings.PVMaxCapacity = settings.PVMaxCapacity;
+            this.settings.BatteryCapacity = settings.BatteryCapacity;
             this.settings.SunlightStartHour = settings.SunlightStartHour;
             this.settings.SunlightEndHour = settings.SunlightEndHour;
         }

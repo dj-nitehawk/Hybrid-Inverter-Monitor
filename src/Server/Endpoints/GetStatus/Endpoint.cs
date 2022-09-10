@@ -40,12 +40,13 @@ public class Endpoint : EndpointWithoutRequest<object>
                 status.LoadPercentage = Random.Shared.Next(100);
                 status.BatteryVoltage = Random.Shared.Next(24);
                 status.BatteryChargeCurrent = Random.Shared.Next(20);
-                status.BatteryDischargeCurrent = Random.Shared.Next(10);
+                status.BatteryDischargeCurrent = Random.Shared.Next(100);
                 status.HeatSinkTemperature = Random.Shared.Next(300);
                 status.PVInputCurrent = Random.Shared.Next(300);
                 status.PVInputVoltage = Random.Shared.Next(300);
                 status.PVInputWatt = Random.Shared.Next(1800);
                 status.PVMaxCapacity = Random.Shared.Next(300);
+                status.BatteryCapacity = 100;
                 yield return status;
             }
             else
