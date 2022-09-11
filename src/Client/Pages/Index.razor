@@ -61,7 +61,7 @@
                                    </div>
                                 <div class="col">
                                     <div class="row h-100 align-content-center">
-                                        <span class="fs-5 @(status?.HeatSinkTemperature > 50 ? "text-danger fw-bolder blinktext" : "text-muted")">
+                                        <span class="fs-5 @(TemperatureCss())">
                                             @(status?.HeatSinkTemperature) C°
                                         </span>
                                     </div>
@@ -200,6 +200,12 @@
 
     private decimal RoundToOneDecimal(decimal? val)
         => Math.Round(val ?? 0, 1);
+
+    private string TemperatureCss(){
+        if (status?.HeatSinkTemperature >= 50 && status.HeatSinkTemperature < 55) return "text-danger";
+        if (status?.HeatSinkTemperature >= 55) return "text-danger fw-bolder blinktext";
+        return "text-muted";
+    }
 
     public static async Task StartStatusStreaming(string basePath)
     {
