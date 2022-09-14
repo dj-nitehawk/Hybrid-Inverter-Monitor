@@ -49,6 +49,23 @@
             color: white;
         }
 
+.settings {
+    display: none;
+    margin-top: 5px;
+}
+
+@media (min-width: 360px) {
+    .settings {
+        display: inline-block;
+    }
+}
+
+@media (min-width: 640px) {
+    .settings {
+        display: none;
+    }
+}
+
 @media (min-width: 641px) {
     .navbar-toggler {
         display: none;
