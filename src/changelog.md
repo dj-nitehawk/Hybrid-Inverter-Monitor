@@ -1,3 +1,3 @@
 ## changelog
-- add settings and pv log shortcuts to navbar
-- upgrade dependencies
+- faster settings screen loading on subsequent visits
+- css fixes & improvements

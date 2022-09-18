@@ -146,11 +146,11 @@
                 <div class="col-6 my-auto fw-bold">
                     Bulk Charge Voltage:
                 </div>
-                <div class="col-6 bg-secondary p-2">
+                <div class="col-6 bg-secondary p-1">
                     <div class="row">
                         <div>
-                            <input @bind-value=settings.BulkChargeVoltage class="form-control bg-light d-inline" style="width:4rem;" type="text" maxlength="4" >
-                            <button type="button" class="btn btn-light m-2" @onclick="()=>SetVoltage(Setting.BulkVoltage)">
+                            <input @bind-value=settings.BulkChargeVoltage class="form-control bg-light d-inline m-1" style="width:4rem;" type="text" maxlength="4" >
+                            <button type="button" class="btn btn-light d-inline m-1" @onclick="()=>SetVoltage(Setting.BulkVoltage)">
                                 <span class="@Spinner(Button.BulkVoltage)"></span>
                                 <span class="@Hidden(Button.BulkVoltage)">Save</span>
                             </button>
@@ -158,15 +158,15 @@
                     </div>
                 </div>
             </div>
-            <div class="row border-primary bg-light px-3 mt-0">
+            <div class="row border-primary bg-light px-3 mt-1">
                 <div class="col-6 my-auto fw-bold">
                     Float Charge Voltage:
                 </div>
-                <div class="col-6 bg-secondary p-2">
+                <div class="col-6 bg-secondary p-1">
                     <div class="row">
                         <div>
-                            <input @bind-value=settings.FloatChargeVoltage class="form-control bg-light d-inline" style="width:4rem;" type="text" maxlength="4">
-                            <button type="button" class="btn btn-light m-2" @onclick="()=>SetVoltage(Setting.FloatVoltage)">
+                            <input @bind-value=settings.FloatChargeVoltage class="form-control bg-light d-inline m-1" style="width:4rem;" type="text" maxlength="4">
+                            <button type="button" class="btn btn-light d-inline m-1" @onclick="()=>SetVoltage(Setting.FloatVoltage)">
                                 <span class="@Spinner(Button.FloatVoltage)"></span>
                                 <span class="@Hidden(Button.FloatVoltage)">Save</span>
                             </button>
@@ -174,15 +174,15 @@
                     </div>
                 </div>
             </div>
-            <div class="row border-primary bg-light px-3 mt-0">
+            <div class="row border-primary bg-light px-3 mt-1">
                 <div class="col-6 my-auto fw-bold">
                     Discharge Cutoff Voltage:
                 </div>
-                <div class="col-6 bg-secondary p-2">
+                <div class="col-6 bg-secondary p-1">
                     <div class="row">
                         <div>
-                            <input @bind-value=settings.DischargeCuttOffVoltage class="form-control bg-light d-inline" style="width:4rem;" type="text" maxlength="4">
-                            <button type="button" class="btn btn-light m-2" @onclick="()=>SetVoltage(Setting.DischargeCutOff)">
+                            <input @bind-value=settings.DischargeCuttOffVoltage class="form-control bg-light d-inline m-1" style="width:4rem;" type="text" maxlength="4">
+                            <button type="button" class="btn btn-light d-inline m-1" @onclick="()=>SetVoltage(Setting.DischargeCutOff)">
                                 <span class="@Spinner(Button.DischargeCutOff)"></span>
                                 <span class="@Hidden(Button.DischargeCutOff)">Save</span>
                             </button>
@@ -190,15 +190,15 @@
                     </div>
                 </div>
             </div>
-            <div class="row border-primary bg-light px-3 mt-0">
+            <div class="row border-primary bg-light px-3 mt-1">
                 <div class="col-6 my-auto fw-bold">
                     Back To Grid Voltage:
                 </div>
-                <div class="col-6 bg-secondary p-2">
+                <div class="col-6 bg-secondary p-1">
                     <div class="row">
                         <div>
-                            <input @bind-value=settings.BackToGridVoltage class="form-control bg-light d-inline" style="width:4rem;" type="text" maxlength="4">
-                            <button type="button" class="btn btn-light m-2" @onclick="()=>SetVoltage(Setting.BackToGrid)">
+                            <input @bind-value=settings.BackToGridVoltage class="form-control bg-light d-inline m-1" style="width:4rem;" type="text" maxlength="4">
+                            <button type="button" class="btn btn-light d-inline m-1" @onclick="()=>SetVoltage(Setting.BackToGrid)">
                                 <span class="@Spinner(Button.BackToGridVoltage)"></span>
                                 <span class="@Hidden(Button.BackToGridVoltage)">Save</span>
                             </button>
@@ -206,15 +206,15 @@
                     </div>
                 </div>
             </div>
-            <div class="row border-primary bg-light px-3 mt-0">
+            <div class="row border-primary bg-light px-3 mt-1">
                 <div class="col-6 my-auto fw-bold">
                     Back To Battery Voltage:
                 </div>
-                <div class="col-6 bg-secondary p-2">
+                <div class="col-6 bg-secondary p-1">
                     <div class="row">
                         <div>
-                            <input @bind-value=settings.BackToBatteryVoltage class="form-control bg-light d-inline" style="width:4rem;" type="text" maxlength="4">
-                            <button type="button" class="btn btn-light m-2" @onclick="()=>SetVoltage(Setting.BackToBattery)">
+                            <input @bind-value=settings.BackToBatteryVoltage class="form-control bg-light d-inline m-1" style="width:4rem;" type="text" maxlength="4">
+                            <button type="button" class="btn btn-light d-inline m-1" @onclick="()=>SetVoltage(Setting.BackToBattery)">
                                 <span class="@Spinner(Button.BackToBattery)"></span>
                                 <span class="@Hidden(Button.BackToBattery)">Save</span>
                             </button>
@@ -238,7 +238,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row border-primary bg-light px-3 mt-0">
+            <div class="row border-primary bg-light px-3 mt-1">
                 <div class="col-6 my-auto fw-bold">
                     Battery Capacity:
                 </div>
@@ -278,12 +278,12 @@
                 </div>
             </div>
             <div class="row border-primary px-3 mt-1">
-                <div class="col-5"></div>
-                <button type="button" class="btn btn-primary my-3 col-2" @onclick="UpdateUserSettings">
+                <div class="col-3"></div>
+                <button type="button" class="btn btn-primary my-3 col-6" @onclick="UpdateUserSettings">
                     <span class="@Spinner(Button.UpdateUserSettings)" style="width:1.2rem;height:1.2rem;"></span>
                     <span class="@Hidden(Button.UpdateUserSettings)">Update</span>            
                 </button>  
-                <div class="col-5"></div>
+                <div class="col-3"></div>
             </div>
         </div>
     </div>
@@ -291,7 +291,7 @@
 
 @code{
     private static ChargeAmpereValues? chargeAmpereValues;
-    private CurrentSettings? settings;
+    private static CurrentSettings? settings;
     private Button currentButton = Button.None;
     private bool isSuccess;
     private string inProgressSetting = "";
@@ -341,6 +341,7 @@
     protected override async Task OnInitializedAsync()
     {
         settings = await Http.GetFromJsonAsync<CurrentSettings>("api/settings/get-setting-values");
+        StateHasChanged();
     }
 
     private async Task SetChargePriority(string priority)
