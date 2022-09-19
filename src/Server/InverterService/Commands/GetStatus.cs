@@ -23,6 +23,6 @@ public class GetStatus : Command<InverterStatus>
         Result.PVInputCurrent = decimal.Parse(parts[12]);
         Result.PVInputVoltage = decimal.Parse(parts[13]);
         Result.BatteryDischargeCurrent = int.Parse(parts[15]);
-        Result.PVInputWatt = Convert.ToInt32(int.Parse(parts[19]) / 1.09);
+        Result.PVInputWatt = Convert.ToInt32(int.Parse(parts[19]));// / 1.09);
     }
 }

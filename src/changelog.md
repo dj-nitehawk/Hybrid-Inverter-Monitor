@@ -1,3 +1,2 @@
 ## changelog
-- faster settings screen loading on subsequent visits
-- css fixes & improvements
+- remove pv power correction factor to avoid incorrect grid usage calculation
