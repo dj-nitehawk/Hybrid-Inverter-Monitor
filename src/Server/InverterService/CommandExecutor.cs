@@ -55,7 +55,7 @@ internal class CommandExecutor : BackgroundService
                 {
                     queue.IsAcceptingCommands = false;
                     log.LogError("execution error: {msg}", x.Message);
-                    await Task.Delay(3000);
+                    await Task.Delay(5000);
                 }
             }
             else

@@ -29,7 +29,7 @@ public abstract class Command<TResponseDto> : ICommand where TResponseDto : new(
 
     public async Task WhileProcessing(CancellationToken c)
     {
-        while (!c.IsCancellationRequested && !IsComplete && DateTime.Now.Subtract(startTime).TotalMilliseconds <= 3000)
+        while (!c.IsCancellationRequested && !IsComplete && DateTime.Now.Subtract(startTime).TotalMilliseconds <= Constants.StatusPollingFrequencyMillis)
             await Task.Delay(500, c);
     }
 }
