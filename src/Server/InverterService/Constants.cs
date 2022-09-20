@@ -2,5 +2,5 @@
 
 public static class Constants
 {
-    public const int StatusPollingFrequencyMillis = 1500;
+    public const int StatusPollingFrequencyMillis = 2000;
 }
