@@ -1,3 +1,5 @@
 ## changelog
-- reduce status polling interval
-- remove pv power correction factor to avoid incorrect grid usage calculation
+- optimize heatsink temperature display
+- show battery c-rate
+- upgrade packages
+- upgrade project to .net 7.0
