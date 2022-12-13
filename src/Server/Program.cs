@@ -32,8 +32,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
-    app.UseOpenApi();
-    app.UseSwaggerUi3(s => s.ConfigureDefaults());
+    //;
 }
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();

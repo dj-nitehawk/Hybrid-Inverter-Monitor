@@ -1,5 +1,6 @@
 ﻿using InverterMon.Server.InverterService.Commands;
 using System.Collections.Concurrent;
+using ICommand = InverterMon.Server.InverterService.Commands.ICommand;
 
 namespace InverterMon.Server.InverterService;
 

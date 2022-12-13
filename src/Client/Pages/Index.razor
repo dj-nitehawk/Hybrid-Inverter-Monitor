@@ -113,12 +113,12 @@
     </div>
 
     <div class="container pt-2">
-            <div class="row">
+        <div class="row">
             <div class="col-sm-12">
                 <div class="card">
                     <h5 class="card-header align-self-center w-100">
-                        <span class="oi oi-battery-empty" aria-hidden="true"/>
-                        Battery
+                        <span class="oi oi-battery-empty" aria-hidden="true" />
+                        Battery                   
                     </h5>
                     <div class="card-body p-0 m-0">
                         <div class="container text-center m-0 p-0">
@@ -140,10 +140,11 @@
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div class="container bg-light rounded-1 p-3 m-2 fw-bold text-muted fs-1">
+                                    <div class="container bg-light rounded-1 p-0 m-2 fw-bold text-muted fs-1">
                                         <div class="fs-4 voltage">Voltage</div>
                                         <div class="text-black charge-discharge">@RoundToOneDecimal(status?.BatteryVoltage)</div>
-                                        <div class="fs-6 text-black-50">V</div>
+                                        <div class="fs-4 text-black-50">V</div>
+                                        <div class="fs-6 bg-white text-dark">C-Rate: @GetCRate()</div>
                                     </div>
                                 </div>
                                 <div class="col-4">
@@ -162,8 +163,8 @@
                     </div>
                 </div>
             </div>
-            </div>
-        </div>   
+        </div>
+    </div>   
 }
 
 @code{
@@ -202,8 +203,8 @@
         => Math.Round(val ?? 0, 1);
 
     private string TemperatureCss(){
-        if (status?.HeatSinkTemperature >= 50 && status.HeatSinkTemperature < 55) return "text-danger";
-        if (status?.HeatSinkTemperature >= 55) return "text-danger fw-bolder blinktext";
+        if (status?.HeatSinkTemperature >= 55 && status.HeatSinkTemperature < 65) return "text-danger";
+        if (status?.HeatSinkTemperature >= 65) return "text-danger fw-bolder blinktext";
         return "text-muted";
     }
 
@@ -254,5 +255,16 @@
                 retryDelay += 250;
             }
         }
+    }
+
+    private decimal GetCRate()
+    {
+        if (status?.BatteryChargeCRate > 0)
+            return Math.Round(status.BatteryChargeCRate, 2);
+
+        if (status?.BatteryDischargeCRate > 0)
+            return Math.Round(status.BatteryDischargeCRate, 2);
+
+        return 0;
     }
 }

@@ -1,5 +1,5 @@
-using InverterMon.Server.InverterService.Commands;
 using System.Text;
+using ICommand = InverterMon.Server.InverterService.Commands.ICommand;
 
 namespace InverterMon.Server.InverterService;
 
