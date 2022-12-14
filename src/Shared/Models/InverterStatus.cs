@@ -11,7 +11,7 @@ public class InverterStatus
     public decimal BatteryVoltage { get; set; }
     public int BatteryChargeCurrent { get; set; }
     public int BatteryChargeWatts => BatteryChargeCurrent == 0 ? 0 : Convert.ToInt32(BatteryChargeCurrent * BatteryVoltage);
-    public decimal BatteryChargeCRate => BatteryChargeCurrent == 0 ? 0 : Convert.ToDecimal(BatteryDischargeCurrent) / BatteryCapacity;
+    public decimal BatteryChargeCRate => BatteryChargeCurrent == 0 ? 0 : Convert.ToDecimal(BatteryChargeCurrent) / BatteryCapacity;
     public int HeatSinkTemperature { get; set; }
     public decimal PVInputCurrent { get; set; }
     public decimal PVInputVoltage { get; set; }
