@@ -29,7 +29,7 @@ partial class Main
             this.web.DefaultBackgroundColor = System.Drawing.Color.White;
             this.web.Location = new System.Drawing.Point(-1, 1);
             this.web.Name = "web";
-            this.web.Size = new System.Drawing.Size(577, 552);
+            this.web.Size = new System.Drawing.Size(577, 441);
             this.web.Source = new System.Uri("http://inverter.djnitehawk.com", System.UriKind.Absolute);
             this.web.TabIndex = 0;
             this.web.ZoomFactor = 1D;
@@ -38,7 +38,7 @@ partial class Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(574, 553);
+            this.ClientSize = new System.Drawing.Size(574, 442);
             this.Controls.Add(this.web);
             this.MaximizeBox = false;
             this.Name = "Main";
