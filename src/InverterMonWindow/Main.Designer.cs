@@ -43,6 +43,7 @@ partial class Main
             this.MaximizeBox = false;
             this.Name = "Main";
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "InverterMon Window";
             this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(this.web)).EndInit();
