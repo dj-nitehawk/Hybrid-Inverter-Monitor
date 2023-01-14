@@ -38,6 +38,9 @@
                                 <div class="fs-5 m-0 p-0 @(status.IsCharging ? "text-success" : "text-danger")">
                                     @(status.IsCharging ? "Charging" : "Discharging")
                                 </div>
+                                <div class="fw-bold fs-6">
+                                    @string.Format("{0:0.00} C",status.CRate)
+                                </div>
                             }else
                             {
                                 <div class="fs-5 m-0 p-0 text-success">
