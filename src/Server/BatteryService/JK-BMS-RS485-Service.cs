@@ -25,20 +25,23 @@ public class JkBms
         bms.ConnectionStatusChanged += ConnectionStatusChanged;
         bms.MessageReceived += MessageReceived;
 
-        var ct = new CancellationTokenSource(TimeSpan.FromSeconds(60)).Token;
-        while (!ct.IsCancellationRequested && !bms.IsConnected)
+        Task.Run(async () =>
         {
-            var success = bms.Connect();
-            if (success)
+            var ct = new CancellationTokenSource(TimeSpan.FromHours(1)).Token;
+            while (!ct.IsCancellationRequested && !bms.IsConnected)
             {
-                logger.LogInformation("bms port opened!");
+                var success = bms.Connect();
+                if (success)
+                {
+                    logger.LogInformation("bms port opened!");
+                }
+                else
+                {
+                    logger.LogWarning("trying to open bms port at: {address}", bmsAddress);
+                    await Task.Delay(10000);
+                }
             }
-            else
-            {
-                logger.LogWarning("can't connect to bms at: {address}", bmsAddress);
-                Task.Delay(5000).GetAwaiter().GetResult();
-            }
-        }
+        });
     }
 
     private void ConnectionStatusChanged(object sender, ConnectionStatusChangedEventArgs e)
