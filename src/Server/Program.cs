@@ -1,5 +1,6 @@
 global using FastEndpoints;
 using FastEndpoints.Swagger;
+using InverterMon.Server.BatteryService;
 using InverterMon.Server.InverterService;
 using InverterMon.Server.Persistance;
 using InverterMon.Server.Persistance.Settings;
@@ -16,6 +17,7 @@ _ = int.TryParse(builder.Configuration["LaunchSettings:WebPort"] ?? "80", out va
 builder.WebHost.ConfigureKestrel(o => o.Listen(IPAddress.Any, port));
 builder.Services.AddSingleton<UserSettings>();
 builder.Services.AddSingleton<CommandQueue>();
+builder.Services.AddSingleton<JkBms>();
 builder.Services.AddSingleton<Database>();
 if (builder.Environment.IsDevelopment())
 {
@@ -32,7 +34,6 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
-    //;
 }
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();

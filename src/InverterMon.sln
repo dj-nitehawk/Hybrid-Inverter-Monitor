@@ -8,7 +8,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InverterMon.Client", "Clien
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InverterMon.Shared", "Shared\InverterMon.Shared.csproj", "{5B01AF46-3275-4F57-B3EA-5F616DB4214B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InverterMonWindow", "InverterMonWindow\InverterMonWindow.csproj", "{9DC94527-CBD8-4807-B6AA-2E079D5C8CA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InverterMonWindow", "InverterMonWindow\InverterMonWindow.csproj", "{9DC94527-CBD8-4807-B6AA-2E079D5C8CA0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

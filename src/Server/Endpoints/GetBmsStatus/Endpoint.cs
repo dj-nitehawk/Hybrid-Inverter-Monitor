@@ -1,0 +1,37 @@
+﻿using InverterMon.Server.BatteryService;
+using InverterMon.Shared.Models;
+using System.Runtime.CompilerServices;
+
+namespace InverterMon.Server.Endpoints.GetBmsStatus;
+
+public class Endpoint : EndpointWithoutRequest<object>
+{
+    public JkBms Bms { get; set; }
+
+    public override void Configure()
+    {
+        Get("bms-status");
+        AllowAnonymous();
+    }
+
+    public override async Task HandleAsync(CancellationToken c)
+    {
+        try
+        {
+            await SendAsync(GetDataStream(c), cancellation: c);
+        }
+        catch (TaskCanceledException)
+        {
+            //nothing to do here
+        }
+    }
+
+    private async IAsyncEnumerable<BMSStatus> GetDataStream([EnumeratorCancellation] CancellationToken c)
+    {
+        while (!c.IsCancellationRequested)
+        {
+            yield return Bms.Status;
+            await Task.Delay(1000, c);
+        }
+    }
+}
