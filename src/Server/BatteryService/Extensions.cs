@@ -12,15 +12,21 @@ public static class Extensions
         port.SendMessage(Convert.FromHexString(commandHex));
     }
 
-    public static ushort Read2Bytes(this byte[] input, int startPos)
+    public static ushort Read2Bytes(this byte[] input, ushort startPos)
     {
+        if (startPos > input.Length - 2)
+            return 0;
+
         var hex = Convert.ToHexString(input, startPos, 2);
         return ushort.Parse(hex, NumberStyles.HexNumber);
     }
 
-    public static uint Read4Bytes(this byte[] input, int startPos)
+    public static ushort Read4Bytes(this byte[] input, ushort startPos)
     {
+        if (startPos > input.Length - 4)
+            return 0;
+
         var hex = Convert.ToHexString(input, startPos, 4);
-        return uint.Parse(hex, NumberStyles.HexNumber);
+        return ushort.Parse(hex, NumberStyles.HexNumber);
     }
 }

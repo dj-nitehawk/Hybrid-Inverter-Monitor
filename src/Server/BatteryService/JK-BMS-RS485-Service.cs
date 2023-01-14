@@ -56,8 +56,8 @@ public class JkBms
         var cellCount = response[1] / 3; //pos 1 is total cell bytes length. 3 bytes per cell.
         if (cellCount is 0 or > 24) return; //todo: replace this with crc check
 
-        int pos = 3;
-        for (byte i = 1; pos <= response.Length - 2 && i <= cellCount; i++)
+        ushort pos = 3;
+        for (byte i = 1; i <= cellCount; i++)
         {
             //cell voltage groups (of 3 bytes) start at pos 2
             //first cell voltage starts at position 3 (pos 2 is cell number). voltage value is next 2 bytes.
@@ -93,10 +93,10 @@ public class JkBms
         pos += 103;
         Status.PackCapacity = response.Read4Bytes(pos);
 
-        var timeLeft = 0f;
-
         if (Status.AvgCurrentAmps > 0)
         {
+
+            float timeLeft;
             if (Status.IsCharging)
                 timeLeft = (Status.PackCapacity - Status.AvailableCapacity) / Status.AvgCurrentAmps;
             else
