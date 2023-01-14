@@ -16,9 +16,13 @@ public class Endpoint : EndpointWithoutRequest<object>
 
     public override async Task HandleAsync(CancellationToken c)
     {
+
         try
         {
-            await SendAsync(GetDataStream(c), cancellation: c);
+            if (Bms.IsConnected)
+                await SendAsync(GetDataStream(c), cancellation: c);
+            else
+                await SendNotFoundAsync(c);
         }
         catch (TaskCanceledException)
         {

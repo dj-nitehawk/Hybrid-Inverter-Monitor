@@ -6,6 +6,7 @@ namespace InverterMon.Server.BatteryService;
 public class JkBms
 {
     public BMSStatus Status { get; } = new();
+    public bool IsConnected => Status.PackVoltage > 0;
 
     private readonly int pollFrequencyMillis = 1000;
     private readonly AmpValQueue recentAmpReadings = new(10); //avg value over 10 readings (~10secs)
@@ -24,7 +25,7 @@ public class JkBms
         bms.ConnectionStatusChanged += ConnectionStatusChanged;
         bms.MessageReceived += MessageReceived;
 
-        var ct = new CancellationTokenSource(TimeSpan.FromHours(1)).Token;
+        var ct = new CancellationTokenSource(TimeSpan.FromSeconds(60)).Token;
         while (!ct.IsCancellationRequested && !bms.IsConnected)
         {
             var success = bms.Connect();
@@ -34,8 +35,8 @@ public class JkBms
             }
             else
             {
-                logger.LogWarning("unable to open bms port at: {port}", bmsAddress);
-                Thread.Sleep(5000);
+                logger.LogWarning("can't connect to bms at: {address}", bmsAddress);
+                Task.Delay(5000).GetAwaiter().GetResult();
             }
         }
     }
