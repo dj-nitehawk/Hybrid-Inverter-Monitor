@@ -31,7 +31,7 @@
                     <div class="col bg-light">
                         <div class="p-0 mt-2 fw-bold fs-1">
                             <div class="m-0 p-0">
-                                @status.AvgCurrentAmps A
+                                @Math.Round(status.AvgCurrentAmps, 1) A
                             </div>
                             @if(status.AvgCurrentAmps > 0)
                             {
@@ -87,17 +87,17 @@
                     </div>
                     <div class="col bg-light p-1" style="font-size:0.8em">
                         <div class="pt-1">
-                            Cell Average:
-                        </div>
-                        <div class="fw-bold">
-                            @status.AvgCellVoltage V
-                        </div>
-                        <div class="border-top pt-1">
                             Cell Delta:
                         </div>
                         <div class="fw-bold">
-                            @status.CellDiff V
+                            @Math.Round(status.CellDiff,3) V
                         </div>
+                        <div class="pt-1 border-top">
+                            Cell Average:
+                        </div>
+                        <div class="fw-bold">
+                            @Math.Round(status.AvgCellVoltage,3) V
+                        </div>                        
                     </div>
                 </div>
                 <div class="row text-center m-1 p-0" style="font-size:0.8em">
