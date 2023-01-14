@@ -60,3 +60,15 @@ sudo systemctl start invertermon
 sudo systemctl status invertermon
 ```
 restart the machine to check if the service was configured correctly.
+
+# JK BMS Support
+If you have a JK BMS + JK RS485 adapter + USB->TTL adapter, simply wire them up correctly and plug it in to the computer. 
+The app will try to connect to the BMS via serial port by default at address `/dev/ttyUSB0`. 
+If your USB->TTL device is mounted at a different device path, simply upate the `appsettings.json` file with the correct path like so:
+```json
+{
+  "LaunchSettings": {
+    "JkBmsAddress": "/dev/ttyUSB1",
+  }
+}
+```

@@ -1,5 +1,2 @@
 ## changelog
-- optimize heatsink temperature display
-- show battery c-rate
-- upgrade packages
-- upgrade project to .net 7.0
+- support for jk bms data reading via rs485 port

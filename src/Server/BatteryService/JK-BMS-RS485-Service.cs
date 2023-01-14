@@ -123,12 +123,12 @@ public class JkBms
         Status.Temp2 = 29;
         Status.PackVoltage = 25.6f;
         Status.IsCharging = true;
-        Status.AvgCurrentAmps = 20;
+        Status.AvgCurrentAmps = 20.444f;
         Status.CapacityPct = 50;
         Status.PackCapacity = 120;
         Status.TimeHrs = 3;
         Status.TimeMins = 11;
         for (byte i = 1; i <= 8; i++)
-            Status.Cells.Add(i, 1.111f);
+            Status.Cells.Add(i, 1.110f);
     }
 }

@@ -76,13 +76,13 @@
                             Min Cell: @status.MinCell.Key
                         </div>
                         <div class="fw-bold">
-                            @status.MinCell.Value V
+                            @string.Format("{0:0.000} V",status.MinCell.Value)
                         </div>
                         <div class="border-top pt-1">
                             Max Cell: <span>@status.MaxCell.Key</span>
                         </div>
                         <div class="fw-bold">
-                            @status.MaxCell.Value V
+                            @string.Format("{0:0.000} V",status.MaxCell.Value)
                         </div>
                     </div>
                     <div class="col bg-light p-1" style="font-size:0.8em">
@@ -90,13 +90,13 @@
                             Cell Delta:
                         </div>
                         <div class="fw-bold">
-                            @Math.Round(status.CellDiff,3) V
+                            @string.Format("{0:0.000} V",status.CellDiff)
                         </div>
                         <div class="pt-1 border-top">
                             Cell Average:
                         </div>
                         <div class="fw-bold">
-                            @Math.Round(status.AvgCellVoltage,3) V
+                            @string.Format("{0:0.000} V",status.AvgCellVoltage)
                         </div>                        
                     </div>
                 </div>
@@ -104,7 +104,7 @@
                     @foreach (var cell in status.Cells)
                     {
                         <div class="col-3 p-2">
-                            <strong class="bg-light border rounded-3 p-1">@cell.Key</strong> @cell.Value V
+                            <strong class="bg-light border rounded-3 p-1">@cell.Key</strong> @string.Format("{0:0.000} V",cell.Value)
                         </div>
                     }
                 </div>
