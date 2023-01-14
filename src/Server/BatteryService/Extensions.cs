@@ -12,13 +12,13 @@ public static class Extensions
         port.SendMessage(Convert.FromHexString(commandHex));
     }
 
-    public static ushort Read2Bytes(this byte[] input, ushort startPos)
+    public static ushort Read2Bytes(this byte[] input, int startPos)
     {
         var hex = Convert.ToHexString(input, startPos, 2);
         return ushort.Parse(hex, NumberStyles.HexNumber);
     }
 
-    public static uint Read4Bytes(this byte[] input, ushort startPos)
+    public static uint Read4Bytes(this byte[] input, int startPos)
     {
         var hex = Convert.ToHexString(input, startPos, 4);
         return uint.Parse(hex, NumberStyles.HexNumber);

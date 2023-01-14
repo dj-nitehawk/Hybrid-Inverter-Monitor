@@ -56,7 +56,7 @@ public class JkBms
         var cellCount = response[1] / 3; //pos 1 is total cell bytes length. 3 bytes per cell.
         if (cellCount is 0 or > 24) return; //todo: replace this with crc check
 
-        ushort pos = 3;
+        int pos = 3;
         for (byte i = 1; pos <= response.Length - 2 && i <= cellCount; i++)
         {
             //cell voltage groups (of 3 bytes) start at pos 2
