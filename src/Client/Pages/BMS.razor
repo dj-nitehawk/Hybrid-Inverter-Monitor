@@ -19,19 +19,19 @@
                 <div class="row text-center m-0 p-0">
                     <div class="col">
                         <div class="fw-bold fs-1 mt-2 text-primary">
-                            @status.PackVoltage V
+                            @string.Format("{0:0.0}",status.PackVoltage) V
                         </div>
-                        <div class="fs-1 m-0 mx-4 border-top">
+                        <div class="fs-1 my-1 mx-5 border-top">
                             @status.CapacityPct%
                         </div>
-                        <div class="fs-5 m-0 border-top border-bottom">
+                        <div class="fs-5 m-0 border-top">
                             @Math.Round(status.AvailableCapacity,1) Ah / @status.PackCapacity Ah
                         </div>
                     </div>
                     <div class="col bg-light">
                         <div class="p-0 mt-2 fw-bold fs-1">
                             <div class="m-0 p-0">
-                                @Math.Round(status.AvgCurrentAmps, 1) A
+                                @string.Format("{0:0.0} A",status.AvgCurrentAmps)
                             </div>
                             @if(status.AvgCurrentAmps > 0)
                             {
@@ -43,17 +43,20 @@
                                 </div>
                             }else
                             {
-                                <div class="fs-5 m-0 p-0 text-success">
-                                    Idle
+                                <div class="fs-5 m-0 p-0 text-muted">
+                                    Holding<br/>Voltage
                                 </div>
                             }
-                            <div class="fw-normal fs-6">
-                                @status.TimeHrs Hrs @status.TimeMins Mins
-                            </div>
+                            @if(status.AvgCurrentAmps > 0)
+                            {
+                                <div class="fw-normal fs-6 m-0 p-0">
+                                    @status.TimeHrs Hrs @status.TimeMins Mins
+                                </div>
+                            }
                         </div>                        
                     </div>
                 </div>
-                <div class="row text-center m-1 p-0 fw-bold" style="font-size:0.8em">
+                <div class="row text-center m-1 p-1 fw-bold" style="font-size:0.8em; background-color:aliceblue">
                     <div class="col">
                         <div class="fw-normal">
                             Mosfet
@@ -73,8 +76,8 @@
                         @status.Temp2 C°
                     </div>
                 </div>
-                <div class="row text-center m-0 p-0 fs-6">
-                    <div class="col bg-light p-1 mx-1" style="font-size:0.8em">
+                <div class="row text-center m-1 p-0 fs-6">
+                    <div class="col bg-light p-1" style="font-size:0.8em">
                         <div class="pt-1">
                             Min Cell: @status.MinCell.Key
                         </div>
@@ -88,7 +91,7 @@
                             @string.Format("{0:0.000} V",status.MaxCell.Value)
                         </div>
                     </div>
-                    <div class="col bg-light p-1" style="font-size:0.8em">
+                    <div class="col bg-light p-1" style="font-size:0.8em;margin-left:0.25rem!important">
                         <div class="pt-1">
                             Cell Delta:
                         </div>
