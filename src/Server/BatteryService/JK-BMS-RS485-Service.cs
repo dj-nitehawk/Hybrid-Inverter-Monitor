@@ -76,8 +76,10 @@ public class JkBms
         //position is increased by 3 bytes in order to skip the address/code byte
         pos += 3;
         Status.MosTemp = res.Read2Bytes(pos);
+
         pos += 3;
         Status.Temp1 = res.Read2Bytes(pos);
+
         pos += 3;
         Status.Temp2 = res.Read2Bytes(pos);
 
@@ -90,7 +92,7 @@ public class JkBms
 
         rawVal &= (1 << 15) - 1; //unset the MSB with a bitmask
         var ampVal = rawVal / 100f;
-        recentAmpReadings.Enqueue(ampVal);
+        recentAmpReadings.Store(ampVal, Status.IsCharging);
         Status.AvgCurrentAmps = recentAmpReadings.GetAverage();
 
         pos += 3;

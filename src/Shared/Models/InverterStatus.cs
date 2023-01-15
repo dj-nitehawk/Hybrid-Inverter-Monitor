@@ -1,22 +1,28 @@
-﻿namespace InverterMon.Shared.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace InverterMon.Shared.Models;
 
 public class InverterStatus
 {
-    public int GridUsageWatts => GridVoltage < 10 ? 0 : LoadWatts + BatteryChargeWatts - (PVInputWatt + BatteryDischargeWatts);
-    public decimal GridVoltage { get; set; }
-    public decimal OutputVoltage { get; set; }
-    public int LoadWatts { get; set; }
-    public decimal LoadCurrent => LoadWatts == 0 ? 0 : LoadWatts / OutputVoltage;
-    public decimal LoadPercentage { get; set; }
-    public decimal BatteryVoltage { get; set; }
-    public int BatteryChargeCurrent { get; set; }
-    public int BatteryChargeWatts => BatteryChargeCurrent == 0 ? 0 : Convert.ToInt32(BatteryChargeCurrent * BatteryVoltage);
-    public decimal BatteryChargeCRate => BatteryChargeCurrent == 0 ? 0 : Convert.ToDecimal(BatteryChargeCurrent) / BatteryCapacity;
-    public int HeatSinkTemperature { get; set; }
-    public decimal PVInputCurrent { get; set; }
-    public decimal PVInputVoltage { get; set; }
-    public int PVMaxCapacity { get; set; } = 1;
-    public int BatteryCapacity { get; set; } = 200;
+    [JsonPropertyName("a")] public int BatteryCapacity { get; set; } = 200;
+    [JsonPropertyName("b")] public decimal BatteryChargeCRate => BatteryChargeCurrent == 0 ? 0 : Convert.ToDecimal(BatteryChargeCurrent) / BatteryCapacity;
+    [JsonPropertyName("c")] public int BatteryChargeCurrent { get; set; }
+    [JsonPropertyName("d")] public int BatteryChargeWatts => BatteryChargeCurrent == 0 ? 0 : Convert.ToInt32(BatteryChargeCurrent * BatteryVoltage);
+    [JsonPropertyName("e")] public decimal BatteryDischargeCRate => BatteryDischargeCurrent == 0 ? 0 : Convert.ToDecimal(BatteryDischargeCurrent) / BatteryCapacity;
+    [JsonPropertyName("f")] public int BatteryDischargeCurrent { get; set; }
+    [JsonPropertyName("g")] public int BatteryDischargePotential => BatteryDischargeCurrent > 0 ? Convert.ToInt32(Convert.ToDouble(BatteryDischargeCurrent) / BatteryCapacity * 100) : 0;
+    [JsonPropertyName("h")] public int BatteryDischargeWatts => BatteryDischargeCurrent == 0 ? 0 : Convert.ToInt32(BatteryDischargeCurrent * BatteryVoltage);
+    [JsonPropertyName("i")] public decimal BatteryVoltage { get; set; }
+    [JsonPropertyName("j")] public int GridUsageWatts => GridVoltage < 10 ? 0 : LoadWatts + BatteryChargeWatts - (PVInputWatt + BatteryDischargeWatts);
+    [JsonPropertyName("k")] public decimal GridVoltage { get; set; }
+    [JsonPropertyName("l")] public int HeatSinkTemperature { get; set; }
+    [JsonPropertyName("m")] public decimal LoadCurrent => LoadWatts == 0 ? 0 : LoadWatts / OutputVoltage;
+    [JsonPropertyName("n")] public decimal LoadPercentage { get; set; }
+    [JsonPropertyName("o")] public int LoadWatts { get; set; }
+    [JsonPropertyName("p")] public decimal OutputVoltage { get; set; }
+    [JsonPropertyName("q")] public decimal PVInputCurrent { get; set; }
+    [JsonPropertyName("r")] public decimal PVInputVoltage { get; set; }
+    [JsonPropertyName("s")]
     public int PVInputWatt
     {
         get => pvInputWatt;
@@ -31,12 +37,9 @@ public class InverterStatus
             }
         }
     }
-    public decimal PVInputWattHour { get; private set; }
-    public int PVPotential => PVInputVoltage > 0 ? Convert.ToInt32(PVInputCurrent / PVMaxCapacity * 100) : 0;
-    public int BatteryDischargePotential => BatteryDischargeCurrent > 0 ? Convert.ToInt32(Convert.ToDouble(BatteryDischargeCurrent) / BatteryCapacity * 100) : 0;
-    public int BatteryDischargeCurrent { get; set; }
-    public int BatteryDischargeWatts => BatteryDischargeCurrent == 0 ? 0 : Convert.ToInt32(BatteryDischargeCurrent * BatteryVoltage);
-    public decimal BatteryDischargeCRate => BatteryDischargeCurrent == 0 ? 0 : Convert.ToDecimal(BatteryDischargeCurrent) / BatteryCapacity;
+    [JsonPropertyName("t")] public decimal PVInputWattHour { get; private set; }
+    [JsonPropertyName("u")] public int PVMaxCapacity { get; set; } = 1;
+    [JsonPropertyName("v")] public int PVPotential => PVInputVoltage > 0 ? Convert.ToInt32(PVInputCurrent / PVMaxCapacity * 100) : 0;
 
     private int pvInputWatt;
     private DateTime pvInputWattHourLastComputed;

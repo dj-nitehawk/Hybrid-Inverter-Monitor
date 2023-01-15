@@ -1,33 +1,36 @@
 ﻿namespace InverterMon.Server.BatteryService;
 
-public sealed class AmpValQueue : Queue<float>
+public sealed class AmpValQueue
 {
-    public int FixedCapacity { get; }
+    private readonly int capacity;
+    private readonly Queue<float> queue = new();
+    private bool lastChargingState;
+
     public AmpValQueue(int fixedCapacity)
     {
-        FixedCapacity = fixedCapacity;
+        capacity = fixedCapacity;
     }
 
-    public new void Enqueue(float val)
+    public void Store(float ampReading, bool chargingState)
     {
-        if (val > 0)
+        if (ampReading == 0 || lastChargingState != chargingState)
         {
-            base.Enqueue(val);
-            if (Count > FixedCapacity)
-            {
-                Dequeue();
-            }
+            queue.Clear();
+            lastChargingState = chargingState;
+            return;
         }
-        else
-        {
-            Clear();
-        }
+
+        lastChargingState = chargingState;
+        queue.Enqueue(ampReading);
+
+        if (queue.Count > capacity)
+            queue.Dequeue();
     }
 
     public float GetAverage()
     {
-        return Count > 0
-               ? this.Average()
+        return queue.Count > 0
+               ? queue.Average()
                : 0;
     }
 }

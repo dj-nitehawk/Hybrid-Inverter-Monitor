@@ -1,23 +1,25 @@
-﻿namespace InverterMon.Shared.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace InverterMon.Shared.Models;
 
 public class BMSStatus
 {
-    public Dictionary<byte, float> Cells { get; set; } = new(); //key: cell number //val: cell voltage
-    public float AvgCellVoltage => Cells.Values.Average();
-    public KeyValuePair<byte, float> MinCell => Cells.MinBy(x => x.Value);
-    public KeyValuePair<byte, float> MaxCell => Cells.MaxBy(x => x.Value);
-    public float CellDiff => MaxCell.Value - MinCell.Value;
-    public ushort MosTemp { get; set; }
-    public ushort Temp1 { get; set; }
-    public ushort Temp2 { get; set; }
-    public float PackVoltage { get; set; }
-    public bool IsCharging { get; set; }
-    public bool IsDisCharging => !IsCharging;
-    public float AvgCurrentAmps { get; set; }
-    public ushort CapacityPct { get; set; }
-    public uint PackCapacity { get; set; }
-    public float AvailableCapacity => PackCapacity / 100f * CapacityPct;
-    public ushort TimeHrs { get; set; }
-    public int TimeMins { get; set; }
-    public double CRate => Math.Round(AvgCurrentAmps / PackCapacity, 2, MidpointRounding.AwayFromZero);
+    [JsonPropertyName("a")] public float AvailableCapacity => PackCapacity / 100f * CapacityPct;
+    [JsonPropertyName("b")] public float AvgCellVoltage => Cells.Values.Average();
+    [JsonPropertyName("c")] public float AvgCurrentAmps { get; set; }
+    [JsonPropertyName("d")] public ushort CapacityPct { get; set; }
+    [JsonPropertyName("e")] public float CellDiff => MaxCell.Value - MinCell.Value;
+    [JsonPropertyName("f")] public Dictionary<byte, float> Cells { get; set; } = new(); //key: cell number //val: cell voltage
+    [JsonPropertyName("g")] public double CRate => Math.Round(AvgCurrentAmps / PackCapacity, 2, MidpointRounding.AwayFromZero);
+    [JsonPropertyName("h")] public bool IsCharging { get; set; }
+    [JsonPropertyName("i")] public bool IsDisCharging => !IsCharging;
+    [JsonPropertyName("j")] public KeyValuePair<byte, float> MaxCell => Cells.MaxBy(x => x.Value);
+    [JsonPropertyName("k")] public KeyValuePair<byte, float> MinCell => Cells.MinBy(x => x.Value);
+    [JsonPropertyName("l")] public ushort MosTemp { get; set; }
+    [JsonPropertyName("m")] public uint PackCapacity { get; set; }
+    [JsonPropertyName("n")] public float PackVoltage { get; set; }
+    [JsonPropertyName("o")] public ushort Temp1 { get; set; }
+    [JsonPropertyName("p")] public ushort Temp2 { get; set; }
+    [JsonPropertyName("q")] public ushort TimeHrs { get; set; }
+    [JsonPropertyName("r")] public int TimeMins { get; set; }
 }
