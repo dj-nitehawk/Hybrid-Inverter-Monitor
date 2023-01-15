@@ -52,9 +52,15 @@ public class JkBms
 
     private async void MessageReceived(object sender, MessageReceivedEventArgs e)
     {
-        var response = e.Data[11..]; //skip the first 10 bytes
-        var cellCount = response[1] / 3; //pos 1 is total cell bytes length. 3 bytes per cell.
-        if (cellCount is 0 or > 24) return; //todo: replace this with crc check
+        if (!e.Data.IsValid())
+        {
+            await Task.Delay(pollFrequencyMillis);
+            bms.QueryData();
+            return;
+        }
+
+        var res = e.Data[11..]; //skip the first 10 bytes
+        var cellCount = res[1] / 3; //pos 1 is total cell bytes length. 3 bytes per cell.
 
         ushort pos = 3;
         for (byte i = 1; i <= cellCount; i++)
@@ -62,24 +68,24 @@ public class JkBms
             //cell voltage groups (of 3 bytes) start at pos 2
             //first cell voltage starts at position 3 (pos 2 is cell number). voltage value is next 2 bytes.
             // ex: .....,1,X,X,2,Y,Y,3,Z,Z
-            Status.Cells[i] = response.Read2Bytes(pos) / 1000f;
+            Status.Cells[i] = res.Read2Bytes(pos) / 1000f;
             if (i < cellCount)
                 pos += 3;
         }
 
         //position is increased by 3 bytes in order to skip the address/code byte
         pos += 3;
-        Status.MosTemp = response.Read2Bytes(pos);
+        Status.MosTemp = res.Read2Bytes(pos);
         pos += 3;
-        Status.Temp1 = response.Read2Bytes(pos);
+        Status.Temp1 = res.Read2Bytes(pos);
         pos += 3;
-        Status.Temp2 = response.Read2Bytes(pos);
+        Status.Temp2 = res.Read2Bytes(pos);
 
         pos += 3;
-        Status.PackVoltage = response.Read2Bytes(pos) / 100f;
+        Status.PackVoltage = res.Read2Bytes(pos) / 100f;
 
         pos += 3;
-        var rawVal = response.Read2Bytes(pos);
+        var rawVal = res.Read2Bytes(pos);
         Status.IsCharging = Convert.ToBoolean(int.Parse(Convert.ToString(rawVal, 2).PadLeft(16, '0')[..1])); //pick first bit of padded 16 bit binary representation and turn it in to a bool
 
         rawVal &= (1 << 15) - 1; //unset the MSB with a bitmask
@@ -88,10 +94,10 @@ public class JkBms
         Status.AvgCurrentAmps = recentAmpReadings.GetAverage();
 
         pos += 3;
-        Status.CapacityPct = Convert.ToUInt16(response[pos]);
+        Status.CapacityPct = Convert.ToUInt16(res[pos]);
 
         pos += 103;
-        Status.PackCapacity = response.Read4Bytes(pos);
+        Status.PackCapacity = res.Read4Bytes(pos);
 
         if (Status.AvgCurrentAmps > 0)
         {
