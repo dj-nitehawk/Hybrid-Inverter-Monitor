@@ -5,12 +5,16 @@ namespace InverterMon.Server.BatteryService;
 
 public static class Extensions
 {
+    //this is the get all data command in hex format
     const string commandHex = "4E5700130000000006030000000000006800000129";
 
     public static void QueryData(this SerialPortInput port)
     {
         port.SendMessage(Convert.FromHexString(commandHex));
     }
+
+    //note: the response is the byte representation of hex digits.
+    //      i.e. the bytes cannot be converted to int without first converting to hex digits.
 
     public static ushort Read2Bytes(this byte[] input, ushort startPos)
     {

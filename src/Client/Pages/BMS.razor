@@ -158,7 +158,7 @@
                 Timeout = TimeSpan.FromSeconds(5)
             };
 
-        var retryDelay = 0;
+        var retryDelay = 1000;
 
         while (true)
         {
@@ -182,14 +182,14 @@
                             }))
                 {
                     onStatusUpdated?.Invoke(s);
-                    retryDelay = 0;
+                    retryDelay = 1000;
                 }
             }
             catch (Exception)
             {
                 onStatusRetrievalError?.Invoke();
                 await Task.Delay(retryDelay);
-                retryDelay += 250;
+                retryDelay += 500;
             }
         }
     }
