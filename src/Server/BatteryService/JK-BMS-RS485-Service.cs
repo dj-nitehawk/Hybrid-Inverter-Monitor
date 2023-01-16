@@ -50,16 +50,18 @@ public class JkBms
             bms.QueryData();
     }
 
-    private async void MessageReceived(object sender, MessageReceivedEventArgs e)
+    private void MessageReceived(object sender, MessageReceivedEventArgs evnt)
     {
-        if (!e.Data.IsValid())
+        var data = evnt.Data.AsSpan();
+
+        if (!data.IsValid())
         {
-            await Task.Delay(pollFrequencyMillis);
+            Thread.Sleep(pollFrequencyMillis);
             bms.QueryData();
             return;
         }
 
-        var res = e.Data[11..]; //skip the first 10 bytes
+        var res = data[11..]; //skip the first 10 bytes
         var cellCount = res[1] / 3; //pos 1 is total cell bytes length. 3 bytes per cell.
 
         ushort pos = 0;
@@ -107,7 +109,7 @@ public class JkBms
             Status.TimeMins = 0;
         }
 
-        await Task.Delay(pollFrequencyMillis);
+        Thread.Sleep(pollFrequencyMillis);
         bms.QueryData();
     }
 
