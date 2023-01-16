@@ -12,7 +12,7 @@ public class JkBms
     private readonly AmpValQueue recentAmpReadings = new(10); //avg value over 10 readings (~10secs)
     private readonly SerialPortInput bms = new();
 
-    public JkBms(IConfiguration config, ILogger<JkBms> logger, IWebHostEnvironment env)
+    public JkBms(IConfiguration config, ILogger<JkBms> logger, IWebHostEnvironment env, IHostApplicationLifetime applife)
     {
         if (env.IsDevelopment())
         {
@@ -24,6 +24,7 @@ public class JkBms
         bms.SetPort(bmsAddress, 115200);
         bms.ConnectionStatusChanged += ConnectionStatusChanged;
         bms.MessageReceived += MessageReceived;
+        applife.ApplicationStopping.Register(bms.Disconnect);
 
         Task.Run(async () =>
         {
