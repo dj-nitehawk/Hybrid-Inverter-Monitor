@@ -22,4 +22,5 @@ public class BMSStatus
     [JsonPropertyName("p")] public ushort Temp2 { get; set; }
     [JsonPropertyName("q")] public ushort TimeHrs { get; set; }
     [JsonPropertyName("r")] public int TimeMins { get; set; }
+    [JsonPropertyName("s")] public bool IsWarning { get; set; }
 }

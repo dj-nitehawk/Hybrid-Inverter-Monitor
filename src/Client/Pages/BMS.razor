@@ -41,16 +41,20 @@
                                 <div class="fw-bold fs-6">
                                     @string.Format("{0:0.00} C",status.CRate)
                                 </div>
-                            }else
+                                <div class="fw-normal fs-6 m-0 p-0">
+                                    @status.TimeHrs Hrs @status.TimeMins Mins
+                                </div>
+                            }
+                            @if(status.AvgCurrentAmps == 0)
                             {
                                 <div class="fs-5 m-0 p-0 text-muted">
                                     Holding<br/>Voltage
                                 </div>
                             }
-                            @if(status.AvgCurrentAmps > 0)
+                            @if(status.IsWarning)
                             {
-                                <div class="fw-normal fs-6 m-0 p-0">
-                                    @status.TimeHrs Hrs @status.TimeMins Mins
+                                <div class="fs-5 fw-bold m-0 p-0 text-danger blinktext">
+                                    Protection!
                                 </div>
                             }
                         </div>                        

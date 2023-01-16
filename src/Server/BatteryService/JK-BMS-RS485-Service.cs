@@ -62,48 +62,35 @@ public class JkBms
         var res = e.Data[11..]; //skip the first 10 bytes
         var cellCount = res[1] / 3; //pos 1 is total cell bytes length. 3 bytes per cell.
 
-        ushort pos = 3;
+        ushort pos = 0;
         for (byte i = 1; i <= cellCount; i++)
         {
             //cell voltage groups (of 3 bytes) start at pos 2
             //first cell voltage starts at position 3 (pos 2 is cell number). voltage value is next 2 bytes.
             // ex: .....,1,X,X,2,Y,Y,3,Z,Z
-            Status.Cells[i] = res.Read2Bytes(pos) / 1000f;
-            if (i < cellCount)
-                pos += 3;
+            //position is increased by 3 bytes in order to skip the address/code byte
+            Status.Cells[i] = res.Read2Bytes(pos += 3) / 1000f;
         }
 
-        //position is increased by 3 bytes in order to skip the address/code byte
-        pos += 3;
-        Status.MosTemp = res.Read2Bytes(pos);
+        Status.MosTemp = res.Read2Bytes(pos += 3);
+        Status.Temp1 = res.Read2Bytes(pos += 3);
+        Status.Temp2 = res.Read2Bytes(pos += 3);
+        Status.PackVoltage = res.Read2Bytes(pos += 3) / 100f;
 
-        pos += 3;
-        Status.Temp1 = res.Read2Bytes(pos);
-
-        pos += 3;
-        Status.Temp2 = res.Read2Bytes(pos);
-
-        pos += 3;
-        Status.PackVoltage = res.Read2Bytes(pos) / 100f;
-
-        pos += 3;
-        var rawVal = res.Read2Bytes(pos);
+        var rawVal = res.Read2Bytes(pos += 3);
         Status.IsCharging = Convert.ToBoolean(int.Parse(Convert.ToString(rawVal, 2).PadLeft(16, '0')[..1])); //pick first bit of padded 16 bit binary representation and turn it in to a bool
 
-        rawVal &= (1 << 15) - 1; //unset the MSB with a bitmask
+        rawVal &= (1 << 15) - 1; //unset the MSB with a bitmask to get correct ampere reading
         var ampVal = rawVal / 100f;
         recentAmpReadings.Store(ampVal, Status.IsCharging);
+
         Status.AvgCurrentAmps = recentAmpReadings.GetAverage();
-
-        pos += 3;
-        Status.CapacityPct = Convert.ToUInt16(res[pos]);
-
-        pos += 103;
-        Status.PackCapacity = res.Read4Bytes(pos);
+        Status.CapacityPct = Convert.ToUInt16(res[pos += 3]);
+        Status.IsWarning = res.Read2Bytes(pos += 15) > 0;
+        Status.PackCapacity = res.Read4Bytes(pos += 88);
 
         if (Status.AvgCurrentAmps > 0)
         {
-
             float timeLeft;
             if (Status.IsCharging)
                 timeLeft = (Status.PackCapacity - Status.AvailableCapacity) / Status.AvgCurrentAmps;
@@ -134,6 +121,7 @@ public class JkBms
         Status.AvgCurrentAmps = 21.444f;
         Status.CapacityPct = 50;
         Status.PackCapacity = 120;
+        Status.IsWarning = false;
         Status.TimeHrs = 3;
         Status.TimeMins = 11;
         for (byte i = 1; i <= 8; i++)
