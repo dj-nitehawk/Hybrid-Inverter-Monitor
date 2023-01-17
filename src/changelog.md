@@ -1,2 +1,3 @@
 ## changelog
-- support for jk bms data reading via rs485 port
+- disconnect bms port on app shutdown
+- optimize jk service memory usage
