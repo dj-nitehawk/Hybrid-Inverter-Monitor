@@ -1,3 +1,3 @@
 ## changelog
-- disconnect bms port on app shutdown
-- optimize jk service memory usage
+- change pv max capacity setting to watts instead of amperes
+- upgrade dependencies to latest

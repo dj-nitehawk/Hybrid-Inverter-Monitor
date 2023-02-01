@@ -14,9 +14,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AntDesign.Charts" Version="0.2.3" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.1" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.1" PrivateAssets="all" />
+        <PackageReference Include="AntDesign.Charts" Version="0.3.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.2" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup>

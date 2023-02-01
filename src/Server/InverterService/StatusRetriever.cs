@@ -26,7 +26,7 @@ internal class StatusRetriever : BackgroundService
             {
                 //feels hacky. find a better solution.
                 cmd.Result.BatteryCapacity = userSettings.BatteryCapacity;
-                cmd.Result.PVMaxCapacity = userSettings.PVMaxCapacity;
+                cmd.Result.PV_MaxCapacity = userSettings.PV_MaxCapacity;
 
                 queue.AddCommands(cmd);
                 _ = db.UpdateTodaysPVGeneration(cmd, c);

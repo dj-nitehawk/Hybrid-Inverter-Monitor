@@ -44,8 +44,8 @@ public class Endpoint : EndpointWithoutRequest<object>
                 status.HeatSinkTemperature = Random.Shared.Next(300);
                 status.PVInputCurrent = Random.Shared.Next(300);
                 status.PVInputVoltage = Random.Shared.Next(300);
-                status.PVInputWatt = Random.Shared.Next(1800);
-                status.PVMaxCapacity = Random.Shared.Next(300);
+                status.PVInputWatt = Random.Shared.Next(1000);
+                status.PV_MaxCapacity = 1000;
                 status.BatteryCapacity = 100;
                 yield return status;
             }

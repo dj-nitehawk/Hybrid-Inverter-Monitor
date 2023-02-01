@@ -7,9 +7,8 @@ public class Validator : Validator<SystemSpec>
 {
     public Validator()
     {
-        RuleFor(x => x.PVMaxCapacity)
-            .GreaterThan(0)
-            .LessThanOrEqualTo(100);
+        RuleFor(x => x.PV_MaxCapacity)
+            .GreaterThan(100);
 
         RuleFor(x => x.SunlightStartHour)
             .GreaterThanOrEqualTo(0)

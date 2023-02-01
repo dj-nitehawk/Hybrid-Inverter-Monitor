@@ -87,7 +87,7 @@ public class Database
         var settings = usrSettingsCollection.FindById(1);
         if (settings is not null)
         {
-            this.settings.PVMaxCapacity = settings.PVMaxCapacity;
+            this.settings.PV_MaxCapacity = settings.PV_MaxCapacity;
             this.settings.BatteryCapacity = settings.BatteryCapacity;
             this.settings.SunlightStartHour = settings.SunlightStartHour;
             this.settings.SunlightEndHour = settings.SunlightEndHour;
