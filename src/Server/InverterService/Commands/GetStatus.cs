@@ -9,8 +9,9 @@ public class GetStatus : Command<InverterStatus>
     public override void Parse(string responseFromInverter)
     {
         //(232.0 50.1 232.0 50.1 0000 0000 000 476 27.02 000 100 0553 0000 000.0 27.00 00000 10011101 03 04 00000 101a\xc8\r
+        //(000.0 00.0 229.8 50.0 0851 0701 023 355 26.20 000 050 0041 00.0 058.5 00.00 00031 00010000 00 00 00000 010 0 01 0000
 
-        string[]? parts = responseFromInverter[1..]
+        string[] parts = responseFromInverter[1..]
             .Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
         Result.GridVoltage = decimal.Parse(parts[0]);
@@ -23,6 +24,6 @@ public class GetStatus : Command<InverterStatus>
         Result.PVInputCurrent = decimal.Parse(parts[12]);
         Result.PVInputVoltage = decimal.Parse(parts[13]);
         Result.BatteryDischargeCurrent = int.Parse(parts[15]);
-        Result.PVInputWatt = Convert.ToInt32(int.Parse(parts[19]));// / 1.09);
+        Result.PVInputWatt = Convert.ToInt32(int.Parse(parts[19]));
     }
 }

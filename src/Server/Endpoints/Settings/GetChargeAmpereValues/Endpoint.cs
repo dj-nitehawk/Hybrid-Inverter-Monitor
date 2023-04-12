@@ -17,9 +17,6 @@ public class Endpoint : EndpointWithoutRequest<ChargeAmpereValues>
 
     public override async Task HandleAsync(CancellationToken c)
     {
-        var cmd1 = new InverterService.Commands.GetChargeAmpereValues(false);
-        var cmd2 = new InverterService.Commands.GetChargeAmpereValues(true);
-
         if (Env.IsDevelopment())
         {
             await SendAsync(new()
@@ -30,6 +27,18 @@ public class Endpoint : EndpointWithoutRequest<ChargeAmpereValues>
             return;
         }
 
+        if (Config["LaunchSettings:TroubleMode"] == "yes")
+        {
+            await SendAsync(new()
+            {
+                CombinedAmpereValues = new[] { "000" },
+                UtilityAmpereValues = new[] { "00" }
+            });
+            return;
+        }
+
+        var cmd1 = new InverterService.Commands.GetChargeAmpereValues(false);
+        var cmd2 = new InverterService.Commands.GetChargeAmpereValues(true);
         Queue.AddCommands(cmd1, cmd2);
 
         await Task.WhenAll(
@@ -46,7 +55,7 @@ public class Endpoint : EndpointWithoutRequest<ChargeAmpereValues>
         }
         else
         {
-            ThrowError("Unable to read settings in a timely manner!");
+            ThrowError("Can't read charge ampere values!");
         }
     }
 }

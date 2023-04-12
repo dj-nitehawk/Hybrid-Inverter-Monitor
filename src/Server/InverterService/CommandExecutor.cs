@@ -1,3 +1,4 @@
+using HidSharp;
 using System.Text;
 using ICommand = InverterMon.Server.InverterService.Commands.ICommand;
 
@@ -6,7 +7,7 @@ namespace InverterMon.Server.InverterService;
 internal class CommandExecutor : BackgroundService
 {
     private readonly CommandQueue queue;
-    private FileStream? port;
+    private DeviceStream? dev;
     private readonly ILogger<CommandExecutor> log;
     private readonly IConfiguration confing;
 
@@ -15,26 +16,31 @@ internal class CommandExecutor : BackgroundService
         this.queue = queue;
         confing = config;
         this.log = log;
-        Connect(new CancellationTokenSource(TimeSpan.FromHours(1)).Token).GetAwaiter().GetResult();
+
+        log.LogInformation("connecting to the inverter...");
+
+        while (!Connect())
+            Thread.Sleep(10000);
     }
 
-    private async Task Connect(CancellationToken c)
+    private bool Connect()
     {
-        var dev = confing["LaunchSettings:DeviceAddress"] ?? "/dev/hidraw0";
+        var devPath = confing["LaunchSettings:DeviceAddress"] ?? "/dev/hidraw0";
 
-        while (!c.IsCancellationRequested)
+        dev = DeviceList.Local
+            .GetDevices(
+               types: DeviceTypes.Hid | DeviceTypes.Serial,
+               filter: d => DeviceFilterHelper.MatchHidDevices(d, 0x0665, 0x5161) || DeviceFilterHelper.MatchSerialDevices(d, devPath))
+            .FirstOrDefault()?.Open();
+
+        if (dev is null)
         {
-            try
-            {
-                port = File.Open(dev, FileMode.Open, FileAccess.ReadWrite);
-                log.LogInformation("inverter connected!");
-                break;
-            }
-            catch (Exception x)
-            {
-                log.LogError("inverter connection failed: {msg}", x.Message);
-                await Task.Delay(5000, c);
-            }
+            return false;
+        }
+        else
+        {
+            log.LogInformation("inverter connected!");
+            return true;
         }
     }
 
@@ -47,15 +53,18 @@ internal class CommandExecutor : BackgroundService
             {
                 try
                 {
-                    await ExecuteCommand(cmd, port!, c);
+                    await ExecuteCommand(cmd, dev!, c);
                     queue.IsAcceptingCommands = true;
                     queue.RemoveCommand();
                 }
                 catch (Exception x)
                 {
                     queue.IsAcceptingCommands = false;
-                    log.LogError("execution error: {msg}", x.Message);
-                    await Task.Delay(5000);
+                    log.LogError("command error: {msg}", x.Message);
+                    dev!.Close();
+                    dev.Dispose();
+                    log.LogInformation("exiting...");
+                    Environment.Exit(0);
                 }
             }
             else
@@ -65,11 +74,11 @@ internal class CommandExecutor : BackgroundService
         }
     }
 
-    private static async Task ExecuteCommand(ICommand command, FileStream port, CancellationToken c)
+    private static async Task ExecuteCommand(ICommand command, Stream port, CancellationToken c)
     {
         command.Start();
         byte[]? cmdBytes = Encoding.ASCII.GetBytes(command.CommandString);
-        ushort crc = CalculateCRC(cmdBytes);
+        ushort crc = CalculateXmodemCrc16(command.CommandString);
 
         byte[]? buf = new byte[cmdBytes.Length + 3];
         Array.Copy(cmdBytes, buf, cmdBytes.Length);
@@ -88,41 +97,24 @@ internal class CommandExecutor : BackgroundService
         }
         while (!buffer.Any(b => b == 0x0d));
 
-        command.Parse(Encoding.ASCII.GetString(buffer, 0, pos - 3));
+        command.Parse(Encoding.ASCII.GetString(buffer, 0, pos - 3).Sanitize());
         command.End();
     }
 
-    private static readonly ushort[] crc_ta = { 0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7, 0x8108, 0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef };
-
-    private static ushort CalculateCRC(byte[] buffer)
+    private static ushort CalculateXmodemCrc16(string data)
     {
         ushort crc = 0;
-
-        foreach (byte b in buffer)
+        for (int i = 0; i < data.Length; i++)
         {
-            int da = (byte)(crc >> 8) >> 4;
-            crc <<= 4;
-            crc ^= crc_ta[da ^ (b >> 4)];
-            da = (byte)(crc >> 8) >> 4;
-            crc <<= 4;
-            crc ^= crc_ta[da ^ (b & 0x0F)];
+            crc ^= (ushort)(data[i] << 8);
+            for (int j = 0; j < 8; j++)
+            {
+                if ((crc & 0x8000) != 0)
+                    crc = (ushort)((crc << 1) ^ 0x1021);
+                else
+                    crc <<= 1;
+            }
         }
-
-        byte crcLow = (byte)crc;
-        byte crcHigh = (byte)(crc >> 8);
-        if (crcLow is 0x28 or 0x0d or 0x0a)
-        {
-            crcLow++;
-        }
-
-        if (crcHigh is 0x28 or 0x0d or 0x0a)
-        {
-            crcHigh++;
-        }
-
-        crc = (ushort)(crcHigh << 8);
-        crc += crcLow;
-
         return crc;
     }
 }

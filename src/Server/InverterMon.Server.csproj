@@ -26,10 +26,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="HidSharp" Version="2.1.0" />
+        <PackageReference Include="SerialPortLib" Version="1.1.1" />
         <PackageReference Include="FastEndpoints" Version="5.7.0" />
         <PackageReference Include="FastEndpoints.Swagger" Version="5.7.0" />
         <PackageReference Include="LiteDB" Version="5.0.15" />
-        <PackageReference Include="SerialPortLib" Version="1.1.1" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.2" />
     </ItemGroup>
 

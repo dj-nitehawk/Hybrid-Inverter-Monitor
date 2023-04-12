@@ -1,3 +1,3 @@
 ## changelog
-- change pv max capacity setting to watts instead of amperes
-- upgrade dependencies to latest
+- add potential support for serial devices (ex: `/dev/ttyUSB*`)
+- add read-only support for troublesome inverters (set `"TroubleMode": "yes"` in `appsettings.json`)
