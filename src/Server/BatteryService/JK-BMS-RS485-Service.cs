@@ -28,7 +28,7 @@ public class JkBms
 
         Task.Run(async () =>
         {
-            var ct = new CancellationTokenSource(TimeSpan.FromHours(1)).Token;
+            var ct = new CancellationTokenSource(TimeSpan.FromMinutes(5)).Token;
             while (!ct.IsCancellationRequested && !bms.IsConnected)
             {
                 var success = bms.Connect();
