@@ -1,4 +1,5 @@
 using HidSharp;
+using System.Diagnostics;
 using System.Text;
 using ICommand = InverterMon.Server.InverterService.Commands.ICommand;
 
@@ -19,8 +20,16 @@ internal class CommandExecutor : BackgroundService
 
         log.LogInformation("connecting to the inverter...");
 
-        while (!Connect())
+        var sw = new Stopwatch();
+        sw.Start();
+
+        while (!Connect() && sw.Elapsed.TotalMinutes <= 5)
             Thread.Sleep(10000);
+
+        if (sw.Elapsed.TotalMinutes >= 5)
+        {
+            log.LogInformation("inverter connecting timed out!");
+        }
     }
 
     private bool Connect()
@@ -39,14 +48,17 @@ internal class CommandExecutor : BackgroundService
         }
         else
         {
-            log.LogInformation("inverter connected!");
+            log.LogInformation("connected to inverter at: [{adr}]", dev.Device.DevicePath);
             return true;
         }
     }
 
     protected override async Task ExecuteAsync(CancellationToken c)
     {
-        while (!c.IsCancellationRequested)
+        var delay = 0;
+        var timeout = TimeSpan.FromMinutes(5);
+
+        while (!c.IsCancellationRequested && delay <= timeout.TotalMilliseconds)
         {
             var cmd = queue.GetCommand();
             if (cmd is not null)
@@ -55,16 +67,14 @@ internal class CommandExecutor : BackgroundService
                 {
                     await ExecuteCommand(cmd, dev!, c);
                     queue.IsAcceptingCommands = true;
+                    delay = 0;
                     queue.RemoveCommand();
                 }
                 catch (Exception x)
                 {
                     queue.IsAcceptingCommands = false;
-                    log.LogError("command error: {msg}", x.Message);
-                    dev!.Close();
-                    dev.Dispose();
-                    log.LogInformation("exiting...");
-                    Environment.Exit(0);
+                    log.LogError("command execution failed: [{msg}]", x.Message);
+                    await Task.Delay(delay += 1000);
                 }
             }
             else
@@ -72,6 +82,8 @@ internal class CommandExecutor : BackgroundService
                 await Task.Delay(500, c);
             }
         }
+
+        log.LogError("command execution halted due to excessive failures!");
     }
 
     private static async Task ExecuteCommand(ICommand command, Stream port, CancellationToken c)
