@@ -35,10 +35,20 @@
 
     <script src="_framework/blazor.webassembly.js"></script>
     <script>
-        if ('serviceWorker' in navigator)
-        {
-            window.addEventListener('load', function ()
-            {
+        let lastVisibleTime = Date.now();
+        document.addEventListener("visibilitychange", function () {
+            if (document.hidden) {                
+                lastVisibleTime = Date.now();
+            } else {
+                if (Date.now() - lastVisibleTime > 180000) {
+                    location.reload();
+                }
+            }
+        });
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
                 navigator.serviceWorker.register('service-worker.js');
             });
         }
