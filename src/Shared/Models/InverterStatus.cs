@@ -4,7 +4,7 @@ namespace InverterMon.Shared.Models;
 
 public class InverterStatus
 {
-    [JsonPropertyName("a")] public int BatteryCapacity { get; set; } = 200;
+    [JsonPropertyName("a")] public int BatteryCapacity { get; set; } = 100;
     [JsonPropertyName("b")] public decimal BatteryChargeCRate => BatteryChargeCurrent == 0 ? 0 : Convert.ToDecimal(BatteryChargeCurrent) / BatteryCapacity;
     [JsonPropertyName("c")] public int BatteryChargeCurrent { get; set; }
     [JsonPropertyName("d")] public int BatteryChargeWatts => BatteryChargeCurrent == 0 ? 0 : Convert.ToInt32(BatteryChargeCurrent * BatteryVoltage);

@@ -2,10 +2,10 @@
 
 public class CurrentSettings
 {
-    public string ChargePriority { get; set; }
-    public string OutputPriority { get; set; }
-    public string MaxACChargeCurrent { get; set; }
-    public string MaxCombinedChargeCurrent { get; set; }
+    public string ChargePriority { get; set; } = "000";
+    public string OutputPriority { get; set; } = "000";
+    public string MaxACChargeCurrent { get; set; } = "000";
+    public string MaxCombinedChargeCurrent { get; set; } = "000";
 
     private decimal _backToGrid;
     public decimal BackToGridVoltage { get => _backToGrid; set => _backToGrid = RoundToHalfPoints(value); }

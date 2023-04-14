@@ -127,7 +127,7 @@
     private static event Action<BMSStatus?>? onStatusUpdated;
     private static event Action? onStatusRetrievalError;
     private static BMSStatus? status;
-
+    
     protected override void OnInitialized()
     {
         onStatusUpdated += UpdateState;

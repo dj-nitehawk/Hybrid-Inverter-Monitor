@@ -73,7 +73,7 @@ internal class CommandExecutor : BackgroundService
                 catch (Exception x)
                 {
                     queue.IsAcceptingCommands = false;
-                    log.LogError("command execution failed: [{msg}]", x.Message);
+                    log.LogError("command [{cmd}] failed with reason [{msg}]", cmd.CommandString, x.Message);
                     await Task.Delay(delay += 1000);
                 }
             }

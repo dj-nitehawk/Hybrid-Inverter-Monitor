@@ -34,6 +34,9 @@ internal class GetSettings : Command<CurrentSettings>
         // 24) 0 - pv ok for parallel
         // 25) 1 - pv power balance
 
+        if (responseFromInverter.StartsWith("(NAK"))
+            return;
+
         string[]? parts = responseFromInverter[1..]
             .Split(' ', StringSplitOptions.RemoveEmptyEntries);
 

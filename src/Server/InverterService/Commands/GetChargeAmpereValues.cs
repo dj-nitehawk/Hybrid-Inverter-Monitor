@@ -12,6 +12,12 @@ internal class GetChargeAmpereValues : Command<List<string>>
 
     public override void Parse(string responseFromInverter)
     {
+        if (responseFromInverter.StartsWith("(NAK"))
+        {
+            Result.Add("000");
+            return;
+        }
+
         var parts = responseFromInverter[1..]
             .Split(' ', StringSplitOptions.RemoveEmptyEntries)
             .Select(x => x[0..3]);
