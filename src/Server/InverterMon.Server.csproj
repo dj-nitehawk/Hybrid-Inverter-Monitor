@@ -29,7 +29,7 @@
         <PackageReference Include="HidSharp" Version="2.1.0" />
         <PackageReference Include="SerialPortLib" Version="1.1.1" />
         <PackageReference Include="FastEndpoints" Version="5.8.1" />
-        <PackageReference Include="FastEndpoints.Swagger" Version="5.8.1" />
+        <!--<PackageReference Include="FastEndpoints.Swagger" Version="5.8.1" />-->
         <PackageReference Include="LiteDB" Version="5.0.16" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.5" />
     </ItemGroup>

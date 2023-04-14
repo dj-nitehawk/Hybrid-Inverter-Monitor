@@ -1,5 +1,4 @@
 global using FastEndpoints;
-using FastEndpoints.Swagger;
 using InverterMon.Server.BatteryService;
 using InverterMon.Server.InverterService;
 using InverterMon.Server.Persistance;
@@ -21,7 +20,7 @@ builder.Services.AddSingleton<JkBms>();
 builder.Services.AddSingleton<Database>();
 if (builder.Environment.IsDevelopment())
 {
-    builder.Services.AddSwaggerDoc();
+    //builder.Services.AddSwaggerDoc();
 }
 else
 {
