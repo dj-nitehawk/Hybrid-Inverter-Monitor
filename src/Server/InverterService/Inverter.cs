@@ -42,6 +42,14 @@ public static class Inverter
         return false;
     }
 
+    public static void Disconnect()
+    {
+        _serialPort?.Close();
+        _serialPort?.Dispose();
+        _fileStream?.Close();
+        _fileStream?.Dispose();
+    }
+
     private static readonly byte[] _writeBuffer = new byte[512];
     public static Task Write(string command, CancellationToken ct)
     {

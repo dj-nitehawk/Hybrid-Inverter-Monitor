@@ -27,35 +27,18 @@ public class Endpoint : EndpointWithoutRequest<ChargeAmpereValues>
             return;
         }
 
-        if (Config["LaunchSettings:TroubleMode"] == "yes")
-        {
-            await SendAsync(new()
-            {
-                CombinedAmpereValues = new[] { "000" },
-                UtilityAmpereValues = new[] { "00" }
-            });
-            return;
-        }
-
         var cmd1 = new InverterService.Commands.GetChargeAmpereValues(false);
         var cmd2 = new InverterService.Commands.GetChargeAmpereValues(true);
         Queue.AddCommands(cmd1, cmd2);
 
         await Task.WhenAll(
-            cmd1.WhileProcessing(c),
-            cmd2.WhileProcessing(c));
+            cmd1.WhileProcessing(c, 5000),
+            cmd2.WhileProcessing(c, 5000));
 
-        if (cmd1.IsComplete && cmd2.IsComplete)
+        await SendAsync(new()
         {
-            await SendAsync(new()
-            {
-                CombinedAmpereValues = cmd1.Result,
-                UtilityAmpereValues = cmd2.Result
-            });
-        }
-        else
-        {
-            ThrowError("Can't read charge ampere values!");
-        }
+            CombinedAmpereValues = cmd1.Result,
+            UtilityAmpereValues = cmd2.Result
+        });
     }
 }

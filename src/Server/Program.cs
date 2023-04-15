@@ -18,11 +18,7 @@ builder.Services.AddSingleton<UserSettings>();
 builder.Services.AddSingleton<CommandQueue>();
 builder.Services.AddSingleton<JkBms>();
 builder.Services.AddSingleton<Database>();
-if (builder.Environment.IsDevelopment())
-{
-    //builder.Services.AddSwaggerDoc();
-}
-else
+if (!builder.Environment.IsDevelopment())
 {
     builder.Services.AddHostedService<CommandExecutor>();
     builder.Services.AddHostedService<StatusRetriever>();

@@ -1,3 +1,2 @@
 ## changelog
-- rewrite device access logic.
-- optimize speed and reduce allocations.
+- support for reading and writing troublesome commands with jblanch/mpp-solar in `TroubleMode`

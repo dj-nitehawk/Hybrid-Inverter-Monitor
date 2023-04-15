@@ -6,14 +6,18 @@ namespace InverterMon.Server.InverterService;
 internal class CommandExecutor : BackgroundService
 {
     private readonly CommandQueue queue;
-    private readonly ILogger<CommandExecutor> log;
-    private readonly IConfiguration confing;
+    private readonly ILogger<CommandExecutor> logger;
+    private readonly string devPath = "/dev/hidraw0";
+    private readonly bool isTroubleMode;
+    private readonly string mppPath = "/usr/local/bin/mpp-solar";
 
     public CommandExecutor(CommandQueue queue, IConfiguration config, ILogger<CommandExecutor> log)
     {
         this.queue = queue;
-        confing = config;
-        this.log = log;
+        this.logger = log;
+        devPath = config["LaunchSettings:DeviceAddress"] ?? devPath;
+        isTroubleMode = config["LaunchSettings:TroubleMode"] == "yes";
+        mppPath = config["LaunchSettings:MppSolarPath"] ?? mppPath;
 
         log.LogInformation("connecting to the inverter...");
 
@@ -31,15 +35,13 @@ internal class CommandExecutor : BackgroundService
 
     private bool Connect()
     {
-        var devPath = confing["LaunchSettings:DeviceAddress"] ?? "/dev/hidraw0";
-
-        if (!Inverter.Connect(devPath, log))
+        if (!Inverter.Connect(devPath, logger))
         {
             return false;
         }
         else
         {
-            log.LogInformation("connected to inverter at: [{adr}]", devPath);
+            logger.LogInformation("connected to inverter at: [{adr}]", devPath);
             return true;
         }
     }
@@ -64,7 +66,7 @@ internal class CommandExecutor : BackgroundService
                 catch (Exception x)
                 {
                     queue.IsAcceptingCommands = false;
-                    log.LogError("command [{cmd}] failed with reason [{msg}]", cmd.CommandString, x.Message);
+                    logger.LogError("command [{cmd}] failed with reason [{msg}]", cmd.CommandString, x.Message);
                     await Task.Delay(delay += 1000);
                 }
             }
@@ -73,14 +75,34 @@ internal class CommandExecutor : BackgroundService
                 await Task.Delay(500, ct);
             }
         }
-        log.LogError("command execution halted due to excessive failures!");
+        logger.LogError("command execution halted due to excessive failures!");
     }
 
-    private static async Task ExecuteCommand(ICommand command, CancellationToken ct)
+    private async Task ExecuteCommand(ICommand command, CancellationToken ct)
     {
-        command.Start();
-        await Inverter.Write(command.CommandString, ct);
-        command.Parse(await Inverter.Read(ct));
-        command.End();
+        if (isTroubleMode && command.IsTroublesomeCmd)
+        {
+            Inverter.Disconnect();
+            using var process = new Process();
+            process.StartInfo.FileName = mppPath;
+            process.StartInfo.Arguments = $"-p {devPath} -o raw -c {command.CommandString}";
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.Start();
+            command.Start();
+            var output = await process.StandardOutput.ReadToEndAsync(ct);
+            var result = output.ParseCLI()[1..^1];
+            command.Parse(result);
+            command.End();
+            await process.WaitForExitAsync(ct);
+            Inverter.Connect(devPath, logger);
+        }
+        else
+        {
+            command.Start();
+            await Inverter.Write(command.CommandString, ct);
+            command.Parse(await Inverter.Read(ct));
+            command.End();
+        }
     }
 }
