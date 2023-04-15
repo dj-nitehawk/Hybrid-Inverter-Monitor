@@ -12,5 +12,4 @@ builder.Services.AddScoped(_ => new HttpClient
 });
 _ = InverterMon.Client.Pages.Index.StartStatusStreaming(builder.HostEnvironment.BaseAddress);
 _ = InverterMon.Client.Pages.BMS.StartStatusStreaming(builder.HostEnvironment.BaseAddress);
-_ = InverterMon.Client.Pages.Settings.RetrieveChargeAmpereValues(builder.HostEnvironment.BaseAddress);
 await builder.Build().RunAsync();

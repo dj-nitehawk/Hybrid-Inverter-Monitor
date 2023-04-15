@@ -88,19 +88,22 @@
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="combinedcurrent" data-bs-toggle="dropdown">
                         @Sanitize(settings.MaxCombinedChargeCurrent) A
                         </button>
-                        <ul class="dropdown-menu dropdown-menu">
-                        @foreach (var val in chargeAmpereValues!.CombinedAmpereValues)
+                        @if (chargeAmpereValues != null)
                         {
-                            <li>
-                                <a 
-                                    class="dropdown-item @(settings.MaxCombinedChargeCurrent == val ? "active" : "")"
-                                    @onclick="()=>SetSetting(Setting.CombinedChargeCurrent,val)"
-                                > 
-                                    @Sanitize(val) A
-                                </a>
-                            </li>  
+                            <ul class="dropdown-menu dropdown-menu">
+                            @foreach (var val in chargeAmpereValues!.CombinedAmpereValues)
+                            {
+                                <li>
+                                    <a 
+                                        class="dropdown-item @(settings.MaxCombinedChargeCurrent == val ? "active" : "")"
+                                        @onclick="()=>SetSetting(Setting.CombinedChargeCurrent,val)"
+                                    > 
+                                        @Sanitize(val) A
+                                    </a>
+                                </li>  
+                            }
+                            </ul>                            
                         }
-                        </ul>
                     </div>
                 }
                 </div>
@@ -123,16 +126,19 @@
                         @Sanitize(settings.MaxACChargeCurrent) A
                         </button>
                         <ul class="dropdown-menu dropdown-menu">
-                        @foreach (var val in chargeAmpereValues!.UtilityAmpereValues)
+                        @if (chargeAmpereValues != null)
                         {
-                            <li>
-                                <a 
-                                    class="dropdown-item @(settings.MaxACChargeCurrent == val ? "active" : "")"
-                                    @onclick="()=>SetSetting(Setting.UtilityChargeCurrent,val)"
-                                > 
-                                    @Sanitize(val) A
-                                </a>
-                            </li>  
+                             @foreach (var val in chargeAmpereValues!.UtilityAmpereValues)
+                             {
+                                <li>
+                                    <a 
+                                        class="dropdown-item @(settings.MaxACChargeCurrent == val ? "active" : "")"
+                                        @onclick="()=>SetSetting(Setting.UtilityChargeCurrent,val)"
+                                    > 
+                                        @Sanitize(val) A
+                                    </a>
+                                </li>  
+                             }                          
                         }
                         </ul>
                     </div>
@@ -291,57 +297,42 @@
 
 @code{
     private static ChargeAmpereValues? chargeAmpereValues;
-    private static CurrentSettings? settings;
+    private CurrentSettings? settings;
     private Button currentButton = Button.None;
     private bool isSuccess;
     private string inProgressSetting = "";
-
-    public static async Task RetrieveChargeAmpereValues(string basePath)
-    {
-        using var client = new HttpClient
-        {
-            BaseAddress = new Uri(basePath),
-            Timeout = TimeSpan.FromSeconds(10)
-        };
-
-        var retryDelay = (int)TimeSpan.FromSeconds(1).TotalMilliseconds;
-        var maxDelay = (int)TimeSpan.FromMinutes(1).TotalMilliseconds;
-
-        while (true)
-        {
-            try
-            {
-                chargeAmpereValues = await client.GetFromJsonAsync<ChargeAmpereValues>("api/settings/get-charge-ampere-values");
-
-                // some inverters only seem to support one of the two commands over usb
-                if(chargeAmpereValues?.CombinedAmpereValues.Any() is true &&
-                   chargeAmpereValues?.UtilityAmpereValues.Any() is false)
-                {
-                    chargeAmpereValues.UtilityAmpereValues = chargeAmpereValues.CombinedAmpereValues;
-                }
-                if(chargeAmpereValues?.CombinedAmpereValues.Any() is false &&
-                   chargeAmpereValues?.UtilityAmpereValues.Any() is true)
-                {
-                    chargeAmpereValues.CombinedAmpereValues = chargeAmpereValues.UtilityAmpereValues;
-                }
-
-                break;
-            }
-            catch (Exception)
-            {
-                if (retryDelay > maxDelay)
-                    break;
-
-                await Task.Delay(retryDelay);
-                retryDelay += 250;
-            }
-        }
-    }
 
     protected override async Task OnInitializedAsync()
     {
         settings = await Http.GetFromJsonAsync<CurrentSettings>("api/settings/get-setting-values");
         StateHasChanged();
+
+        _ = Task.Run(async ()  =>
+        {
+            if (chargeAmpereValues is null)
+            {
+                using var client = new HttpClient
+                {
+                    BaseAddress = new Uri(Http.BaseAddress?.ToString() ?? "/"),
+                    Timeout = TimeSpan.FromSeconds(10)
+                };
+
+                chargeAmpereValues = await client.GetFromJsonAsync<ChargeAmpereValues>("api/settings/get-charge-ampere-values");
+
+                // some inverters only seem to support one of the two commands over usb
+                if (chargeAmpereValues?.CombinedAmpereValues.Any() is true &&
+                    chargeAmpereValues?.UtilityAmpereValues.Any() is false)
+                {
+                    chargeAmpereValues.UtilityAmpereValues = chargeAmpereValues.CombinedAmpereValues;
+                }
+                if (chargeAmpereValues?.CombinedAmpereValues.Any() is false &&
+                    chargeAmpereValues?.UtilityAmpereValues.Any() is true)
+                {
+                    chargeAmpereValues.CombinedAmpereValues = chargeAmpereValues.UtilityAmpereValues;
+                }
+                StateHasChanged();
+            }
+        });
     }
 
     private async Task SetChargePriority(string priority)
