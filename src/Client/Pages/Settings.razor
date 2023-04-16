@@ -23,20 +23,90 @@
         <div class="tab-pane fade show active" id="settings" role="tabpanel">
             <div class="row border-primary bg-light px-3">
                 <div class="col-6 my-auto fw-bold">
+                    Max Combined Charge Current:
+                </div>
+                <div class="col-6 p-2 bg-secondary">
+
+                    @if (chargeAmpereValues == null || inProgressSetting == Setting.CombinedChargeCurrent)
+                    {
+                        <div class="spinner-border m-2"></div>
+                    }
+                    else
+                    {
+                        <div class="dropdown p-1">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="combinedcurrent" data-bs-toggle="dropdown">
+                                @Sanitize(settings.MaxCombinedChargeCurrent) A
+                            </button>
+                            @if (chargeAmpereValues != null)
+                            {
+                                <ul class="dropdown-menu dropdown-menu">
+                                    @foreach (var val in chargeAmpereValues!.CombinedAmpereValues)
+                                    {
+                                        <li>
+                                            <a class="dropdown-item @(settings.MaxCombinedChargeCurrent == val ? "active" : "")"
+                               @onclick="()=>SetSetting(Setting.CombinedChargeCurrent,val)">
+                                                @Sanitize(val) A
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="row border-primary bg-light px-3 mt-1">
+                <div class="col-6 my-auto fw-bold">
+                    Max Grid Charge Current:
+                </div>
+                <div class="col-6 p-2 bg-secondary">
+
+                    @if (chargeAmpereValues == null || inProgressSetting == Setting.UtilityChargeCurrent)
+                    {
+                        <div class="spinner-border m-2"></div>
+                    }
+                    else
+                    {
+                        <div class="dropdown p-1">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="gridcurrent" data-bs-toggle="dropdown">
+                                @Sanitize(settings.MaxACChargeCurrent) A
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu">
+                                @if (chargeAmpereValues != null)
+                                {
+                                    @foreach (var val in chargeAmpereValues!.UtilityAmpereValues)
+                                    {
+                                        <li>
+                                            <a class="dropdown-item @(settings.MaxACChargeCurrent == val ? "active" : "")"
+                               @onclick="()=>SetSetting(Setting.UtilityChargeCurrent,val)">
+                                                @Sanitize(val) A
+                                            </a>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="row border-primary bg-light px-3 mt-1">
+                <div class="col-6 my-auto fw-bold">
                     Output Source Priority:
                 </div>
                 <div class="col-6 bg-secondary p-2">
-                    <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetOutputPriority(OutputPriority.SolarFirst)">
+                    <button disabled="@isLoadingChargeValues" type="button" class="btn btn-light d-block m-2" @onclick="()=>SetOutputPriority(OutputPriority.SolarFirst)">
                         <span class="@Spinner(Button.OpSolarFirst)"></span>
                         <span class="@Hidden(Button.OpSolarFirst)">Solar First</span>
                         <span class="@Success(Button.OpSolarFirst, OutputPriority.SolarFirst, settings.OutputPriority)"></span>
                     </button>
-                        <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetOutputPriority(OutputPriority.SolarBatteryUtility)">
+                    <button disabled="@isLoadingChargeValues" type="button" class="btn btn-light d-block m-2" @onclick="()=>SetOutputPriority(OutputPriority.SolarBatteryUtility)">
                         <span class="@Spinner(Button.OpSolarBatteryUtility)"></span>
                         <span class="@Hidden(Button.OpSolarBatteryUtility)">Solar > Battery > Utility</span>
                         <span class="@Success(Button.OpSolarBatteryUtility, OutputPriority.SolarBatteryUtility, settings.OutputPriority)"></span>
-                    </button>  
-                        <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetOutputPriority(OutputPriority.UtilityFirst)">
+                    </button>
+                    <button disabled="@isLoadingChargeValues" type="button" class="btn btn-light d-block m-2" @onclick="()=>SetOutputPriority(OutputPriority.UtilityFirst)">
                         <span class="@Spinner(Button.OpUtilityFirst)"></span>
                         <span class="@Hidden(Button.OpUtilityFirst)">Utility First</span>
                         <span class="@Success(Button.OpUtilityFirst, OutputPriority.UtilityFirst, settings.OutputPriority)"></span>
@@ -49,100 +119,26 @@
                     Battery Charging Priority:
                 </div>
                 <div class="col-6 bg-secondary p-2">
-                    <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetChargePriority(ChargePriority.OnlySolar)">
+                    <button disabled="@isLoadingChargeValues" type="button" class="btn btn-light d-block m-2" @onclick="()=>SetChargePriority(ChargePriority.OnlySolar)">
                         <span class="@Spinner(Button.ChOnlySolar)"></span>
                         <span class="@Hidden(Button.ChOnlySolar)">Solar Only</span>
                         <span class="@Success(Button.ChOnlySolar, ChargePriority.OnlySolar, settings.ChargePriority)"></span>
                     </button>
-                    <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetChargePriority(ChargePriority.SolarFirst)">
+                    <button disabled="@isLoadingChargeValues" type="button" class="btn btn-light d-block m-2" @onclick="()=>SetChargePriority(ChargePriority.SolarFirst)">
                         <span class="@Spinner(Button.ChSolarFirst)"></span>
                         <span class="@Hidden(Button.ChSolarFirst)">Solar First</span>
                         <span class="@Success(Button.ChSolarFirst, ChargePriority.SolarFirst, settings.ChargePriority)"></span>
                     </button>
-                    <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetChargePriority(ChargePriority.SolarAndUtility)">
+                    <button disabled="@isLoadingChargeValues" type="button" class="btn btn-light d-block m-2" @onclick="()=>SetChargePriority(ChargePriority.SolarAndUtility)">
                         <span class="@Spinner(Button.ChSolarAndUtility)"></span>
                         <span class="@Hidden(Button.ChSolarAndUtility)">Solar & Utility</span>
                         <span class="@Success(Button.ChSolarAndUtility, ChargePriority.SolarAndUtility, settings.ChargePriority)"></span>
                     </button>
-                    <button type="button" class="btn btn-light d-block m-2" @onclick="()=>SetChargePriority(ChargePriority.UtilityFirst)">
+                    <button disabled="@isLoadingChargeValues" type="button" class="btn btn-light d-block m-2" @onclick="()=>SetChargePriority(ChargePriority.UtilityFirst)">
                         <span class="@Spinner(Button.ChUtilityFirst)"></span>
                         <span class="@Hidden(Button.ChUtilityFirst)">Utility First</span>
                         <span class="@Success(Button.ChUtilityFirst, ChargePriority.UtilityFirst, settings.ChargePriority)"></span>
                     </button>
-                </div>
-            </div>
-
-            <div class="row border-primary bg-light px-3 mt-1">
-                <div class="col-6 my-auto fw-bold">
-                    Max Combined Charge Current:
-                </div>
-                <div class="col-6 p-2 bg-secondary">
-                
-                @if (inProgressSetting == Setting.CombinedChargeCurrent)
-                {
-                    <div class="spinner-border m-2"></div>     
-                }
-                else
-                {
-                    <div class="dropdown p-1">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="combinedcurrent" data-bs-toggle="dropdown">
-                        @Sanitize(settings.MaxCombinedChargeCurrent) A
-                        </button>
-                        @if (chargeAmpereValues != null)
-                        {
-                            <ul class="dropdown-menu dropdown-menu">
-                            @foreach (var val in chargeAmpereValues!.CombinedAmpereValues)
-                            {
-                                <li>
-                                    <a 
-                                        class="dropdown-item @(settings.MaxCombinedChargeCurrent == val ? "active" : "")"
-                                        @onclick="()=>SetSetting(Setting.CombinedChargeCurrent,val)"
-                                    > 
-                                        @Sanitize(val) A
-                                    </a>
-                                </li>  
-                            }
-                            </ul>                            
-                        }
-                    </div>
-                }
-                </div>
-            </div>
-
-            <div class="row border-primary bg-light px-3 mt-1">
-                <div class="col-6 my-auto fw-bold">
-                    Max Grid Charge Current:
-                </div>
-                <div class="col-6 p-2 bg-secondary">
-                
-                @if (inProgressSetting == Setting.UtilityChargeCurrent)
-                {
-                    <div class="spinner-border m-2"></div>     
-                }
-                else
-                {
-                    <div class="dropdown p-1">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="gridcurrent" data-bs-toggle="dropdown">
-                        @Sanitize(settings.MaxACChargeCurrent) A
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu">
-                        @if (chargeAmpereValues != null)
-                        {
-                             @foreach (var val in chargeAmpereValues!.UtilityAmpereValues)
-                             {
-                                <li>
-                                    <a 
-                                        class="dropdown-item @(settings.MaxACChargeCurrent == val ? "active" : "")"
-                                        @onclick="()=>SetSetting(Setting.UtilityChargeCurrent,val)"
-                                    > 
-                                        @Sanitize(val) A
-                                    </a>
-                                </li>  
-                             }                          
-                        }
-                        </ul>
-                    </div>
-                }
                 </div>
             </div>
         </div>
@@ -297,6 +293,7 @@
 
 @code{
     private static ChargeAmpereValues? chargeAmpereValues;
+    private bool isLoadingChargeValues = false;
     private CurrentSettings? settings;
     private Button currentButton = Button.None;
     private bool isSuccess;
@@ -311,11 +308,16 @@
         {
             if (chargeAmpereValues is null)
             {
+                isLoadingChargeValues = true;
+                StateHasChanged();
+
                 using var client = new HttpClient
                 {
                     BaseAddress = new Uri(Http.BaseAddress?.ToString() ?? "/"),
                     Timeout = TimeSpan.FromSeconds(10)
                 };
+
+                await Task.Delay(3000);
 
                 chargeAmpereValues = await client.GetFromJsonAsync<ChargeAmpereValues>("api/settings/get-charge-ampere-values");
 
@@ -330,6 +332,8 @@
                 {
                     chargeAmpereValues.CombinedAmpereValues = chargeAmpereValues.UtilityAmpereValues;
                 }
+
+                isLoadingChargeValues = false;
                 StateHasChanged();
             }
         });
