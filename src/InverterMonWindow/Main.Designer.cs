@@ -15,41 +15,47 @@ partial class Main
 
     private void InitializeComponent()
     {
-            this.web = new Microsoft.Web.WebView2.WinForms.WebView2();
-            ((System.ComponentModel.ISupportInitialize)(this.web)).BeginInit();
-            this.SuspendLayout();
-            // 
-            // web
-            // 
-            this.web.AllowExternalDrop = false;
-            this.web.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.web.CreationProperties = null;
-            this.web.DefaultBackgroundColor = System.Drawing.Color.White;
-            this.web.Location = new System.Drawing.Point(-1, 1);
-            this.web.Name = "web";
-            this.web.Size = new System.Drawing.Size(577, 458);
-            this.web.Source = new System.Uri("http://inverter.djnitehawk.com", System.UriKind.Absolute);
-            this.web.TabIndex = 0;
-            this.web.ZoomFactor = 1D;
-            // 
-            // Main
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(574, 459);
-            this.Controls.Add(this.web);
-            this.MaximizeBox = false;
-            this.Name = "Main";
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "InverterMon Window";
-            this.TopMost = true;
-            ((System.ComponentModel.ISupportInitialize)(this.web)).EndInit();
-            this.ResumeLayout(false);
-
+        components = new System.ComponentModel.Container();
+        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
+        web = new Microsoft.Web.WebView2.WinForms.WebView2();
+        TrayIcon = new NotifyIcon(components);
+        ((System.ComponentModel.ISupportInitialize)web).BeginInit();
+        SuspendLayout();
+        // 
+        // web
+        // 
+        web.AllowExternalDrop = false;
+        web.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        web.CreationProperties = null;
+        web.DefaultBackgroundColor = Color.White;
+        web.Location = new Point(-1, 1);
+        web.Name = "web";
+        web.Size = new Size(577, 458);
+        web.Source = new Uri("http://inverter.djnitehawk.com", UriKind.Absolute);
+        web.TabIndex = 0;
+        web.ZoomFactor = 1D;
+        // 
+        // TrayIcon
+        // 
+        TrayIcon.Icon = (Icon)resources.GetObject("TrayIcon.Icon");
+        TrayIcon.Text = "TrayIcon";
+        // 
+        // Main
+        // 
+        AutoScaleDimensions = new SizeF(7F, 15F);
+        AutoScaleMode = AutoScaleMode.Font;
+        ClientSize = new Size(574, 459);
+        Controls.Add(web);
+        MaximizeBox = false;
+        Name = "Main";
+        ShowInTaskbar = false;
+        StartPosition = FormStartPosition.CenterScreen;
+        Text = "InverterMon Window";
+        TopMost = true;
+        ((System.ComponentModel.ISupportInitialize)web).EndInit();
+        ResumeLayout(false);
     }
 
     private Microsoft.Web.WebView2.WinForms.WebView2 web;
+    private NotifyIcon TrayIcon;
 }
