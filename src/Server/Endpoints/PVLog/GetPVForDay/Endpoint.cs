@@ -30,6 +30,9 @@ public class Endpoint : Endpoint<Request, PVDay>
                 Id = DateOnly.FromDateTime(DateTime.Now).DayNumber,
                 TotalWattHours = Random.Shared.Next(3000),
             };
+
+            //pvDay.AllocateBuckets(6, 18);
+
             for (int i = 0; i < 97; i++)
                 pvDay.WattPeaks.Add(i.ToString(), Random.Shared.Next(2000));
         }

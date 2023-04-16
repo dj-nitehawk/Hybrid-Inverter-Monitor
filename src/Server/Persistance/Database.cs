@@ -61,9 +61,9 @@ public class Database
 
         await cmd.WhileProcessing(c);
 
-        var todayDayNumer = DateOnly.FromDateTime(DateTime.Now).DayNumber;
+        var todayDayNumber = DateOnly.FromDateTime(DateTime.Now).DayNumber;
 
-        if (today?.Id == todayDayNumer)
+        if (today?.Id == todayDayNumber)
         {
             today.SetWattPeaks(cmd.Result.PVInputWatt);
             today.SetTotalWattHours(cmd.Result.PVInputWattHour);
@@ -72,8 +72,10 @@ public class Database
         else
         {
             cmd.Result.ResetPVWattHourAccumulation(); //it's a new day. start accumulation from scratch.
-            today = new PVGeneration { Id = todayDayNumer };
+            today = new PVGeneration { Id = todayDayNumber };
+            today.AllocateBuckets(settings.SunlightStartHour, settings.SunlightEndHour);
             today.SetTotalWattHours(0);
+
             pvGenCollection.Insert(today);
         }
         db.Checkpoint();
