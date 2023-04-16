@@ -22,7 +22,7 @@
                 <span class="oi oi-arrow-thick-right"></span>
             </button>
         </h3>
-        <Line Data="day.WattPeaks" Config="config" />
+        <Area Data="day.WattPeaks" Config="aConf" />
         <h4 class="bg-light text-center p-3">
             Total Generation: <b>@day.TotalKiloWattHours</b> kWh
         </h4>
@@ -32,14 +32,22 @@
 @code{
     private PVDay? day;
 
-    private LineConfig config = new ()
+    private AreaConfig aConf = new()
     {
-        Title = new(),
         Padding = "auto",
-        ForceFit = true,
+        AutoFit = true,
         XField = "Time",
         YField = "Watts",
-        Smooth = false
+        Smooth = false,
+        Line = new()
+        {
+             Size = 1,
+                Color = "#5598d7"
+        },
+        AreaStyle = new()
+        {
+            Fill = "l(270) 0:#ffffff 0.5:#7ec2f3 1:#1890ff",
+        }
     };
 
     protected override async Task OnInitializedAsync()
