@@ -8,6 +8,8 @@ public class PVDay
     public string DayName { get; set; }
     public decimal TotalKiloWattHours { get; set; }
     public IEnumerable<WattPeak> WattPeaks { get; set; }
+    public int GraphTickCount { get; set; }
+    public int[] GraphRange { get; set; }
 
     public class WattPeak
     {

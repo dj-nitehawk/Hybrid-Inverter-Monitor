@@ -1,4 +1,5 @@
 ﻿using InverterMon.Server.Persistance;
+using InverterMon.Server.Persistance.Settings;
 using InverterMon.Shared.Models;
 
 namespace InverterMon.Server.Endpoints.PVLog.GetPVForDay;
@@ -6,6 +7,7 @@ namespace InverterMon.Server.Endpoints.PVLog.GetPVForDay;
 public class Endpoint : Endpoint<Request, PVDay>
 {
     public Database Db { get; set; }
+    public UserSettings UsrSettings { get; set; }
 
     public override void Configure()
     {
@@ -37,6 +39,8 @@ public class Endpoint : Endpoint<Request, PVDay>
                 pvDay.WattPeaks.Add(i.ToString(), Random.Shared.Next(2000));
         }
 
+        Response.GraphRange = UsrSettings.PVGraphRange;
+        Response.GraphTickCount = UsrSettings.PVGraphTickCount;
         Response.TotalKiloWattHours = Math.Round(pvDay.TotalWattHours / 1000, 2);
         Response.DayNumber = pvDay.Id;
         Response.DayName = DateOnly.FromDayNumber(pvDay.Id).ToString("dddd MMMM dd");

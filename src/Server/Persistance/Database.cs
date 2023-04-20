@@ -73,9 +73,7 @@ public class Database
         {
             cmd.Result.ResetPVWattHourAccumulation(); //it's a new day. start accumulation from scratch.
             today = new PVGeneration { Id = todayDayNumber };
-            today.AllocateBuckets(settings.SunlightStartHour, settings.SunlightEndHour);
             today.SetTotalWattHours(0);
-
             pvGenCollection.Insert(today);
         }
         db.Checkpoint();

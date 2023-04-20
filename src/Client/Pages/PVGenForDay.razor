@@ -60,6 +60,12 @@
         try
         {
             day = await Http.GetFromJsonAsync<PVDay>($"api/pv-log/get-pv-for-day/{dayNumber ?? DateOnly.FromDateTime(DateTime.Now).DayNumber}");
+            aConf.XAxis = new()
+            {
+                Range = day?.GraphRange,
+                TickCount = day?.GraphTickCount
+            };
+            //StateHasChanged();
         }
         catch (Exception)
         {

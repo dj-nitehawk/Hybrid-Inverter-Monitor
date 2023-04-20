@@ -2,12 +2,12 @@
 
 public static class PVGenExtensions
 {
-    private static readonly TimeSpan bucketDuration = TimeSpan.FromMinutes(5);
+    public static TimeSpan BucketDuration => TimeSpan.FromMinutes(5);
     private static readonly string bucketKey = "HH:mm";
 
     public static string ToTimeBucket(this DateTime dt)
     {
-        var delta = dt.Ticks % bucketDuration.Ticks;
+        var delta = dt.Ticks % BucketDuration.Ticks;
         return new DateTime(dt.Ticks - delta, dt.Kind).ToString(bucketKey);
     }
 
@@ -18,7 +18,7 @@ public static class PVGenExtensions
         while (timeOfDay.Hour < endHour)
         {
             pvGen.WattPeaks[timeOfDay.ToString(bucketKey)] = 0;
-            timeOfDay = timeOfDay.AddMinutes(bucketDuration.TotalMinutes);
+            timeOfDay = timeOfDay.AddMinutes(BucketDuration.TotalMinutes);
         }
     }
 }
