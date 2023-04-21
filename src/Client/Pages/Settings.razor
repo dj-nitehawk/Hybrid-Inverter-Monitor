@@ -317,8 +317,6 @@
                     Timeout = TimeSpan.FromSeconds(10)
                 };
 
-                await Task.Delay(3000);
-
                 chargeAmpereValues = await client.GetFromJsonAsync<ChargeAmpereValues>("api/settings/get-charge-ampere-values");
 
                 // some inverters only seem to support one of the two commands over usb
