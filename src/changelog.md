@@ -1,4 +1,3 @@
 ## changelog
-- disable buttons in settings page until data is loaded in (applies only to trouble mode)
-- pre-allocate pv graph slots
-- change pv graph style
+- revert pre-allocating of pv graph
+- cache charge ampere values on first call and prevent refetching from inverter

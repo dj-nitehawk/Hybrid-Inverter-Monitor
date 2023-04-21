@@ -9,6 +9,8 @@ public class Endpoint : EndpointWithoutRequest<ChargeAmpereValues>
     public CommandQueue Queue { get; set; }
     public UserSettings UserSettings { get; set; }
 
+    private static ChargeAmpereValues? ampereValues;
+
     public override void Configure()
     {
         Get("settings/get-charge-ampere-values");
@@ -27,18 +29,23 @@ public class Endpoint : EndpointWithoutRequest<ChargeAmpereValues>
             return;
         }
 
-        var cmd1 = new InverterService.Commands.GetChargeAmpereValues(false);
-        var cmd2 = new InverterService.Commands.GetChargeAmpereValues(true);
-        Queue.AddCommands(cmd1, cmd2);
-
-        await Task.WhenAll(
-            cmd1.WhileProcessing(c, 5000),
-            cmd2.WhileProcessing(c, 5000));
-
-        await SendAsync(new()
+        if (ampereValues is null)
         {
-            CombinedAmpereValues = cmd1.Result,
-            UtilityAmpereValues = cmd2.Result
-        });
+            var cmd1 = new InverterService.Commands.GetChargeAmpereValues(false);
+            var cmd2 = new InverterService.Commands.GetChargeAmpereValues(true);
+            Queue.AddCommands(cmd1, cmd2);
+
+            await Task.WhenAll(
+                cmd1.WhileProcessing(c, 5000),
+                cmd2.WhileProcessing(c, 5000));
+
+            ampereValues = new()
+            {
+                CombinedAmpereValues = cmd1.Result,
+                UtilityAmpereValues = cmd2.Result
+            };
+        }
+
+        await SendAsync(ampereValues);
     }
 }
