@@ -1,3 +1,5 @@
 ## changelog
-- revert pre-allocating of pv graph
-- cache charge ampere values on first call and prevent refetching from inverter
+
+- reduce jk bms charge ampere value cache size for faster updates
+- upgrade project to .net 8
+- misc. minor code refactors
