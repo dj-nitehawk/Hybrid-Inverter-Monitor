@@ -1,6 +1,6 @@
-﻿using InverterMon.Server.BatteryService;
+﻿using System.Runtime.CompilerServices;
+using InverterMon.Server.BatteryService;
 using InverterMon.Shared.Models;
-using System.Runtime.CompilerServices;
 
 namespace InverterMon.Server.Endpoints.GetBmsStatus;
 
@@ -16,7 +16,6 @@ public class Endpoint : EndpointWithoutRequest<object>
 
     public override async Task HandleAsync(CancellationToken c)
     {
-
         try
         {
             if (Bms.IsConnected)
@@ -35,6 +34,7 @@ public class Endpoint : EndpointWithoutRequest<object>
         while (!c.IsCancellationRequested)
         {
             yield return Bms.Status;
+
             await Task.Delay(1000, c);
         }
     }

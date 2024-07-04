@@ -7,17 +7,17 @@ class CommandExecutor : BackgroundService
 {
     readonly CommandQueue queue;
     readonly ILogger<CommandExecutor> logger;
-    readonly string devPath = "/dev/hidraw0";
-    readonly bool isTroubleMode;
-    readonly string mppPath = "/usr/local/bin/mpp-solar";
+    readonly string _devPath = "/dev/hidraw0";
+    readonly bool _isTroubleMode;
+    readonly string _mppPath = "/usr/local/bin/mpp-solar";
 
     public CommandExecutor(CommandQueue queue, IConfiguration config, ILogger<CommandExecutor> log)
     {
         this.queue = queue;
-        this.logger = log;
-        devPath = config["LaunchSettings:DeviceAddress"] ?? devPath;
-        isTroubleMode = config["LaunchSettings:TroubleMode"] == "yes";
-        mppPath = config["LaunchSettings:MppSolarPath"] ?? mppPath;
+        logger = log;
+        _devPath = config["LaunchSettings:DeviceAddress"] ?? _devPath;
+        _isTroubleMode = config["LaunchSettings:TroubleMode"] == "yes";
+        _mppPath = config["LaunchSettings:MppSolarPath"] ?? _mppPath;
 
         log.LogInformation("connecting to the inverter...");
 
@@ -28,22 +28,17 @@ class CommandExecutor : BackgroundService
             Thread.Sleep(10000);
 
         if (sw.Elapsed.TotalMinutes >= 5)
-        {
             log.LogInformation("inverter connecting timed out!");
-        }
     }
 
     bool Connect()
     {
-        if (!Inverter.Connect(devPath, logger))
-        {
+        if (!Inverter.Connect(_devPath, logger))
             return false;
-        }
-        else
-        {
-            logger.LogInformation("connected to inverter at: [{adr}]", devPath);
-            return true;
-        }
+
+        logger.LogInformation("connected to inverter at: [{adr}]", _devPath);
+
+        return true;
     }
 
     protected override async Task ExecuteAsync(CancellationToken ct)
@@ -54,6 +49,7 @@ class CommandExecutor : BackgroundService
         while (!ct.IsCancellationRequested && delay <= timeout.TotalMilliseconds)
         {
             var cmd = queue.GetCommand();
+
             if (cmd is not null)
             {
                 try
@@ -71,31 +67,29 @@ class CommandExecutor : BackgroundService
                 }
             }
             else
-            {
                 await Task.Delay(500, ct);
-            }
         }
         logger.LogError("command execution halted due to excessive failures!");
     }
 
     async Task ExecuteCommand(ICommand command, CancellationToken ct)
     {
-        if (isTroubleMode && command.IsTroublesomeCmd)
+        if (_isTroubleMode && command.IsTroublesomeCmd)
         {
             Inverter.Disconnect();
             using var process = new Process();
-            process.StartInfo.FileName = mppPath;
-            process.StartInfo.Arguments = $"-p {devPath} -o raw -c {command.CommandString}";
+            process.StartInfo.FileName = _mppPath;
+            process.StartInfo.Arguments = $"-p {_devPath} -o raw -c {command.CommandString}";
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.Start();
             command.Start();
             var output = await process.StandardOutput.ReadToEndAsync(ct);
-            var result = output.ParseCLI()[1..^1];
+            var result = output.ParseCli()[1..^1];
             command.Parse(result);
             command.End();
             await process.WaitForExitAsync(ct);
-            Inverter.Connect(devPath, logger);
+            Inverter.Connect(_devPath, logger);
         }
         else
         {

@@ -9,7 +9,7 @@ public class Endpoint : EndpointWithoutRequest<ChargeAmpereValues>
     public CommandQueue Queue { get; set; }
     public UserSettings UserSettings { get; set; }
 
-    static ChargeAmpereValues? ampereValues;
+    static ChargeAmpereValues? _ampereValues;
 
     public override void Configure()
     {
@@ -21,15 +21,17 @@ public class Endpoint : EndpointWithoutRequest<ChargeAmpereValues>
     {
         if (Env.IsDevelopment())
         {
-            await SendAsync(new()
-            {
-                CombinedAmpereValues = new[] { "010", "020", "030" },
-                UtilityAmpereValues = new[] { "04", "10", "20" }
-            });
+            await SendAsync(
+                new()
+                {
+                    CombinedAmpereValues = new[] { "010", "020", "030" },
+                    UtilityAmpereValues = new[] { "04", "10", "20" }
+                });
+
             return;
         }
 
-        if (ampereValues is null)
+        if (_ampereValues is null)
         {
             var cmd1 = new InverterService.Commands.GetChargeAmpereValues(false);
             var cmd2 = new InverterService.Commands.GetChargeAmpereValues(true);
@@ -39,13 +41,13 @@ public class Endpoint : EndpointWithoutRequest<ChargeAmpereValues>
                 cmd1.WhileProcessing(c, 5000),
                 cmd2.WhileProcessing(c, 5000));
 
-            ampereValues = new()
+            _ampereValues = new()
             {
                 CombinedAmpereValues = cmd1.Result,
                 UtilityAmpereValues = cmd2.Result
             };
         }
 
-        await SendAsync(ampereValues);
+        await SendAsync(_ampereValues);
     }
 }

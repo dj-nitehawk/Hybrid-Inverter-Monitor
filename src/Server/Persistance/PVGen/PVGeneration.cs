@@ -10,15 +10,13 @@ public class PVGeneration
     {
         var key = DateTime.Now.ToTimeBucket();
 
-        if (WattPeaks.ContainsKey(key))
+        if (WattPeaks.TryGetValue(key, out var value))
         {
-            if (WattPeaks[key] < newValue)
+            if (value < newValue)
                 WattPeaks[key] = newValue;
         }
         else
-        {
             WattPeaks[key] = newValue;
-        }
     }
 
     public void SetTotalWattHours(decimal totalWattHours)

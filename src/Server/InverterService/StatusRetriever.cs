@@ -3,19 +3,8 @@ using InverterMon.Server.Persistance.Settings;
 
 namespace InverterMon.Server.InverterService;
 
-class StatusRetriever : BackgroundService
+class StatusRetriever(CommandQueue queue, Database db, UserSettings userSettings) : BackgroundService
 {
-    readonly CommandQueue queue;
-    readonly Database db;
-    readonly UserSettings userSettings;
-
-    public StatusRetriever(CommandQueue queue, Database db, UserSettings userSettings)
-    {
-        this.queue = queue;
-        this.db = db;
-        this.userSettings = userSettings;
-    }
-
     protected override async Task ExecuteAsync(CancellationToken c)
     {
         var cmd = queue.StatusCommand;
@@ -29,7 +18,7 @@ class StatusRetriever : BackgroundService
                 cmd.Result.PV_MaxCapacity = userSettings.PV_MaxCapacity;
 
                 queue.AddCommands(cmd);
-                _ = db.UpdateTodaysPVGeneration(cmd, c);
+                _ = db.UpdateTodaysPvGeneration(cmd, c);
             }
             await Task.Delay(Constants.StatusPollingFrequencyMillis);
         }

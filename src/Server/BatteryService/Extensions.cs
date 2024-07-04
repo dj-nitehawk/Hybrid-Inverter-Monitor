@@ -6,11 +6,11 @@ namespace InverterMon.Server.BatteryService;
 public static class Extensions
 {
     //this is the get all data command
-    static readonly byte[] cmd = Convert.FromHexString("4E5700130000000006030000000000006800000129");
+    static readonly byte[] _cmd = Convert.FromHexString("4E5700130000000006030000000000006800000129");
 
     public static void QueryData(this SerialPortInput port)
     {
-        port.SendMessage(cmd);
+        port.SendMessage(_cmd);
     }
 
     //note: the response is the byte representation of hex digits.
@@ -19,12 +19,14 @@ public static class Extensions
     public static ushort Read2Bytes(this Span<byte> data, ushort startPos)
     {
         var hex = Convert.ToHexString(data.Slice(startPos, 2));
+
         return ushort.Parse(hex, NumberStyles.HexNumber);
     }
 
     public static uint Read4Bytes(this Span<byte> input, ushort startPos)
     {
         var hex = Convert.ToHexString(input.Slice(startPos, 4));
+
         return uint.Parse(hex, NumberStyles.HexNumber);
     }
 
@@ -38,14 +40,14 @@ public static class Extensions
         if (header is not "4E57")
             return false;
 
-        short crc_calc = 0;
+        short crcCalc = 0;
 
-        foreach (var b in data[0..^3])//sum up all bytes excluding the last 4 bytes
-            crc_calc += b;
+        foreach (var b in data[..^3]) //sum up all bytes excluding the last 4 bytes
+            crcCalc += b;
 
         //convert last 2 bytes to hex and get short from that hex
-        var crc_lo = data[^2..^0].Read2Bytes(0);
+        var crcLo = data[^2..].Read2Bytes(0);
 
-        return crc_calc == crc_lo;
+        return crcCalc == crcLo;
     }
 }

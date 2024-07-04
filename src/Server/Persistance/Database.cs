@@ -8,100 +8,99 @@ namespace InverterMon.Server.Persistance;
 
 public class Database
 {
-    readonly LiteDatabase db;
-    readonly CommandQueue queue;
-    readonly UserSettings settings;
-    readonly ILiteCollection<PVGeneration> pvGenCollection;
-    readonly ILiteCollection<UserSettings> usrSettingsCollection;
-    PVGeneration? today;
+    readonly LiteDatabase _db;
+    readonly CommandQueue _queue;
+    readonly UserSettings _settings;
+    readonly ILiteCollection<PVGeneration> _pvGenCollection;
+    readonly ILiteCollection<UserSettings> _usrSettingsCollection;
+    PVGeneration? _today;
 
     public Database(IHostApplicationLifetime lifetime, CommandQueue queue, UserSettings settings)
     {
-        this.queue = queue;
-        this.settings = settings;
-        db = new("InverterMon.db") { CheckpointSize = 0 };
-        lifetime.ApplicationStopping.Register(() => db?.Dispose());
-        pvGenCollection = db.GetCollection<PVGeneration>();
-        usrSettingsCollection = db.GetCollection<UserSettings>();
-        RestoreTodaysPVWattHours();
+        _queue = queue;
+        _settings = settings;
+        _db = new("InverterMon.db") { CheckpointSize = 0 };
+        lifetime.ApplicationStopping.Register(() => _db?.Dispose());
+        _pvGenCollection = _db.GetCollection<PVGeneration>();
+        _usrSettingsCollection = _db.GetCollection<UserSettings>();
+        RestoreTodaysPvWattHours();
         RestoreUserSettings();
     }
 
     //todo: break apart this class and put seperated logic in each vertical slice
 
-    public void RestoreTodaysPVWattHours()
+    public void RestoreTodaysPvWattHours()
     {
-        var todayDayNumer = DateOnly.FromDateTime(DateTime.Now).DayNumber;
+        var todayDayNumber = DateOnly.FromDateTime(DateTime.Now).DayNumber;
 
-        today = pvGenCollection
-            .Query()
-            .Where(pg => pg.Id == todayDayNumer)
-            .SingleOrDefault();
+        _today = _pvGenCollection
+                 .Query()
+                 .Where(pg => pg.Id == todayDayNumber)
+                 .SingleOrDefault();
 
-        if (today is not null)
-        {
-            queue.StatusCommand.Result.RestorePVWattHours(today.TotalWattHours);
-        }
+        if (_today is not null)
+            _queue.StatusCommand.Result.RestorePVWattHours(_today.TotalWattHours);
         else
         {
-            today = new PVGeneration { Id = todayDayNumer };
-            today.SetTotalWattHours(0);
-            queue.StatusCommand.Result.RestorePVWattHours(0);
-            pvGenCollection.Insert(today);
-            db.Checkpoint();
+            _today = new() { Id = todayDayNumber };
+            _today.SetTotalWattHours(0);
+            _queue.StatusCommand.Result.RestorePVWattHours(0);
+            _pvGenCollection.Insert(_today);
+            _db.Checkpoint();
         }
     }
 
-    public async Task UpdateTodaysPVGeneration(GetStatus cmd, CancellationToken c)
+    public async Task UpdateTodaysPvGeneration(GetStatus cmd, CancellationToken c)
     {
         var hourNow = DateTime.Now.Hour;
 
-        if (hourNow < settings.SunlightStartHour || hourNow >= settings.SunlightEndHour)
+        if (hourNow < _settings.SunlightStartHour || hourNow >= _settings.SunlightEndHour)
             return;
 
         await cmd.WhileProcessing(c);
 
         var todayDayNumber = DateOnly.FromDateTime(DateTime.Now).DayNumber;
 
-        if (today?.Id == todayDayNumber)
+        if (_today?.Id == todayDayNumber)
         {
-            today.SetWattPeaks(cmd.Result.PVInputWatt);
-            today.SetTotalWattHours(cmd.Result.PVInputWattHour);
-            pvGenCollection.Update(today);
+            _today.SetWattPeaks(cmd.Result.PVInputWatt);
+            _today.SetTotalWattHours(cmd.Result.PVInputWattHour);
+            _pvGenCollection.Update(_today);
         }
         else
         {
             cmd.Result.ResetPVWattHourAccumulation(); //it's a new day. start accumulation from scratch.
-            today = new PVGeneration { Id = todayDayNumber };
-            today.SetTotalWattHours(0);
-            pvGenCollection.Insert(today);
+            _today = new() { Id = todayDayNumber };
+            _today.SetTotalWattHours(0);
+            _pvGenCollection.Insert(_today);
         }
-        db.Checkpoint();
+        _db.Checkpoint();
     }
 
-    public PVGeneration? GetPVGenForDay(int dayNumer)
-        => pvGenCollection.FindOne(p => p.Id == dayNumer);
+    public PVGeneration? GetPvGenForDay(int dayNumber)
+        => _pvGenCollection.FindOne(p => p.Id == dayNumber);
 
     public void RestoreUserSettings()
     {
-        var settings = usrSettingsCollection.FindById(1);
+        var settings = _usrSettingsCollection.FindById(1);
+
         if (settings is not null)
         {
-            this.settings.PV_MaxCapacity = settings.PV_MaxCapacity;
-            this.settings.BatteryCapacity = settings.BatteryCapacity;
-            this.settings.SunlightStartHour = settings.SunlightStartHour;
-            this.settings.SunlightEndHour = settings.SunlightEndHour;
+            _settings.PV_MaxCapacity = settings.PV_MaxCapacity;
+            _settings.BatteryCapacity = settings.BatteryCapacity;
+            _settings.SunlightStartHour = settings.SunlightStartHour;
+            _settings.SunlightEndHour = settings.SunlightEndHour;
         }
         else
         {
-            usrSettingsCollection.Insert(this.settings);
-            db.Checkpoint();
+            _usrSettingsCollection.Insert(_settings);
+            _db.Checkpoint();
         }
     }
 
     public void UpdateUserSettings(UserSettings settings)
     {
-        usrSettingsCollection.Update(settings);
-        db.Checkpoint();
+        _usrSettingsCollection.Update(settings);
+        _db.Checkpoint();
     }
 }

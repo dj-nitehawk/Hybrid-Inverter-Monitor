@@ -14,8 +14,7 @@ public class GetStatus : Command<InverterStatus>
         if (responseFromInverter.StartsWith("(NAK"))
             return;
 
-        string[] parts = responseFromInverter[1..]
-            .Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        var parts = responseFromInverter[1..].Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
         Result.GridVoltage = decimal.Parse(parts[0]);
         Result.OutputVoltage = decimal.Parse(parts[2]);

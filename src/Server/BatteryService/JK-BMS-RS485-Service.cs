@@ -8,47 +8,49 @@ public class JkBms
     public BMSStatus Status { get; } = new();
     public bool IsConnected => Status.PackVoltage > 0;
 
-    readonly int pollFrequencyMillis = 1000;
-    readonly AmpValQueue recentAmpReadings = new(10); //avg value over 10 readings (~10secs)
-    readonly SerialPortInput bms = new();
+    readonly int _pollFrequencyMillis = 1000;
+    readonly AmpValQueue _recentAmpReadings = new(3); //avg value over 10 readings (~3secs)
+    readonly SerialPortInput _bms = new();
 
-    public JkBms(IConfiguration config, ILogger<JkBms> logger, IWebHostEnvironment env, IHostApplicationLifetime applife)
+    public JkBms(IConfiguration config, ILogger<JkBms> logger, IWebHostEnvironment env, IHostApplicationLifetime appLife)
     {
         if (env.IsDevelopment())
         {
             FillDummyData();
+
             return;
         }
 
         var bmsAddress = config["LaunchSettings:JkBmsAddress"] ?? "/dev/ttyUSB0";
-        bms.SetPort(bmsAddress, 115200);
-        bms.ConnectionStatusChanged += ConnectionStatusChanged;
-        bms.MessageReceived += MessageReceived;
-        applife.ApplicationStopping.Register(bms.Disconnect);
+        _bms.SetPort(bmsAddress);
+        _bms.ConnectionStatusChanged += ConnectionStatusChanged;
+        _bms.MessageReceived += MessageReceived;
+        appLife.ApplicationStopping.Register(_bms.Disconnect);
 
-        Task.Run(async () =>
-        {
-            var ct = new CancellationTokenSource(TimeSpan.FromMinutes(5)).Token;
-            while (!ct.IsCancellationRequested && !bms.IsConnected)
+        Task.Run(
+            async () =>
             {
-                var success = bms.Connect();
-                if (success)
+                var ct = new CancellationTokenSource(TimeSpan.FromMinutes(5)).Token;
+
+                while (!ct.IsCancellationRequested && !_bms.IsConnected)
                 {
-                    logger.LogInformation("bms port opened!");
+                    var success = _bms.Connect();
+
+                    if (success)
+                        logger.LogInformation("bms port opened!");
+                    else
+                    {
+                        logger.LogWarning("trying to open bms port at: {address}", bmsAddress);
+                        await Task.Delay(10000);
+                    }
                 }
-                else
-                {
-                    logger.LogWarning("trying to open bms port at: {address}", bmsAddress);
-                    await Task.Delay(10000);
-                }
-            }
-        });
+            });
     }
 
     void ConnectionStatusChanged(object sender, ConnectionStatusChangedEventArgs e)
     {
         if (e.Connected)
-            bms.QueryData();
+            _bms.QueryData();
     }
 
     void MessageReceived(object sender, MessageReceivedEventArgs evnt)
@@ -57,23 +59,23 @@ public class JkBms
 
         if (!data.IsValid())
         {
-            Thread.Sleep(pollFrequencyMillis);
-            bms.QueryData();
+            Thread.Sleep(_pollFrequencyMillis);
+            _bms.QueryData();
+
             return;
         }
 
-        var res = data[11..]; //skip the first 10 bytes
+        var res = data[11..];       //skip the first 10 bytes
         var cellCount = res[1] / 3; //pos 1 is total cell bytes length. 3 bytes per cell.
 
         ushort pos = 0;
         for (byte i = 1; i <= cellCount; i++)
-        {
+
             //cell voltage groups (of 3 bytes) start at pos 2
             //first cell voltage starts at position 3 (pos 2 is cell number). voltage value is next 2 bytes.
             // ex: .....,1,X,X,2,Y,Y,3,Z,Z
             //position is increased by 3 bytes in order to skip the address/code byte
             Status.Cells[i] = res.Read2Bytes(pos += 3) / 1000f;
-        }
 
         Status.MosTemp = res.Read2Bytes(pos += 3);
         Status.Temp1 = res.Read2Bytes(pos += 3);
@@ -81,13 +83,15 @@ public class JkBms
         Status.PackVoltage = res.Read2Bytes(pos += 3) / 100f;
 
         var rawVal = res.Read2Bytes(pos += 3);
-        Status.IsCharging = Convert.ToBoolean(int.Parse(Convert.ToString(rawVal, 2).PadLeft(16, '0')[..1])); //pick first bit of padded 16 bit binary representation and turn it in to a bool
+        Status.IsCharging =
+            Convert.ToBoolean(
+                int.Parse(Convert.ToString(rawVal, 2).PadLeft(16, '0')[..1])); //pick first bit of padded 16 bit binary representation and turn it in to a bool
 
         rawVal &= (1 << 15) - 1; //unset the MSB with a bitmask to get correct ampere reading
         var ampVal = rawVal / 100f;
-        recentAmpReadings.Store(ampVal, Status.IsCharging);
+        _recentAmpReadings.Store(ampVal, Status.IsCharging);
 
-        Status.AvgCurrentAmps = recentAmpReadings.GetAverage();
+        Status.AvgCurrentAmps = _recentAmpReadings.GetAverage();
         Status.CapacityPct = Convert.ToUInt16(res[pos += 3]);
         Status.IsWarning = res.Read2Bytes(pos += 15) > 0;
         Status.PackCapacity = res.Read4Bytes(pos += 88);
@@ -110,8 +114,8 @@ public class JkBms
             Status.TimeMins = 0;
         }
 
-        Thread.Sleep(pollFrequencyMillis);
-        bms.QueryData();
+        Thread.Sleep(_pollFrequencyMillis);
+        _bms.QueryData();
     }
 
     void FillDummyData()

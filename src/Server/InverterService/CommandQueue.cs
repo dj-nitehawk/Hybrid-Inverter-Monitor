@@ -1,5 +1,5 @@
-﻿using InverterMon.Server.InverterService.Commands;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
+using InverterMon.Server.InverterService.Commands;
 using ICommand = InverterMon.Server.InverterService.Commands.ICommand;
 
 namespace InverterMon.Server.InverterService;
@@ -9,22 +9,24 @@ public class CommandQueue
     public bool IsAcceptingCommands { get; set; } = true;
     public GetStatus StatusCommand { get; } = new();
 
-    readonly ConcurrentQueue<ICommand> toProcess = new();
+    readonly ConcurrentQueue<ICommand> _toProcess = new();
 
     public bool AddCommands(params ICommand[] commands)
     {
         if (IsAcceptingCommands)
         {
             foreach (var cmd in commands)
-                toProcess.Enqueue(cmd);
+                _toProcess.Enqueue(cmd);
+
             return true;
         }
+
         return false;
     }
 
     public ICommand? GetCommand()
-        => toProcess.TryPeek(out var command) ? command : null;
+        => _toProcess.TryPeek(out var command) ? command : null;
 
     public void RemoveCommand()
-        => toProcess.TryDequeue(out _);
+        => _toProcess.TryDequeue(out _);
 }

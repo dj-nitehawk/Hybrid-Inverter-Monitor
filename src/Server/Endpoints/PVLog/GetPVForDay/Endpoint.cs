@@ -17,11 +17,12 @@ public class Endpoint : Endpoint<Request, PVDay>
 
     public override async Task HandleAsync(Request r, CancellationToken c)
     {
-        var pvDay = Db.GetPVGenForDay(r.DayNumber);
+        var pvDay = Db.GetPvGenForDay(r.DayNumber);
 
         if (pvDay is null)
         {
             await SendNotFoundAsync();
+
             return;
         }
 
@@ -30,12 +31,12 @@ public class Endpoint : Endpoint<Request, PVDay>
             pvDay = new()
             {
                 Id = DateOnly.FromDateTime(DateTime.Now).DayNumber,
-                TotalWattHours = Random.Shared.Next(3000),
+                TotalWattHours = Random.Shared.Next(3000)
             };
 
             //pvDay.AllocateBuckets(6, 18);
 
-            for (int i = 0; i < 97; i++)
+            for (var i = 0; i < 97; i++)
                 pvDay.WattPeaks.Add(i.ToString(), Random.Shared.Next(2000));
         }
 
@@ -44,10 +45,11 @@ public class Endpoint : Endpoint<Request, PVDay>
         Response.TotalKiloWattHours = Math.Round(pvDay.TotalWattHours / 1000, 2);
         Response.DayNumber = pvDay.Id;
         Response.DayName = DateOnly.FromDayNumber(pvDay.Id).ToString("dddd MMMM dd");
-        Response.WattPeaks = pvDay.WattPeaks.Select(p => new PVDay.WattPeak
-        {
-            MinuteBucket = p.Key,
-            PeakWatt = p.Value
-        });
+        Response.WattPeaks = pvDay.WattPeaks.Select(
+            p => new PVDay.WattPeak
+            {
+                MinuteBucket = p.Key,
+                PeakWatt = p.Value
+            });
     }
 }

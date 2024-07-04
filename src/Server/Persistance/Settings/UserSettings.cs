@@ -10,16 +10,17 @@ public class UserSettings
     public int BatteryCapacity { get; set; } = 100;
     public int SunlightStartHour { get; set; } = 6;
     public int SunlightEndHour { get; set; } = 18;
-    public int[] PVGraphRange => new[] { 0, (SunlightEndHour - SunlightStartHour) * 60 };
+    public int[] PVGraphRange => [0, (SunlightEndHour - SunlightStartHour) * 60];
     public int PVGraphTickCount => PVGraphRange[1] / (int)PVGenExtensions.BucketDuration.TotalMinutes;
 
-    public SystemSpec ToSystemSpec() => new()
-    {
-        PV_MaxCapacity = PV_MaxCapacity,
-        BatteryCapacity = BatteryCapacity,
-        SunlightStartHour = SunlightStartHour,
-        SunlightEndHour = SunlightEndHour
-    };
+    public SystemSpec ToSystemSpec()
+        => new()
+        {
+            PV_MaxCapacity = PV_MaxCapacity,
+            BatteryCapacity = BatteryCapacity,
+            SunlightStartHour = SunlightStartHour,
+            SunlightEndHour = SunlightEndHour
+        };
 
     public void FromSystemSpec(SystemSpec spec)
     {

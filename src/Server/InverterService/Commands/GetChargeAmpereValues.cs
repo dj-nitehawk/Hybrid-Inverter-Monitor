@@ -1,3 +1,5 @@
+// ReSharper disable VirtualMemberCallInConstructor
+
 namespace InverterMon.Server.InverterService.Commands;
 
 class GetChargeAmpereValues : Command<List<string>>
@@ -19,8 +21,8 @@ class GetChargeAmpereValues : Command<List<string>>
             return;
 
         var parts = responseFromInverter[1..]
-            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
-            .Select(x => x[..3]);
+                    .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x => x[..3]);
 
         if (parts.Any())
             Result.Clear(); //remove default values

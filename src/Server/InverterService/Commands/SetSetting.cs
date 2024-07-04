@@ -1,3 +1,5 @@
+// ReSharper disable VirtualMemberCallInConstructor
+
 namespace InverterMon.Server.InverterService.Commands;
 
 class SetSetting : Command<bool>

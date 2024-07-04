@@ -1,4 +1,6 @@
-﻿namespace InverterMon.Server.InverterService.Commands;
+﻿// ReSharper disable UnassignedGetOnlyAutoProperty
+
+namespace InverterMon.Server.InverterService.Commands;
 
 public interface ICommand
 {

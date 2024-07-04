@@ -1,10 +1,10 @@
 global using FastEndpoints;
+using System.Globalization;
+using System.Net;
 using InverterMon.Server.BatteryService;
 using InverterMon.Server.InverterService;
 using InverterMon.Server.Persistance;
 using InverterMon.Server.Persistance.Settings;
-using System.Globalization;
-using System.Net;
 
 //avoid parsing issues with non-english cultures
 var cultureInfo = new CultureInfo("en-US");

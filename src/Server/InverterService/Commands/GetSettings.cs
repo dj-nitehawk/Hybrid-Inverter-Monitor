@@ -37,8 +37,7 @@ class GetSettings : Command<CurrentSettings>
         if (responseFromInverter.StartsWith("(NAK"))
             return;
 
-        string[]? parts = responseFromInverter[1..]
-            .Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        var parts = responseFromInverter[1..].Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
         Result.BackToGridVoltage = decimal.Parse(parts[9 - 1]);
         Result.DischargeCuttOffVoltage = decimal.Parse(parts[10 - 1]);
