@@ -2,9 +2,9 @@
 
 public sealed class AmpValQueue
 {
-    private readonly int capacity;
-    private readonly Queue<float> queue = new();
-    private bool lastChargingState;
+    readonly int capacity;
+    readonly Queue<float> queue = new();
+    bool lastChargingState;
 
     public AmpValQueue(int fixedCapacity)
     {

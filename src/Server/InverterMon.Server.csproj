@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <NoWarn>CS8618;CA2016</NoWarn>
@@ -26,10 +26,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="SerialPortLib" Version="1.1.1" />
-        <PackageReference Include="FastEndpoints" Version="5.8.1" />
-        <PackageReference Include="LiteDB" Version="5.0.16" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.5" />
+        <PackageReference Include="SerialPortLib" Version="1.1.2" />
+        <PackageReference Include="FastEndpoints" Version="5.27.0" />
+        <PackageReference Include="LiteDB" Version="5.0.20" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.6" />
     </ItemGroup>
 
     <ItemGroup>

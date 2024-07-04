@@ -8,12 +8,12 @@ namespace InverterMon.Server.Persistance;
 
 public class Database
 {
-    private readonly LiteDatabase db;
-    private readonly CommandQueue queue;
-    private readonly UserSettings settings;
-    private readonly ILiteCollection<PVGeneration> pvGenCollection;
-    private readonly ILiteCollection<UserSettings> usrSettingsCollection;
-    private PVGeneration? today;
+    readonly LiteDatabase db;
+    readonly CommandQueue queue;
+    readonly UserSettings settings;
+    readonly ILiteCollection<PVGeneration> pvGenCollection;
+    readonly ILiteCollection<UserSettings> usrSettingsCollection;
+    PVGeneration? today;
 
     public Database(IHostApplicationLifetime lifetime, CommandQueue queue, UserSettings settings)
     {

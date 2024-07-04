@@ -9,7 +9,7 @@ public class CommandQueue
     public bool IsAcceptingCommands { get; set; } = true;
     public GetStatus StatusCommand { get; } = new();
 
-    private readonly ConcurrentQueue<ICommand> toProcess = new();
+    readonly ConcurrentQueue<ICommand> toProcess = new();
 
     public bool AddCommands(params ICommand[] commands)
     {

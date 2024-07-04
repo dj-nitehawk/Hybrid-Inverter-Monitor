@@ -9,7 +9,7 @@ public class Endpoint : EndpointWithoutRequest<ChargeAmpereValues>
     public CommandQueue Queue { get; set; }
     public UserSettings UserSettings { get; set; }
 
-    private static ChargeAmpereValues? ampereValues;
+    static ChargeAmpereValues? ampereValues;
 
     public override void Configure()
     {

@@ -5,8 +5,8 @@ namespace InverterMon.Server.InverterService;
 
 public static class Inverter
 {
-    private static SerialPort? _serialPort;
-    private static FileStream? _fileStream;
+    static SerialPort? _serialPort;
+    static FileStream? _fileStream;
 
     public static bool Connect(string devicePath, ILogger logger)
     {
@@ -50,7 +50,7 @@ public static class Inverter
         _fileStream?.Dispose();
     }
 
-    private static readonly byte[] _writeBuffer = new byte[512];
+    static readonly byte[] _writeBuffer = new byte[512];
     public static Task Write(string command, CancellationToken ct)
     {
         byte[] cmdBytes = Encoding.ASCII.GetBytes(command);
@@ -72,7 +72,7 @@ public static class Inverter
         return Task.CompletedTask;
     }
 
-    private static readonly byte[] _readBuffer = new byte[1024];
+    static readonly byte[] _readBuffer = new byte[1024];
     public static async Task<string> Read(CancellationToken ct)
     {
         int pos = 0;
@@ -119,7 +119,7 @@ public static class Inverter
         throw new InvalidOperationException("buffer overflow.");
     }
 
-    private static ushort CalculateXmodemCrc16(string data)
+    static ushort CalculateXmodemCrc16(string data)
     {
         ushort crc = 0;
         int length = data.Length;

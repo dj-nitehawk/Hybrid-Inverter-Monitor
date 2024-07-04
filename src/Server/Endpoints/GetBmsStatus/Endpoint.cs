@@ -30,7 +30,7 @@ public class Endpoint : EndpointWithoutRequest<object>
         }
     }
 
-    private async IAsyncEnumerable<BMSStatus> GetDataStream([EnumeratorCancellation] CancellationToken c)
+    async IAsyncEnumerable<BMSStatus> GetDataStream([EnumeratorCancellation] CancellationToken c)
     {
         while (!c.IsCancellationRequested)
         {

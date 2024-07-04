@@ -8,9 +8,9 @@ public class JkBms
     public BMSStatus Status { get; } = new();
     public bool IsConnected => Status.PackVoltage > 0;
 
-    private readonly int pollFrequencyMillis = 1000;
-    private readonly AmpValQueue recentAmpReadings = new(10); //avg value over 10 readings (~10secs)
-    private readonly SerialPortInput bms = new();
+    readonly int pollFrequencyMillis = 1000;
+    readonly AmpValQueue recentAmpReadings = new(10); //avg value over 10 readings (~10secs)
+    readonly SerialPortInput bms = new();
 
     public JkBms(IConfiguration config, ILogger<JkBms> logger, IWebHostEnvironment env, IHostApplicationLifetime applife)
     {
@@ -45,13 +45,13 @@ public class JkBms
         });
     }
 
-    private void ConnectionStatusChanged(object sender, ConnectionStatusChangedEventArgs e)
+    void ConnectionStatusChanged(object sender, ConnectionStatusChangedEventArgs e)
     {
         if (e.Connected)
             bms.QueryData();
     }
 
-    private void MessageReceived(object sender, MessageReceivedEventArgs evnt)
+    void MessageReceived(object sender, MessageReceivedEventArgs evnt)
     {
         var data = evnt.Data.AsSpan();
 
@@ -114,7 +114,7 @@ public class JkBms
         bms.QueryData();
     }
 
-    private void FillDummyData()
+    void FillDummyData()
     {
         Status.MosTemp = 30;
         Status.Temp1 = 28;

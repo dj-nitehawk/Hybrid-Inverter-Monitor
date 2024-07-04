@@ -1,6 +1,6 @@
 namespace InverterMon.Server.InverterService.Commands;
 
-internal class SetSetting : Command<bool>
+class SetSetting : Command<bool>
 {
     public override string CommandString { get; set; }
     public override bool IsTroublesomeCmd { get; } = true;

@@ -6,7 +6,7 @@ namespace InverterMon.Server.BatteryService;
 public static class Extensions
 {
     //this is the get all data command
-    private static readonly byte[] cmd = Convert.FromHexString("4E5700130000000006030000000000006800000129");
+    static readonly byte[] cmd = Convert.FromHexString("4E5700130000000006030000000000006800000129");
 
     public static void QueryData(this SerialPortInput port)
     {

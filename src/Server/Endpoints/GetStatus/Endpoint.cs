@@ -26,7 +26,7 @@ public class Endpoint : EndpointWithoutRequest<object>
         }
     }
 
-    private async IAsyncEnumerable<InverterStatus> GetDataStream([EnumeratorCancellation] CancellationToken c)
+    async IAsyncEnumerable<InverterStatus> GetDataStream([EnumeratorCancellation] CancellationToken c)
     {
         var blank = new InverterStatus();
 

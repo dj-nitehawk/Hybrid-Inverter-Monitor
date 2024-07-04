@@ -11,29 +11,34 @@ var cultureInfo = new CultureInfo("en-US");
 CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
-var builder = WebApplication.CreateBuilder();
-_ = int.TryParse(builder.Configuration["LaunchSettings:WebPort"] ?? "80", out var port);
-builder.WebHost.ConfigureKestrel(o => o.Listen(IPAddress.Any, port));
-builder.Services.AddSingleton<UserSettings>();
-builder.Services.AddSingleton<CommandQueue>();
-builder.Services.AddSingleton<JkBms>();
-builder.Services.AddSingleton<Database>();
-if (!builder.Environment.IsDevelopment())
-{
-    builder.Services.AddHostedService<CommandExecutor>();
-    builder.Services.AddHostedService<StatusRetriever>();
-}
-builder.Services.AddFastEndpoints();
+var bld = WebApplication.CreateBuilder();
 
-var app = builder.Build();
-if (app.Environment.IsDevelopment())
+_ = int.TryParse(bld.Configuration["LaunchSettings:WebPort"] ?? "80", out var port);
+bld.WebHost.ConfigureKestrel(o => o.Listen(IPAddress.Any, port));
+
+bld.Services
+   .AddSingleton<UserSettings>()
+   .AddSingleton<CommandQueue>()
+   .AddSingleton<JkBms>()
+   .AddSingleton<Database>();
+
+if (!bld.Environment.IsDevelopment())
 {
-    app.UseWebAssemblyDebugging();
+    bld.Services
+       .AddHostedService<CommandExecutor>()
+       .AddHostedService<StatusRetriever>();
 }
-app.UseBlazorFrameworkFiles();
-app.UseStaticFiles();
+
+bld.Services.AddFastEndpoints();
+
+var app = bld.Build();
+
+if (app.Environment.IsDevelopment())
+    app.UseWebAssemblyDebugging();
+
+app.UseBlazorFrameworkFiles()
+   .UseStaticFiles();
 app.MapFallbackToFile("index.html");
-app.UseRouting();
-app.UseAuthorization();
-app.UseFastEndpoints(c => c.Endpoints.RoutePrefix = "api");
+app.UseRouting()
+   .UseFastEndpoints(c => c.Endpoints.RoutePrefix = "api");
 app.Run();

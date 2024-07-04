@@ -3,11 +3,11 @@ using InverterMon.Server.Persistance.Settings;
 
 namespace InverterMon.Server.InverterService;
 
-internal class StatusRetriever : BackgroundService
+class StatusRetriever : BackgroundService
 {
-    private readonly CommandQueue queue;
-    private readonly Database db;
-    private readonly UserSettings userSettings;
+    readonly CommandQueue queue;
+    readonly Database db;
+    readonly UserSettings userSettings;
 
     public StatusRetriever(CommandQueue queue, Database db, UserSettings userSettings)
     {

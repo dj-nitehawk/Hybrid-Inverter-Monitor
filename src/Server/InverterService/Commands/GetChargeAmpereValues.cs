@@ -1,6 +1,6 @@
 namespace InverterMon.Server.InverterService.Commands;
 
-internal class GetChargeAmpereValues : Command<List<string>>
+class GetChargeAmpereValues : Command<List<string>>
 {
     public override string CommandString { get; set; } = "QMCHGCR";
     public override bool IsTroublesomeCmd { get; } = true;

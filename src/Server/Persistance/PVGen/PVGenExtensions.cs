@@ -3,7 +3,7 @@
 public static class PVGenExtensions
 {
     public static TimeSpan BucketDuration => TimeSpan.FromMinutes(5);
-    private static readonly string bucketKey = "HH:mm";
+    static readonly string bucketKey = "HH:mm";
 
     public static string ToTimeBucket(this DateTime dt)
     {

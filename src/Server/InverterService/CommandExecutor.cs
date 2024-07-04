@@ -3,13 +3,13 @@ using ICommand = InverterMon.Server.InverterService.Commands.ICommand;
 
 namespace InverterMon.Server.InverterService;
 
-internal class CommandExecutor : BackgroundService
+class CommandExecutor : BackgroundService
 {
-    private readonly CommandQueue queue;
-    private readonly ILogger<CommandExecutor> logger;
-    private readonly string devPath = "/dev/hidraw0";
-    private readonly bool isTroubleMode;
-    private readonly string mppPath = "/usr/local/bin/mpp-solar";
+    readonly CommandQueue queue;
+    readonly ILogger<CommandExecutor> logger;
+    readonly string devPath = "/dev/hidraw0";
+    readonly bool isTroubleMode;
+    readonly string mppPath = "/usr/local/bin/mpp-solar";
 
     public CommandExecutor(CommandQueue queue, IConfiguration config, ILogger<CommandExecutor> log)
     {
@@ -33,7 +33,7 @@ internal class CommandExecutor : BackgroundService
         }
     }
 
-    private bool Connect()
+    bool Connect()
     {
         if (!Inverter.Connect(devPath, logger))
         {
@@ -78,7 +78,7 @@ internal class CommandExecutor : BackgroundService
         logger.LogError("command execution halted due to excessive failures!");
     }
 
-    private async Task ExecuteCommand(ICommand command, CancellationToken ct)
+    async Task ExecuteCommand(ICommand command, CancellationToken ct)
     {
         if (isTroubleMode && command.IsTroublesomeCmd)
         {
