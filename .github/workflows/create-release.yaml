@@ -26,12 +26,12 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: 8.x
+          dotnet-version: 7.x
 
       - name: Publish Binaries
         working-directory: src/Server
         run: |
-          dotnet publish ./InverterMon.Server.csproj -c Release -r ${{ matrix.rid }} --self-contained -o ./bin/${{ matrix.rid }}
+          dotnet publish ./InverterMon.Server.csproj -c Release -r ${{ matrix.rid }} --self-contained -p:PublishTrimmed=false -o ./bin/${{ matrix.rid }}
           rm -rf ./bin/${{ matrix.rid }}/BlazorDebugProxy
           cd ./bin/${{ matrix.rid }}
           zip -r -9 ../${{ matrix.rid }}.zip ./*
