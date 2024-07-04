@@ -350,3 +350,5 @@ MigrationBackup/
 .ionide/
 
 *.db
+
+src/InverterMonWindow/.idea/.idea.InverterMonWindow.dir/.idea/

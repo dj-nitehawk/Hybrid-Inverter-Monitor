@@ -30,7 +30,7 @@ partial class Main
         web.DefaultBackgroundColor = Color.White;
         web.Location = new Point(-1, 1);
         web.Name = "web";
-        web.Size = new Size(577, 458);
+        web.Size = new Size(577, 526);
         web.Source = new Uri("http://inverter.djnitehawk.com", UriKind.Absolute);
         web.TabIndex = 0;
         web.ZoomFactor = 1D;
@@ -44,7 +44,7 @@ partial class Main
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(574, 459);
+        ClientSize = new Size(574, 527);
         Controls.Add(web);
         MaximizeBox = false;
         Name = "Main";

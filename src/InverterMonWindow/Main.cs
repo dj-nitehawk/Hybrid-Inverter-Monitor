@@ -23,7 +23,7 @@ public partial class Main : Form
             MessageBox.Show("Failed to register hotkey!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
     }
 
-    private void Main_Resize(object? sender, EventArgs e)
+    void Main_Resize(object? sender, EventArgs e)
     {
         if (WindowState == FormWindowState.Minimized)
         {
@@ -33,19 +33,19 @@ public partial class Main : Form
         }
     }
 
-    private void Main_FormClosed(object? sender, FormClosedEventArgs e)
+    void Main_FormClosed(object? sender, FormClosedEventArgs e)
     {
         Properties.Settings.Default.WindowPosition = Location;
         Properties.Settings.Default.Save();
         UnregisterHotKey(Handle, 1);
     }
 
-    private void Main_Load(object? sender, EventArgs e)
+    void Main_Load(object? sender, EventArgs e)
     {
         Location = Properties.Settings.Default.WindowPosition;
     }
 
-    private void TrayIcon_Click(object? sender, EventArgs e)
+    void TrayIcon_Click(object? sender, EventArgs e)
     {
         Show();
         WindowState = FormWindowState.Normal;
