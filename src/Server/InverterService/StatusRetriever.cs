@@ -3,22 +3,33 @@ using InverterMon.Server.Persistance.Settings;
 
 namespace InverterMon.Server.InverterService;
 
-class StatusRetriever(CommandQueue queue, Database db, UserSettings userSettings) : BackgroundService
+class StatusRetriever : BackgroundService
 {
+    readonly CommandQueue _queue;
+    readonly Database _db;
+    readonly UserSettings _userSettings;
+
+    public StatusRetriever(CommandQueue queue, Database db, UserSettings userSettings)
+    {
+        _queue = queue;
+        _db = db;
+        _userSettings = userSettings;
+    }
+
     protected override async Task ExecuteAsync(CancellationToken c)
     {
-        var cmd = queue.StatusCommand;
+        var cmd = _queue.StatusCommand;
 
         while (!c.IsCancellationRequested)
         {
-            if (queue.IsAcceptingCommands)
+            if (_queue.IsAcceptingCommands)
             {
                 //feels hacky. find a better solution.
-                cmd.Result.BatteryCapacity = userSettings.BatteryCapacity;
-                cmd.Result.PV_MaxCapacity = userSettings.PV_MaxCapacity;
+                cmd.Result.BatteryCapacity = _userSettings.BatteryCapacity;
+                cmd.Result.PV_MaxCapacity = _userSettings.PV_MaxCapacity;
 
-                queue.AddCommands(cmd);
-                _ = db.UpdateTodaysPvGeneration(cmd, c);
+                _queue.AddCommands(cmd);
+                _ = _db.UpdateTodaysPvGeneration(cmd, c);
             }
             await Task.Delay(Constants.StatusPollingFrequencyMillis);
         }

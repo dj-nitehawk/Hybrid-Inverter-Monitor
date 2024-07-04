@@ -2,11 +2,12 @@
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
+        <LangVersion>11</LangVersion>
+
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <NoWarn>CS8618;CA2016</NoWarn>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <LangVersion>12</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -27,23 +28,23 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="SerialPortLib" Version="1.1.2" />
-        <PackageReference Include="FastEndpoints" Version="5.27.0" />
-        <PackageReference Include="LiteDB" Version="5.0.20" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.*" />
+        <PackageReference Include="SerialPortLib" Version="1.1.2"/>
+        <PackageReference Include="FastEndpoints" Version="5.27.0"/>
+        <PackageReference Include="LiteDB" Version="5.0.20"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.*"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Client\InverterMon.Client.csproj" />
-        <ProjectReference Include="..\Shared\InverterMon.Shared.csproj" />
+        <ProjectReference Include="..\Client\InverterMon.Client.csproj"/>
+        <ProjectReference Include="..\Shared\InverterMon.Shared.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Content Remove="appsettings.Development.json" />
-        <None Remove="InverterMon-log.db" />
-        <None Remove="InverterMon.db" />
-        <None Remove="InverterService\protocol.pdf" />
-        <None Include="../changelog.md" Link="changelog.md" />
+        <Content Remove="appsettings.Development.json"/>
+        <None Remove="InverterMon-log.db"/>
+        <None Remove="InverterMon.db"/>
+        <None Remove="InverterService\protocol.pdf"/>
+        <None Include="../changelog.md" Link="changelog.md"/>
     </ItemGroup>
 
 </Project>
