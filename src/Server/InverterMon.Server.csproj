@@ -30,7 +30,7 @@
     <ItemGroup>
         <PackageReference Include="SerialPortLib" Version="1.1.2"/>
         <PackageReference Include="FastEndpoints" Version="5.27.0"/>
-        <PackageReference Include="LiteDB" Version="5.0.20"/>
+        <PackageReference Include="LiteDB" Version="5.0.21" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.*"/>
     </ItemGroup>
 
