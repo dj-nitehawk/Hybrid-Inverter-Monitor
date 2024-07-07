@@ -1,5 +1,6 @@
 ## changelog
 
-- reduce jk bms charge ampere value cache size for faster updates
-- upgrade dependencies to latest
-- misc. minor code refactors
+- show decimal point of jk bms temperature sensor values
+- show battery power in watts in jk bms section
+- improve bms cell voltage display
+- improve pv watts display
