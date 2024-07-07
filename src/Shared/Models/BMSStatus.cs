@@ -15,11 +15,11 @@ public class BMSStatus
     [JsonPropertyName("i")] public bool IsDisCharging => !IsCharging;
     [JsonPropertyName("j")] public KeyValuePair<byte, float> MaxCell => Cells.MaxBy(x => x.Value);
     [JsonPropertyName("k")] public KeyValuePair<byte, float> MinCell => Cells.MinBy(x => x.Value);
-    [JsonPropertyName("l")] public ushort MosTemp { get; set; }
+    [JsonPropertyName("l")] public float MosTemp { get; set; }
     [JsonPropertyName("m")] public uint PackCapacity { get; set; }
     [JsonPropertyName("n")] public float PackVoltage { get; set; }
-    [JsonPropertyName("o")] public ushort Temp1 { get; set; }
-    [JsonPropertyName("p")] public ushort Temp2 { get; set; }
+    [JsonPropertyName("o")] public float Temp1 { get; set; }
+    [JsonPropertyName("p")] public float Temp2 { get; set; }
     [JsonPropertyName("q")] public ushort TimeHrs { get; set; }
     [JsonPropertyName("r")] public int TimeMins { get; set; }
     [JsonPropertyName("s")] public bool IsWarning { get; set; }

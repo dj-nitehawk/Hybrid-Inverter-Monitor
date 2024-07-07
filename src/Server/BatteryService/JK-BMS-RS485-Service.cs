@@ -120,9 +120,9 @@ public class JkBms
 
     void FillDummyData()
     {
-        Status.MosTemp = 30;
-        Status.Temp1 = 28;
-        Status.Temp2 = 29;
+        Status.MosTemp = 30.1f;
+        Status.Temp1 = 28.5f;
+        Status.Temp2 = 29.2f;
         Status.PackVoltage = 25.6f;
         Status.IsCharging = true;
         Status.AvgCurrentAmps = 21.444f;
