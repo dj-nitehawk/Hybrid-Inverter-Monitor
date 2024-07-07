@@ -5,63 +5,63 @@
 
 <PageTitle>Dashboard</PageTitle>
 
-<Loader Enabled=@(status is null) />
+<Loader Enabled=@(status is null)/>
 
-@if(status is not null)
+@if (status is not null)
 {
     <div class="container">
 
-    @if(status?.GridUsageWatts > 100)
-    {
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <h5 class="card-header">
-                        <span class="oi oi-power-standby" aria-hidden="true"/>
-                        Grid Usage
-                    </h5>
-                    <div class="card-body pt-0">
-                        <div class="container text-center fw-bold p-0">
-                            <div class="row bg-light rounded">
-                                <div class="col">
-                                    <div class="fs-1 text-danger">@status?.GridUsageWatts</div>
-                                    W
+        @if (status?.GridUsageWatts > 100)
+        {
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <h5 class="card-header">
+                            <span class="oi oi-power-standby" aria-hidden="true"></span>
+                            Grid Usage
+                        </h5>
+                        <div class="card-body pt-0">
+                            <div class="container text-center fw-bold p-0">
+                                <div class="row bg-light rounded">
+                                    <div class="col">
+                                        <div class="fs-1 text-danger">@status?.GridUsageWatts</div>
+                                        W
+                                    </div>
                                 </div>
-                            </div> 
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>   
-    }
+        }
         <div class="row mt-2">
             <div class="col-sm-6">
                 <div class="card">
                     <h5 class="card-header">
-                        <span class="oi oi-lightbulb"/>
+                        <span class="oi oi-lightbulb"></span>
                         <span>Output Load</span>
                     </h5>
                     <div class="card-body pt-0">
                         <div class="container text-center fw-bold p-0">
                             <div class="row bg-light rounded">
                                 <div class="progress p-0" style="height:2px;">
-                                    <span class="progress-bar" role="progressbar" style="width: @RoundToWholeNumer(status?.LoadPercentage)%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></span>
+                                    <span class="progress-bar" role="progressbar" style="width: @RoundToWholeNumber(status?.LoadPercentage)%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></span>
                                 </div>
                                 <div class="col">
                                     <div class="fs-1 text-danger">@status?.LoadWatts</div>
                                     W
                                 </div>
-                            </div>                         
+                            </div>
                             <div class="row">
                                 <div class="col">
-                                    <div class="fs-5 text-muted">@RoundToWholeNumer(status?.OutputVoltage)</div>
+                                    <div class="fs-5 text-muted">@RoundToWholeNumber(status?.OutputVoltage)</div>
                                     <span class="text-body">
                                         V
                                     </span>
-                                   </div>
+                                </div>
                                 <div class="col">
                                     <div class="row h-100 align-content-center">
-                                        <span class="fs-5 @(TemperatureCss())">
+                                        <span class="fs-5 @TemperatureCss()">
                                             @(status?.HeatSinkTemperature) C°
                                         </span>
                                     </div>
@@ -70,12 +70,12 @@
                                     <div class="fs-5 text-muted">@RoundToOneDecimal(status?.LoadCurrent)</div>
                                     A
                                 </div>
-                            </div>   
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-    
+
             <div class="col-sm-6">
                 <div class="card mt-2 mt-sm-0">
                     <h5 class="card-header">
@@ -87,29 +87,29 @@
                             <div class="row bg-light rounded">
                                 <div class="progress p-0" style="height:2px;">
                                     <span class="progress-bar" role="progressbar" style="width: @status?.PVPotential%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></span>
-                                </div>                                
+                                </div>
                                 <div class="col">
                                     <div class="fs-1 text-success">@status?.PVInputWatt</div>
                                     W
                                 </div>
-                            </div>                         
+                            </div>
                             <div class="row">
                                 <div class="col">
-                                    <div class="fs-5 text-muted">@RoundToWholeNumer(status?.PVInputVoltage)</div>
-                                        <span class="text-body">
-                                            V
-                                        </span>
-                                    </div>
+                                    <div class="fs-5 text-muted">@RoundToWholeNumber(status?.PVInputVoltage)</div>
+                                    <span class="text-body">
+                                        V
+                                    </span>
+                                </div>
                                 <div class="col">
                                     <div class="fs-5 text-muted">@RoundToOneDecimal(status?.PVInputCurrent)</div>
-                                    A 
+                                    A
                                 </div>
-                            </div>   
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>    
+        </div>
     </div>
 
     <div class="container pt-2">
@@ -117,8 +117,8 @@
             <div class="col-sm-12">
                 <div class="card">
                     <h5 class="card-header align-self-center w-100">
-                        <span class="oi oi-battery-empty" aria-hidden="true" />
-                        Battery                   
+                        <span class="oi oi-battery-empty" aria-hidden="true"/>
+                        Battery
                     </h5>
                     <div class="card-body p-0 m-0">
                         <div class="container text-center m-0 p-0">
@@ -164,7 +164,7 @@
                 </div>
             </div>
         </div>
-    </div>   
+    </div>
 }
 
 @code{
@@ -179,15 +179,15 @@
     }
 
     private void NullifyStatus()
-    { 
+    {
         status = null;
         StateHasChanged();
     }
 
-    private void UpdateState(InverterStatus? s) 
+    private void UpdateState(InverterStatus? s)
     {
         status = s;
-        StateHasChanged();     
+        StateHasChanged();
     }
 
     public void Dispose()
@@ -196,16 +196,20 @@
         onStatusRetrievalError -= NullifyStatus;
     }
 
-    private decimal RoundToWholeNumer(decimal? val)
+    private static decimal RoundToWholeNumber(decimal? val)
         => Math.Round(val ?? 0, 0);
 
-    private decimal RoundToOneDecimal(decimal? val)
+    private static decimal RoundToOneDecimal(decimal? val)
         => Math.Round(val ?? 0, 1);
 
-    private string TemperatureCss(){
-        if (status?.HeatSinkTemperature >= 55 && status.HeatSinkTemperature < 65) return "text-danger";
-        if (status?.HeatSinkTemperature >= 65) return "text-danger fw-bolder blinktext";
-        return "text-muted";
+    private static string TemperatureCss()
+    {
+        return status?.HeatSinkTemperature switch
+        {
+            >= 55 and < 65 => "text-danger",
+            >= 65 => "text-danger fw-bolder blinktext",
+            _ => "text-muted"
+        };
     }
 
     public static async Task StartStatusStreaming(string basePath)
@@ -215,13 +219,11 @@
         //      and it leads to a new stream download being created everytime a page is initialized.
         //      which leads to a memory leak/ connection exhaustion.
 
-        using var client = new HttpClient
-        {
-            BaseAddress = new Uri(basePath),
-            Timeout = TimeSpan.FromSeconds(5)
-        };
+        using var client = new HttpClient();
+        client.BaseAddress = new(basePath);
+        client.Timeout = TimeSpan.FromSeconds(5);
 
-        int retryDelay = 1000;
+        var retryDelay = 1000;
 
         while (true)
         {
@@ -236,13 +238,13 @@
                 using var stream = await response.Content.ReadAsStreamAsync();
 
                 await foreach (var s in
-                    JsonSerializer.DeserializeAsyncEnumerable<InverterStatus>(
-                        stream,
-                        new JsonSerializerOptions
-                        {
-                            PropertyNameCaseInsensitive = true,
-                            DefaultBufferSize = 64
-                        }))
+                               JsonSerializer.DeserializeAsyncEnumerable<InverterStatus>(
+                                   stream,
+                                   new JsonSerializerOptions
+                                   {
+                                       PropertyNameCaseInsensitive = true,
+                                       DefaultBufferSize = 64
+                                   }))
                 {
                     onStatusUpdated?.Invoke(s);
                     retryDelay = 1000;
@@ -257,7 +259,7 @@
         }
     }
 
-    private decimal GetCRate()
+    private static decimal GetCRate()
     {
         if (status?.BatteryChargeCRate > 0)
             return Math.Round(status.BatteryChargeCRate, 2);
@@ -267,4 +269,5 @@
 
         return 0;
     }
+
 }

@@ -11,7 +11,7 @@
 {
     <div class="card">
         <h5 class="card-header fw-bold">
-            <span class="oi oi-battery-empty" aria-hidden="true"/>
+            <span class="oi oi-battery-empty" aria-hidden="true"></span>
             JK BMS
         </h5>
         <div class="card-body p-0">
@@ -110,11 +110,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="row text-center m-1 p-0" style="font-size:0.8em">
+                <div class="row text-center m-1 p-0" style="font-size:0.75em">
                     @foreach (var cell in status.Cells)
                     {
                         <div class="col-3 p-1">
-                            <strong class="bg-light border rounded-3 p-1">@cell.Key</strong> @($"{cell.Value:0.000} V")
+                            <strong class="bg-light border rounded-3 p-1">@($"{cell.Key:00}")</strong> @($"{cell.Value:0.000} V")
                         </div>
                     }
                 </div>
