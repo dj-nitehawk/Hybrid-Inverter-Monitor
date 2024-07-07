@@ -5,9 +5,9 @@
 
 <PageTitle>JK BMS Status</PageTitle>
 
-<Loader Enabled=@(status is null) />
+<Loader Enabled=@(status is null)/>
 
-@if(status is not null)
+@if (status is not null)
 {
     <div class="card">
         <h5 class="card-header fw-bold">
@@ -19,45 +19,45 @@
                 <div class="row text-center m-0 p-0">
                     <div class="col">
                         <div class="fw-bold fs-1 mt-2 text-primary">
-                            @string.Format("{0:0.0}",status.PackVoltage) V
+                            @($"{status.PackVoltage:0.0}") V
                         </div>
                         <div class="fs-1 my-1 mx-5 border-top">
                             @status.CapacityPct%
                         </div>
                         <div class="fs-5 m-0 border-top">
-                            @Math.Round(status.AvailableCapacity,1) Ah / @status.PackCapacity Ah
+                            @Math.Round(status.AvailableCapacity, 1) Ah / @status.PackCapacity Ah
                         </div>
                     </div>
                     <div class="col bg-light">
-                        <div class="p-0 mt-2 fw-bold fs-1">
-                            <div class="m-0 p-0">
-                                @string.Format("{0:0.0} A",status.AvgCurrentAmps)
+                        <div class="p-0 mt-2 fw-bold">
+                            <div class="fs-1">
+                                @($"{status.AvgCurrentAmps:0.0} A")
                             </div>
-                            @if(status.AvgCurrentAmps > 0)
+                            @if (status.AvgCurrentAmps > 0)
                             {
                                 <div class="fs-5 m-0 p-0 @(status.IsCharging ? "text-success" : "text-danger")">
                                     @(status.IsCharging ? "Charging" : "Discharging")
                                 </div>
-                                <div class="fw-bold fs-6">
-                                    @string.Format("{0:0.00} C",status.CRate)
+                                <div class="fw-bold fs-6 text-secondary">
+                                    @($"{status.CRate:0.00} C") / @($"{status.AvgPowerWatts:0} W")
                                 </div>
                                 <div class="fw-normal fs-6 m-0 p-0">
                                     @status.TimeHrs Hrs @status.TimeMins Mins
                                 </div>
                             }
-                            @if(status.AvgCurrentAmps == 0)
+                            @if (status.AvgCurrentAmps == 0)
                             {
                                 <div class="fs-5 m-0 p-0 text-muted">
                                     Holding<br/>Voltage
                                 </div>
                             }
-                            @if(status.IsWarning)
+                            @if (status.IsWarning)
                             {
                                 <div class="fs-5 fw-bold m-0 p-0 text-danger blinktext">
                                     Protection!
                                 </div>
                             }
-                        </div>                        
+                        </div>
                     </div>
                 </div>
                 <div class="row text-center m-1 p-1 fw-bold" style="font-size:0.8em; background-color:aliceblue">
@@ -86,13 +86,13 @@
                             Min Cell: @status.MinCell.Key
                         </div>
                         <div class="fw-bold">
-                            @string.Format("{0:0.000} V",status.MinCell.Value)
+                            @($"{status.MinCell.Value:0.000} V")
                         </div>
                         <div class="border-top pt-1">
                             Max Cell: <span>@status.MaxCell.Key</span>
                         </div>
                         <div class="fw-bold">
-                            @string.Format("{0:0.000} V",status.MaxCell.Value)
+                            @($"{status.MaxCell.Value:0.000} V")
                         </div>
                     </div>
                     <div class="col bg-light p-1" style="font-size:0.8em;margin-left:0.25rem!important">
@@ -100,21 +100,21 @@
                             Cell Delta:
                         </div>
                         <div class="fw-bold">
-                            @string.Format("{0:0.000} V",status.CellDiff)
+                            @($"{status.CellDiff:0.000} V")
                         </div>
                         <div class="pt-1 border-top">
                             Cell Average:
                         </div>
                         <div class="fw-bold">
-                            @string.Format("{0:0.000} V",status.AvgCellVoltage)
-                        </div>                        
+                            @($"{status.AvgCellVoltage:0.000} V")
+                        </div>
                     </div>
                 </div>
                 <div class="row text-center m-1 p-0" style="font-size:0.8em">
                     @foreach (var cell in status.Cells)
                     {
-                        <div class="col-3 p-2">
-                            <strong class="bg-light border rounded-3 p-1">@cell.Key</strong> @string.Format("{0:0.000} V",cell.Value)
+                        <div class="col-3 p-1">
+                            <strong class="bg-light border rounded-3 p-1">@cell.Key</strong> @($"{cell.Value:0.000} V")
                         </div>
                     }
                 </div>
@@ -127,7 +127,7 @@
     private static event Action<BMSStatus?>? onStatusUpdated;
     private static event Action? onStatusRetrievalError;
     private static BMSStatus? status;
-    
+
     protected override void OnInitialized()
     {
         onStatusUpdated += UpdateState;
@@ -160,10 +160,10 @@
         //      which leads to a memory leak/ connection exhaustion.
 
         using var client = new HttpClient
-            {
-                BaseAddress = new Uri(basePath),
-                Timeout = TimeSpan.FromSeconds(5)
-            };
+        {
+            BaseAddress = new(basePath),
+            Timeout = TimeSpan.FromSeconds(5)
+        };
 
         var retryDelay = 1000;
 
@@ -180,13 +180,13 @@
                 using var stream = await response.Content.ReadAsStreamAsync();
 
                 await foreach (var s in
-                    JsonSerializer.DeserializeAsyncEnumerable<BMSStatus>(
-                        stream,
-                        new JsonSerializerOptions
-                            {
-                                PropertyNameCaseInsensitive = true,
-                                DefaultBufferSize = 64
-                            }))
+                               JsonSerializer.DeserializeAsyncEnumerable<BMSStatus>(
+                                   stream,
+                                   new JsonSerializerOptions
+                                   {
+                                       PropertyNameCaseInsensitive = true,
+                                       DefaultBufferSize = 64
+                                   }))
                 {
                     onStatusUpdated?.Invoke(s);
                     retryDelay = 1000;
@@ -200,4 +200,5 @@
             }
         }
     }
+
 }

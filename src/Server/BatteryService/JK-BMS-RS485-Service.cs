@@ -8,8 +8,8 @@ public class JkBms
     public BMSStatus Status { get; } = new();
     public bool IsConnected => Status.PackVoltage > 0;
 
-    readonly int _pollFrequencyMillis = 1000;
-    readonly AmpValQueue _recentAmpReadings = new(3); //avg value over 10 readings (~3secs)
+    const int PollFrequencyMillis = 1000;
+    readonly AmpValQueue _recentAmpReadings = new(5); //avg value over 5 readings (~5secs)
     readonly SerialPortInput _bms = new();
 
     public JkBms(IConfiguration config, ILogger<JkBms> logger, IWebHostEnvironment env, IHostApplicationLifetime appLife)
@@ -59,7 +59,7 @@ public class JkBms
 
         if (!data.IsValid())
         {
-            Thread.Sleep(_pollFrequencyMillis);
+            Thread.Sleep(PollFrequencyMillis);
             _bms.QueryData();
 
             return;
@@ -114,7 +114,7 @@ public class JkBms
             Status.TimeMins = 0;
         }
 
-        Thread.Sleep(_pollFrequencyMillis);
+        Thread.Sleep(PollFrequencyMillis);
         _bms.QueryData();
     }
 
