@@ -47,13 +47,14 @@ public class Endpoint : EndpointWithoutRequest<object>
                 status.PVInputWatt = Random.Shared.Next(1000);
                 status.PV_MaxCapacity = 1000;
                 status.BatteryCapacity = 100;
+
                 yield return status;
             }
             else
             {
                 yield return Queue.IsAcceptingCommands
-                    ? Queue.StatusCommand.Result
-                    : blank;
+                                 ? Queue.StatusCommand.Result
+                                 : blank;
             }
             await Task.Delay(1000, c);
         }
