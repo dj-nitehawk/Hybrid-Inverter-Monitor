@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Globalization;
+using System.Text.Json.Serialization;
 
 namespace InverterMon.Shared.Models;
 
@@ -63,4 +64,20 @@ public class BMSStatus
 
     [JsonPropertyName("t")]
     public double AvgPowerWatts => Math.Round(AvgCurrentAmps * PackVoltage, 0, MidpointRounding.AwayFromZero);
+
+    [JsonPropertyName("u")]
+    public float PackNominalVoltage { get; set; }
+
+    public string GetTimeString()
+    {
+        var currentTime = DateTime.UtcNow
+                                  .AddHours(5).AddMinutes(30); //only supports IST time zone :-(
+
+        var futureTime = currentTime.AddHours(TimeHrs).AddMinutes(TimeMins);
+
+        if (futureTime.Date == currentTime.Date)
+            return futureTime.ToString("h:mm tt");
+        else
+            return futureTime.ToString("dddd h:mm tt");
+    }
 }

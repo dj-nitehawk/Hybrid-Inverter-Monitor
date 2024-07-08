@@ -1,6 +1,4 @@
 ## changelog
 
-- show decimal point of jk bms temperature sensor values
-- show battery power in watts in jk bms section
-- improve bms cell voltage display
-- improve pv watts display
+- toggle for displaying bms battery capacities in kWh
+- toggle for displaying bms remaining time as date and time string

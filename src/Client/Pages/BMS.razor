@@ -5,7 +5,7 @@
 
 <PageTitle>JK BMS Status</PageTitle>
 
-<Loader Enabled=@(status is null)/>
+<Loader Enabled=@(status is null) />
 
 @if (status is not null)
 {
@@ -24,8 +24,8 @@
                         <div class="fs-1 my-1 mx-5 border-top">
                             @status.CapacityPct%
                         </div>
-                        <div class="fs-5 m-0 border-top">
-                            @Math.Round(status.AvailableCapacity, 1) Ah / @status.PackCapacity Ah
+                        <div class="fs-5 m-0 border-top" style="cursor: pointer;" @onclick="_ => ShowCapacityKwh = !ShowCapacityKwh">
+                            @(GetPackCapacity())
                         </div>
                     </div>
                     <div class="col bg-light">
@@ -41,14 +41,14 @@
                                 <div class="fw-bold fs-6 text-secondary">
                                     @($"{status.CRate:0.00} C") / @($"{status.AvgPowerWatts:0} W")
                                 </div>
-                                <div class="fw-normal fs-6 m-0 p-0">
-                                    @status.TimeHrs Hrs @status.TimeMins Mins
+                                <div class="fw-normal fs-6 m-0 p-0" style="cursor: pointer;" @onclick="_ => ShowEndDateAndTime = !ShowEndDateAndTime">
+                                    @(GetTimeLeft())
                                 </div>
                             }
                             @if (status.AvgCurrentAmps == 0)
                             {
                                 <div class="fs-5 m-0 p-0 text-muted">
-                                    Holding<br/>Voltage
+                                    Holding<br />Voltage
                                 </div>
                             }
                             @if (status.IsWarning)
@@ -127,6 +127,8 @@
     private static event Action<BMSStatus?>? onStatusUpdated;
     private static event Action? onStatusRetrievalError;
     private static BMSStatus? status;
+    private static bool ShowEndDateAndTime;
+    private static bool ShowCapacityKwh;
 
     protected override void OnInitialized()
     {
@@ -146,6 +148,26 @@
         StateHasChanged();
     }
 
+    private string GetTimeLeft()
+    {
+        if (ShowEndDateAndTime)
+        {
+            return status!.GetTimeString();
+        }
+        return $"{status!.TimeHrs} Hrs {status.TimeMins} Mins";
+    }
+
+    private string GetPackCapacity()
+    {
+        if (ShowCapacityKwh)
+        {
+            var avlCap = Math.Round((status!.AvailableCapacity * status.PackNominalVoltage) / 1000, 1);
+            var packCap = Math.Round((status!.PackCapacity * status.PackNominalVoltage) / 1000, 1);
+            return $"{avlCap} kWh / {packCap} kWh";
+        }
+        return $"{Math.Round(status!.AvailableCapacity, 1)} Ah / {status!.PackCapacity} Ah";
+    }
+
     public void Dispose()
     {
         onStatusUpdated -= UpdateState;
@@ -160,10 +182,10 @@
         //      which leads to a memory leak/ connection exhaustion.
 
         using var client = new HttpClient
-        {
-            BaseAddress = new(basePath),
-            Timeout = TimeSpan.FromSeconds(5)
-        };
+            {
+                BaseAddress = new(basePath),
+                Timeout = TimeSpan.FromSeconds(5)
+            };
 
         var retryDelay = 1000;
 
@@ -183,10 +205,10 @@
                                JsonSerializer.DeserializeAsyncEnumerable<BMSStatus>(
                                    stream,
                                    new JsonSerializerOptions
-                                   {
-                                       PropertyNameCaseInsensitive = true,
-                                       DefaultBufferSize = 64
-                                   }))
+                                       {
+                                           PropertyNameCaseInsensitive = true,
+                                           DefaultBufferSize = 64
+                                       }))
                 {
                     onStatusUpdated?.Invoke(s);
                     retryDelay = 1000;

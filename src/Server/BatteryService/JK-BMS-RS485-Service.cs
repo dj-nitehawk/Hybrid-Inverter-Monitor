@@ -1,4 +1,5 @@
-﻿using InverterMon.Shared.Models;
+﻿using InverterMon.Server.Persistance.Settings;
+using InverterMon.Shared.Models;
 using SerialPortLib;
 
 namespace InverterMon.Server.BatteryService;
@@ -12,7 +13,7 @@ public class JkBms
     readonly AmpValQueue _recentAmpReadings = new(5); //avg value over 5 readings (~5secs)
     readonly SerialPortInput _bms = new();
 
-    public JkBms(IConfiguration config, ILogger<JkBms> logger, IWebHostEnvironment env, IHostApplicationLifetime appLife)
+    public JkBms(UserSettings userSettings, IConfiguration config, ILogger<JkBms> logger, IWebHostEnvironment env, IHostApplicationLifetime appLife)
     {
         if (env.IsDevelopment())
         {
@@ -21,6 +22,7 @@ public class JkBms
             return;
         }
 
+        Status.PackNominalVoltage = userSettings.BatteryNominalVoltage;
         var bmsAddress = config["LaunchSettings:JkBmsAddress"] ?? "/dev/ttyUSB0";
         _bms.SetPort(bmsAddress);
         _bms.ConnectionStatusChanged += ConnectionStatusChanged;
@@ -126,11 +128,12 @@ public class JkBms
         Status.PackVoltage = 25.6f;
         Status.IsCharging = true;
         Status.AvgCurrentAmps = 21.444f;
-        Status.CapacityPct = 50;
+        Status.CapacityPct = 48;
         Status.PackCapacity = 120;
+        Status.PackNominalVoltage = 50;
         Status.IsWarning = false;
-        Status.TimeHrs = 3;
-        Status.TimeMins = 11;
+        Status.TimeHrs = 24;
+        Status.TimeMins = 10;
         for (byte i = 1; i <= 8; i++)
             Status.Cells.Add(i, 1.110f);
     }

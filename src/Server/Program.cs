@@ -19,8 +19,8 @@ bld.WebHost.ConfigureKestrel(o => o.Listen(IPAddress.Any, port));
 bld.Services
    .AddSingleton<UserSettings>()
    .AddSingleton<CommandQueue>()
-   .AddSingleton<JkBms>()
-   .AddSingleton<Database>();
+   .AddSingleton<Database>()
+   .AddSingleton<JkBms>();
 
 if (!bld.Environment.IsDevelopment())
 {

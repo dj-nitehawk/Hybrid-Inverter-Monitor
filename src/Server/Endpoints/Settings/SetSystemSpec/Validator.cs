@@ -18,7 +18,11 @@ public class Validator : Validator<SystemSpec>
         RuleFor(x => x.SunlightEndHour)
             .GreaterThanOrEqualTo(0)
             .LessThanOrEqualTo(24)
-            .Must((s, h) => h > s.SunlightStartHour).WithMessage("Sunlight end hour must be later than start hour!"); ;
+            .Must((s, h) => h > s.SunlightStartHour).WithMessage("Sunlight end hour must be later than start hour!");
+
+        RuleFor(x => x.BatteryNominalVoltage)
+            .GreaterThan(5)
+            .WithMessage("Battery nominal voltage required!");
 
         //todo: display validation errors on ui
     }

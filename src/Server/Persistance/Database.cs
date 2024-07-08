@@ -88,6 +88,7 @@ public class Database
         {
             _settings.PV_MaxCapacity = settings.PV_MaxCapacity;
             _settings.BatteryCapacity = settings.BatteryCapacity;
+            _settings.BatteryNominalVoltage = settings.BatteryNominalVoltage;
             _settings.SunlightStartHour = settings.SunlightStartHour;
             _settings.SunlightEndHour = settings.SunlightEndHour;
         }
