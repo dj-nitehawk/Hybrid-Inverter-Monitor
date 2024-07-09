@@ -1,4 +1,4 @@
 ## changelog
 
-- toggle for displaying bms battery capacities in kWh
-- toggle for displaying bms remaining time as date and time string
+- remember battery capacity view mode toggle state
+- fix battery capacity text wrap issue on mobile
