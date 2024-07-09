@@ -5,7 +5,7 @@ namespace InverterMon.Client.AppState;
 
 public static class StateExtensions
 {
-    public static async Task<T?> LoadAsync<T>(this IJSRuntime jsRuntime) where T : class
+    public static async Task<T?> LoadStateAsync<T>(this IJSRuntime jsRuntime) where T : class
     {
         var data = await jsRuntime.InvokeAsync<string>("localStorage.getItem", typeof(T).FullName);
 
@@ -15,7 +15,7 @@ public static class StateExtensions
         return null;
     }
 
-    public static ValueTask SaveAsync<T>(this IJSRuntime jsRuntime, T state) where T : class
+    public static ValueTask SaveStateAsync<T>(this IJSRuntime jsRuntime, T state) where T : class
     {
         return jsRuntime.InvokeVoidAsync("localStorage.setItem", typeof(T).FullName, JsonSerializer.Serialize(state));
     }

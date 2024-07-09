@@ -1,7 +1,9 @@
 ﻿@page "/bms"
+@using InverterMon.Client.AppState
 @using InverterMon.Shared.Models
 @using System.Text.Json
 @implements IDisposable
+@inject IJSRuntime Js
 
 <PageTitle>JK BMS Status</PageTitle>
 
@@ -24,7 +26,7 @@
                         <div class="fs-1 my-1 mx-5 border-top">
                             @status.CapacityPct%
                         </div>
-                        <div class="fs-5 pack-capacity m-0 border-top" style="cursor: pointer;" @onclick="_ => ShowCapacityKwh = !ShowCapacityKwh">
+                        <div class="fs-5 pack-capacity m-0 border-top" style="cursor: pointer;" @onclick="ToggleCapacityKwh">
                             @(GetPackCapacity())
                         </div>
                     </div>
@@ -41,7 +43,7 @@
                                 <div class="fw-bold fs-6 text-secondary">
                                     @($"{status.CRate:0.00} C") / @($"{status.AvgPowerWatts:0} W")
                                 </div>
-                                <div class="fw-normal fs-6 m-0 p-0" style="cursor: pointer;" @onclick="_ => ShowEndDateAndTime = !ShowEndDateAndTime">
+                                <div class="fw-normal fs-6 m-0 p-0" style="cursor: pointer;" @onclick="ToggleEndDateAndTime">
                                     @(GetTimeLeft())
                                 </div>
                             }
@@ -127,13 +129,25 @@
     private static event Action<BMSStatus?>? onStatusUpdated;
     private static event Action? onStatusRetrievalError;
     private static BMSStatus? status;
-    private static bool ShowEndDateAndTime;
-    private static bool ShowCapacityKwh;
+    private static ClientSettings state = new();
 
     protected override void OnInitialized()
     {
         onStatusUpdated += UpdateState;
-        onStatusRetrievalError += NullifyStatus;
+        onStatusRetrievalError += NullifyStatus;        
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var st = await Js.LoadStateAsync<ClientSettings>();
+        if(st is null)
+        {
+            await Js.SaveStateAsync(state);
+        }
+        else
+        {
+            state = st;
+        }
     }
 
     private void NullifyStatus()
@@ -150,7 +164,7 @@
 
     private string GetTimeLeft()
     {
-        if (ShowEndDateAndTime)
+        if (state.ShowEndDateAndTime)
         {
             return status!.GetTimeString();
         }
@@ -159,13 +173,25 @@
 
     private string GetPackCapacity()
     {
-        if (ShowCapacityKwh)
+        if (state.ShowCapacityKwh)
         {
             var avlCap = Math.Round((status!.AvailableCapacity * status.PackNominalVoltage) / 1000, 1);
             var packCap = Math.Round((status!.PackCapacity * status.PackNominalVoltage) / 1000, 1);
             return $"{avlCap} kWh / {packCap} kWh";
         }
         return $"{Math.Round(status!.AvailableCapacity, 1)} Ah / {status!.PackCapacity} Ah";
+    }
+
+    private async Task ToggleCapacityKwh()
+    {
+        state.ShowCapacityKwh = !state.ShowCapacityKwh;
+        await Js.SaveStateAsync(state);
+    }
+
+    private async Task ToggleEndDateAndTime()
+    {
+        state.ShowEndDateAndTime = !state.ShowEndDateAndTime;
+        await Js.SaveStateAsync(state);
     }
 
     public void Dispose()
