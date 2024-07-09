@@ -72,6 +72,10 @@ a, .btn-link {
     .charge-discharge {
         font-size: 0.8em !important;
     }
+
+    .pack-capacity {
+        font-size: 1.2em !important;
+    }
 }
 
 .unit {
