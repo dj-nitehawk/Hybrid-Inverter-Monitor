@@ -1,0 +1,1 @@
+dotnet publish ./InverterMon.Server.csproj -c Release -r win-x64 --self-contained -p:PublishTrimmed=true -p:TrimmerLogLevel=Detailed -o D:\\DOWNLOADS

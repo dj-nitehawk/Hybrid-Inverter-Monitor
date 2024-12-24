@@ -1,6 +1,7 @@
 global using FastEndpoints;
 using System.Globalization;
 using System.Net;
+using InverterMon.Server;
 using InverterMon.Server.BatteryService;
 using InverterMon.Server.InverterService;
 using InverterMon.Server.Persistance;
@@ -29,7 +30,7 @@ if (!bld.Environment.IsDevelopment())
        .AddHostedService<StatusRetriever>();
 }
 
-bld.Services.AddFastEndpoints();
+bld.Services.AddFastEndpoints(o => o.SourceGeneratorDiscoveredTypes = DiscoveredTypes.All);
 
 var app = bld.Build();
 
@@ -40,5 +41,10 @@ app.UseBlazorFrameworkFiles()
    .UseStaticFiles();
 app.MapFallbackToFile("index.html");
 app.UseRouting()
-   .UseFastEndpoints(c => c.Endpoints.RoutePrefix = "api");
+   .UseFastEndpoints(
+       c =>
+       {
+           c.Endpoints.RoutePrefix = "api";
+           c.Binding.ReflectionCache.AddFromInverterMonServer();
+       });
 app.Run();

@@ -2,12 +2,12 @@
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
-        <LangVersion>11</LangVersion>
-
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <NoWarn>CS8618;CA2016</NoWarn>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <NuGetAuditMode>direct</NuGetAuditMode>
+        <LangVersion>13</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -28,10 +28,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FastEndpoints.Generator" Version="5.32.0.13-beta" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive"/>
         <PackageReference Include="SerialPortLib" Version="1.1.2"/>
-        <PackageReference Include="FastEndpoints" Version="5.27.0"/>
+        <PackageReference Include="FastEndpoints" Version="5.32.0.13-beta"/>
         <PackageReference Include="LiteDB" Version="5.0.21"/>
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.*"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.20"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -45,6 +46,7 @@
         <None Remove="InverterMon.db"/>
         <None Remove="InverterService\protocol.pdf"/>
         <None Include="../changelog.md" Link="changelog.md"/>
+        <None Remove="Properties\PublishProfiles\FolderProfile.pubxml"/>
     </ItemGroup>
 
 </Project>

@@ -1,0 +1,6 @@
+﻿<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Publish InverterMonWindow" type="DotNetFolderPublish" factoryName="Publish to folder" focusToolWindowBeforeRun="true">
+    <riderPublish configuration="Release" delete_existing_files="true" include_all_content_for_self_extract="true" include_native_libs_for_self_extract="true" platform="Any CPU" produce_single_file="true" ready_to_run="true" runtime="win-x64" self_contained="true" target_folder="$PROJECT_DIR$/../../../DOWNLOADS/InvertermonWindow" target_framework="net9.0-windows" uuid_high="-7077049302210033657" uuid_low="-5284360602526118752" />
+    <method v="2" />
+  </configuration>
+</component>

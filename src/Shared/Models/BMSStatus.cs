@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace InverterMon.Shared.Models;
 
@@ -77,7 +76,7 @@ public class BMSStatus
 
         if (futureTime.Date == currentTime.Date)
             return futureTime.ToString("h:mm tt");
-        else
-            return futureTime.ToString("dddd h:mm tt");
+
+        return futureTime.ToString("dddd h:mm tt");
     }
 }
